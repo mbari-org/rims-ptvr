@@ -65,22 +65,68 @@ var spcview = (function() {
 
     var lastQueryUrl = '';
 
-    var queryPresets = {
-        "spc-big": {
+    var queryPresets = [
+        {
+            "name": "spc-big-1",
+            "label": "Small [0.88,2.0]",
+            "title": "Images in the range 0.88 mm to 2.0 mm",
             "camera": "SPC-BIG",
-            "minmaj": 1.0,
-            "maxmaj": 5.0,
-            "minasp": 0.3,
-            "maxasp": 1.0,
-        },
-        "spc2medium": {
-            "camera": "SPC-BIG",
-            "minmaj": 0.5,
-            "maxmaj": 1.0,
+            "minmaj": .88,
+            "maxmaj": 2.0,
             "minasp": 0.05,
             "maxasp": 1.0,
         },
-    };
+        {
+            "name": "spc-big-2",
+            "label": "Large [2.0,20.0]",
+            "title": "Images in the range 2.0 mm to 20.0 mm",
+            "camera": "SPC-BIG",
+            "minmaj": 2,
+            "maxmaj": 20.0,
+            "minasp": 0.05,
+            "maxasp": 1.0,
+        },
+        {
+            "name": "circular-small",
+            "label": "Circular [0.7,2.0]",
+            "title": "Circular images in the range 0.7 to 2.0 mm",
+            "camera": "SPC-BIG",
+            "minmaj": .7,
+            "maxmaj": 2.0,
+            "minasp": 0.9,
+            "maxasp": 1.0,
+        },
+        {
+            "name": "circular-big",
+            "label": "Circular [2.0,20.0]",
+            "title": "Circular images in the range 2.0 to 20.0 mm",
+            "camera": "SPC-BIG",
+            "minmaj": 2.0,
+            "maxmaj": 20.0,
+            "minasp": 0.9,
+            "maxasp": 1.0,
+        },
+        {
+            "name": "small-lines",
+            "label": "Linear [0.7,2.0]",
+            "title": "Line-like images in the range 0.7 to 2.0 mm",
+            "camera": "SPC-BIG",
+            "minmaj": .7,
+            "maxmaj": 2.0,
+            "minasp": 0,
+            "maxasp": 0.15,
+        },
+        {
+            "name": "big-lines",
+            "label": "Linear [2.0,20.0]",
+            "title": "Line-like images in the range 2.0 to 20.0 mm",
+            "camera": "SPC-BIG",
+            "minmaj": 2.0,
+            "maxmaj": 20.0,
+            "minasp": 0,
+            "maxasp": 0.15,
+        },
+    ];
 
     var imageDetailActive = false;
     
@@ -930,15 +976,37 @@ var spcview = (function() {
     // Public Methods
     var my = {};
     
+    my.buildPresetMenu = function() {
+    // build preset menu
+        $.each(queryPresets, function(index,preset) {
+            var li = $('<li/>')
+                .addClass('ui-menu-item')
+                .attr('data-toggle', 'tooltip')
+                .prop('title',preset.title)
+                .attr('data-placement','right')
+                .appendTo($('#search-presets'));
+            var a = $('<a/>')
+                .addClass('ui-all')
+                .attr('href', 'http://planktivore.ucsd.edu/caymans_viewer/spcview.html?preset='+preset.name)
+                .text(preset.label)
+                .appendTo(li);
+        });
+    };
+    
     my.loadPreset = function(params) {
         if (params['preset'] != undefined) {
-            preset = queryPresets[params['preset']];
-            
-            minMaj.val(preset['minmaj'].toString());
-            maxMaj.val(preset['maxmaj'].toString());
-            minAspect.val(preset['minasp'].toString());
-            maxAspect.val(preset['maxasp'].toString());
-            camera.val(cameraNames.indexOf(preset['camera']).toString());
+        
+            for (var i=0;i<queryPresets.length;i++) {
+                
+                if (queryPresets[i].name == params['preset']) {
+                    preset = queryPresets[i];
+                    minMaj.val(preset['minmaj'].toString());
+                    maxMaj.val(preset['maxmaj'].toString());
+                    minAspect.val(preset['minasp'].toString());
+                    maxAspect.val(preset['maxasp'].toString());
+                    camera.val(cameraNames.indexOf(preset['camera']).toString());
+                }
+            }
             //console.log(preset);
         }
     };
@@ -1593,6 +1661,8 @@ var urlParams;
 
 spcview.loadPreset(urlParams);
 
+
+spcview.buildPresetMenu();
 // Load initial data
 spcview.loadLabels();
 spcview.loadTags();

@@ -43,29 +43,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"
               role="button" aria-expanded="false">Search Presets <span
                   class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-
-                <li data-toggle="tooltip" title="Show images from SPC2 camera in the
-                range 1 mm to 5 mm" data-placement="right"><a
-                href="http://spc.ucsd.edu/viewer/spcview.html?preset=spc2big">SPC2:
-                [1.0,5.0] mm</a>
-                </li>
-                <li data-toggle="tooltip" title="Show images from SPC2 camera in the
-                range 0.5 mm to 1 mm" data-placement="right"><a
-                href="http://spc.ucsd.edu/viewer/spcview.html?preset=spc2medium">SPC2:
-                [0.5,1.0] mm</a>
-                </li>
-                <li data-toggle="tooltip" title="Show images from SPCP2 camera in the
-                range 0.05 mm to 1 mm" data-placement="right"><a
-                href="http://spc.ucsd.edu/viewer/spcview.html?preset=spcp2big">SPCP2:
-                [0.05,1.0] mm</a>
-                </li>
-                <li data-toggle="tooltip" title="Show images from SPCP2 camera in the
-                range 0.05 mm to 0.1 mm" data-placement="right"><a
-                href="http://spc.ucsd.edu/viewer/spcview.html?preset=spcp2medium">SPCP2:
-                [0.05,0.1] mm</a>
-                </li>
-            </ul>
+            <ul id="search-presets" class="dropdown-menu" role="menu"></ul>
          </li>
         <li id="toggle-timeline" data-toggle="tooltip" title="Show/Hide a browsable timeline of detected images per day." data-placement="bottom"><a href="#">Timeline</a></li>
         <li id="toggle-search-params" data-toggle="tooltip" title="Show/Hide the set of image search parameters." data-placement="bottom"><a href="#">Search Settings</a></li>

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<root>
+    <StartTime>2017-08-03 08:00:00</StartTime>
+    <EndTime>2017-12-31 23:59:59</EndTime>
+    <dst>True</dst>
+    <CameraName>SPCP2</CameraName>
+    <MinSize>0</MinSize>
+    <MaxSize>10</MaxSize>
+    <MinAspect>0</MinAspect>
+    <MaxAspect>1</MaxAspect>
+    <OutFile>/home/ptvradmin/virtualenvs/planktivore/dataset_info/all_spcp_size_aspect_010118</OutFile>
+</root>
+

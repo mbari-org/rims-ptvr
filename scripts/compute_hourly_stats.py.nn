@@ -1,0 +1,75 @@
+from rois.models import Image, PlanktonCamera
+from roistats.models import HourlyStats
+import datetime
+import pytz
+import numpy as np
+import glob
+import os
+import sys
+
+def run(*args):
+
+    print args
+    start_hour = datetime.datetime(
+            year=int(args[0].split('/')[2]),
+            month=int(args[0].split('/')[0]),
+            day=int(args[0].split('/')[1]),
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+            tzinfo=pytz.UTC
+    )
+
+    # Extract the other settings from argumnts
+    # assumes mm units for length
+    min_length = int(args[2].split(','[0])
+    max_length = int(args[2].split(',')[1])
+    length_inc = int(args[2].split(',')[2])
+    min_aspect = int(args[3].split(',')[0])
+    max_aspect = int(args[3].split(',')[1])
+    aspect_inc = int(args[3].split(',')[2])
+
+    # Create ranges for histograms
+    length_bins = np.arange(min_length,max_length,length_inc)
+    aspect_bins = np.arange(min_aspect,max_aspect,aspect_inc)
+
+    
+    cam = PlanktonCamera.objects.get(name=args[1])
+
+    t1 = start_hour + datetime.timedelta(hours=hour)
+
+    t2 = t1 + datetime.timedelta(hours=1)
+    # Get or create the object
+    hourly_stats,created  = HourlyStats.objects.get_or_create(camera__name=cam,hour=t1)
+    hourly_stats.camera = cam
+    hourly_stats.hour = t1
+        
+    # retrive queryset
+    values_list = Image.objects.filter(timestamp__gte=t1,
+            timestamp__lte=t2,
+            camera__name=cam.name).values_list('major_axis_length',
+            'aspect_ratio')
+        
+
+    if len(values_list) == 0:
+        hourly_stats.save()
+        continue
+
+    # Process
+    major_lengths = np.array(values_list)[:,0]
+    minor_lengths = np.array(values_list)[:,1]
+        
+    hourly_stats.total_rois = major_lengths.size
+    hourly_stats.average_major_length = int(np.mean(major_lengths))
+    hourly_stats.average_minor_length = int(np.mean(minor_lengths))
+    hourly_stats.stddev_major_length = int(np.std(major_lengths))
+    hourly_stats.stddev_minor_length = int(np.std(minor_lengths))
+    hourly_stats.median_major_length = int(np.median(major_lengths))
+    hourly_stats.median_minor_length = int(np.median(minor_lengths))
+
+    # update display
+    print str(t1) + " found " + str(hourly_stats.total_rois) + " rois."
+
+    # Save 
+    hourly_stats.save()

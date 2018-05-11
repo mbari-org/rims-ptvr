@@ -1,0 +1,141 @@
+body {
+  width: 100%;
+  padding-top: 100px;
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.progress {
+  height: 24px;
+}
+
+.progress-bar{
+    padding-top: 3px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.image-item {
+  display: inline-block;
+  border: 2px solid #333;
+  border-color: hsla(0, 0%, 0%, 0.7);
+  vertical-align: top;
+  
+}
+
+.image-item:hover {
+  border: 2px solid #fff;
+  background: #8CF;
+  cursor: pointer;
+}
+
+.selected-image-item {
+  border: 2px solid #099;
+  background: #8CF;
+  cursor: pointer;
+}
+
+.labeled-image-item {
+  border: 2px solid #f660ab;
+  background: #8CF;
+  cursor: pointer;
+}
+.selected-image-item:hover {
+  border: 2px solid #fff;
+  background: #8CF;
+  cursor: pointer;
+}
+.labeled-image-item.selected-image-item {
+  border: 2px solid #33ee00;
+  background: #8CF;
+  cursor: pointer;
+}
+
+.nav.navbar-nav li a.search {
+    color: #0f0;
+}
+
+.nav.navbar-nav li a.archive {
+    color: #00f;
+}
+.vertical-pad {
+  height: 25px;
+ }
+ 
+ .nav-panel {
+  background: #333;
+  color: #999;
+ }
+ 
+#query-text {
+    margin-left: 15px;
+    color: #66CC88;
+    float: left;
+    margin-top: -15px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+#status-text {
+    color: #CCCCFF;
+    margin-left: 15px;
+    float: left;
+    margin-top: -15px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#ScaleBar {
+    background-color: #ccF;
+    color: #000;
+    text-align: center;
+    width: 100%;
+    height: 20px;
+}
+
+#page-container {
+    float: right;
+    margin-left: 25px;
+    margin-top: -10px;
+    margin-bottom: -10px;
+}
+
+#image-window {
+    width: 50%;
+    height: 100%;
+}
+    
+.modal-dialog {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.modal-content {
+  height: 100%;
+  border-radius: 0;
+}
+
+.modal-body {
+  height: 80%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#ImageContainer {
+    float: left;
+}
+
+img #TargetImage {
+    image-rendering: auto;
+}
+
+#ImageInfo {
+    width: 30%;
+    margin-left: 20px;
+    float: left;
+}
+
+.info-label {
+    color: #0af;
+}
+

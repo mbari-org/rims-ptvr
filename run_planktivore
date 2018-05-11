@@ -1,0 +1,1 @@
+/home/ptvradmin/virtualenvs/planktivore/bin/gunicorn -c /home/ptvradmin/virtualenvs/planktivore/planktivore_caymans/gunicorn_config.py planktivore.wsgi

@@ -1,0 +1,12 @@
+nohup.out
+classes_1516combined.txt
+*.tif
+*.png
+*.zip
+*.jpg
+*.pyc
+*.prof
+images/
+fonts/
+static/
+migrations/

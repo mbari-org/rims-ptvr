@@ -1,0 +1,16 @@
+python manage.py runscript import_2014_spc_images --script-args=139* &
+python manage.py runscript import_2014_spc_images --script-args=1401* &
+python manage.py runscript import_2014_spc_images --script-args=1402* &
+python manage.py runscript import_2014_spc_images --script-args=1403* &
+python manage.py runscript import_2014_spc_images --script-args=1404* &
+python manage.py runscript import_2014_spc_images --script-args=1405* &
+python manage.py runscript import_2014_spc_images --script-args=1406* &
+python manage.py runscript import_2014_spc_images --script-args=1407* &
+python manage.py runscript import_2014_spc_images --script-args=1408* &
+python manage.py runscript import_2014_spc_images --script-args=1409* &
+python manage.py runscript import_2014_spc_images --script-args=1410* &
+python manage.py runscript import_2014_spc_images --script-args=1411* &
+python manage.py runscript import_2014_spc_images --script-args=1412* &
+python manage.py runscript import_2014_spc_images --script-args=1413* &
+python manage.py runscript import_2014_spc_images --script-args=1414* &
+python manage.py runscript import_2014_spc_images --script-args=1415* &

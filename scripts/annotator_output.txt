@@ -1,0 +1,18 @@
+Check for django.contrib.admin.scripts.info_fill
+Check for django.contrib.auth.scripts.info_fill
+Check for django.contrib.contenttypes.scripts.info_fill
+Check for django.contrib.sessions.scripts.info_fill
+Check for django.contrib.messages.scripts.info_fill
+Check for django.contrib.staticfiles.scripts.info_fill
+Check for django_extensions.scripts.info_fill
+Check for rest_framework.scripts.info_fill
+Check for jquery.scripts.info_fill
+Check for rois.scripts.info_fill
+Check for roistats.scripts.info_fill
+Check for systemstats.scripts.info_fill
+Check for corsheaders.scripts.info_fill
+Check for django_mptt_admin.scripts.info_fill
+Check for scripts.info_fill
+Found script 'scripts.info_fill' ...
+Running script 'scripts.info_fill' ...
+number of images 2129823

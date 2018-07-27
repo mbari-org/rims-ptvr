@@ -586,6 +586,7 @@ class ImageList(generics.ListAPIView):
         # Filter on label if requestedi
 
         lqs = LabelInstance.objects
+        use_lqs = False
 
         # check for invert selector
         invert_labels = False
@@ -597,8 +598,9 @@ class ImageList(generics.ListAPIView):
         if invert_labels:
         
             if (label_name.lower() == 'unlabeled'):
-                qs = qs.filter(user_labels__isnull=False)
+                qs = qs.exclude(user_labels__isnull=True)
             elif (label_name.lower() != 'any'):
+                use_lqs = True
                 if (self.kwargs['labeltype'] == 'machines'):
                     lqs = lqs.exclude(
                             label__name__in=label_name.split(','),
@@ -617,6 +619,7 @@ class ImageList(generics.ListAPIView):
             if (label_name.lower() == 'unlabeled'):
                 qs = qs.filter(user_labels__isnull=True)
             elif (label_name.lower() != 'any'):
+                use_lqs = True
                 if (self.kwargs['labeltype'] == 'machines'):
                     lqs = lqs.filter(
                             label__name__in=label_name.split(','),
@@ -639,6 +642,7 @@ class ImageList(generics.ListAPIView):
             
         # Filter on tag if requested
         if (annotator_name.lower() != 'any'):
+            use_lqs = True
             lqs = lqs.filter(
                     annotator__name__in=annotator_name.split(',')
             )
@@ -646,7 +650,8 @@ class ImageList(generics.ListAPIView):
 
 
         # apply the label and annotator filters
-        qs = qs.filter(pk__in = lqs.values_list('image__image_id'))
+        if use_lqs:
+            qs = qs.filter(pk__in = lqs.values_list('image__image_id'))
 
 
         # if not archving, get a subset of the total

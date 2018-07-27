@@ -73,6 +73,9 @@ class Annotator(models.Model):
     user = models.CharField('User name', max_length=1024, default='')
 
     name = models.CharField('Annotator name', max_length=1024, default='')
+    
+    def __str__(self):
+        return self.name or ''
 
 """ A Machine Annotator """
 class MachineAnnotator(Annotator):

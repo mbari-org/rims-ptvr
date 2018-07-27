@@ -6,12 +6,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rois.models import Image, Tag, Label, LabelSet, TagSet, QueryRecord
-from rois.models import MachineAnnotator, HumanAnnotator, LabelInstance
+from rois.models import Annotator, MachineAnnotator, HumanAnnotator, LabelInstance
 from django.db.models import Q
 from django.conf import settings
 from rest_framework import viewsets, generics
 from rois.serializers import ImageSerializer, ImageValueSerializer
 from rest_framework.renderers import JSONRenderer
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from utils import convert_date
 import numpy as np
@@ -48,6 +49,11 @@ def totals(request,camera='SPC2'):
 def labels(request):
     resp = {}
     resp['labels'] = list(Label.objects.all().values())
+    return HttpResponse(json.dumps(resp),content_type="application/json")
+    
+def annotators(request):
+    resp = {}
+    resp['annotators'] = list(Annotator.objects.all().values())
     return HttpResponse(json.dumps(resp),content_type="application/json")
 
 def logout_user(request):
@@ -216,6 +222,11 @@ def label_images(request):
             tag_name = data['tag']
             started = data['started']
             submitted = data['submitted']
+            
+            if 'name' in data:
+                labelset_name = data['name']
+            else:
+                labelset_name = ''
     
             if 'notes' in data:
                 notes = data['notes']
@@ -305,7 +316,7 @@ def label_images(request):
 
                     # see if the annotator object exists
                     if not MachineAnnotator.objects.filter(name=machine_name):
-                        ma = MachineAnnotator(user=user_info,
+                        ma = MachineAnnotator(user=request.user.get_username(),
                                 name=machine_name,
                                 timestamp=ls.started)
                         ma.save()
@@ -334,7 +345,7 @@ def label_images(request):
 
                     # see if human annotator exists
                     if not HumanAnnotator.objects.filter(user=request.user.get_username()):
-                        ha = HumanAnnotator(user=request.user.get_username())
+                        ha = HumanAnnotator(user=request.user.get_username(),name=request.user.get_username())
                         ha.save()
                     else:
                         ha = HumanAnnotator.objects.filter(user=request.user.get_username())[0]
@@ -433,13 +444,19 @@ class ImageViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(camera__name=cam)
 
 
+class ImageListPagination(PageNumberPagination):
+    page_size = 500
+    max_page_size = 50000
+        
 class ImageList(generics.ListAPIView):
 
     serializer_class = ImageSerializer
+    pagination_class = ImageListPagination
 
     queryset = []
 
     def get(self,request,*args,**kwargs):
+        self.pagination_class.page_size = self.kwargs['nimages']
         response = super(ImageList,self).get(request,*args,**kwargs)
         if len(response.data) == 0:
             response.data = [{}]
@@ -450,7 +467,8 @@ class ImageList(generics.ListAPIView):
         response.data['image_data'] = r
         response.data['total_matching'] = self.total_matching
         response.data['query_time'] = self.query_time
-        response.data['page_size'] = settings.REST_FRAMEWORK['PAGE_SIZE']  
+        response.data['page_size'] = self.kwargs['nimages']
+        #response.data['page_size'] = settings.REST_FRAMEWORK['PAGE_SIZE']  
 
 
         # sort the result by image height
@@ -509,6 +527,7 @@ class ImageList(generics.ListAPIView):
         hour_end = self.kwargs['hourend']
         label_name = self.kwargs['label']
         tag_name = self.kwargs['tag']
+        annotator_name = self.kwargs['annotator']
         self.total_count = 100
         
         noclipped = exclude.find('clipped') != -1 
@@ -564,30 +583,52 @@ class ImageList(generics.ListAPIView):
         #        human_labels_ids = sum(human_labels,())
         #        qs = qs.filter(pk__in = human_labels_ids[0])
 
-        # Filter on label if requested
-        if (label_name.lower() == 'unlabeled'):
-            qs = qs.filter(user_labels__isnull=True)
-        elif (label_name.lower() != 'any'):
-            if (self.kwargs['labeltype'] == 'machines'):
-                image_ids = LabelInstance.objects.filter(
-                        label__name=label_name,
-                        annotator__in=MachineAnnotator.objects.all()
-                        ).values_list('image__image_id')
-                
-                qs = qs.filter(pk__in = image_ids)
-            
-            elif (self.kwargs['labeltype'] == 'humans'):
-                image_ids = LabelInstance.objects.filter(
-                        label__name=label_name,
-                        annotator__in=HumanAnnotator.objects.all()
-                        ).values_list('image__image_id')
-                qs = qs.filter(pk__in = image_ids)
-            
-            else:
-                image_ids = LabelInstance.objects.filter(
-                        label__name=label_name,
-                        ).values_list('image__image_id')
-                qs = qs.filter(pk__in = image_ids)
+        # Filter on label if requestedi
+
+        lqs = LabelInstance.objects
+
+        # check for invert selector
+        invert_labels = False
+        if len(label_name) > 1:
+            if label_name[0] == '!':
+                label_name = label_name[1:]
+                invert_labels = True
+        
+        if invert_labels:
+        
+            if (label_name.lower() == 'unlabeled'):
+                qs = qs.filter(user_labels__isnull=False)
+            elif (label_name.lower() != 'any'):
+                if (self.kwargs['labeltype'] == 'machines'):
+                    lqs = lqs.exclude(
+                            label__name__in=label_name.split(','),
+                            annotator__in=MachineAnnotator.objects.all()
+                        )
+                elif (self.kwargs['labeltype'] == 'humans'):
+                    lqs = lqs.exclude(
+                            label__name__in=label_name.split(','),
+                            annotator__in=HumanAnnotator.objects.all()
+                        )
+                else:
+                    lqs = lqs.exclude(label__name__in=label_name.split(','))
+
+        else:
+
+            if (label_name.lower() == 'unlabeled'):
+                qs = qs.filter(user_labels__isnull=True)
+            elif (label_name.lower() != 'any'):
+                if (self.kwargs['labeltype'] == 'machines'):
+                    lqs = lqs.filter(
+                            label__name__in=label_name.split(','),
+                            annotator__in=MachineAnnotator.objects.all()
+                        )
+                elif (self.kwargs['labeltype'] == 'humans'):
+                    lqs = lqs.filter(
+                            label__name__in=label_name.split(','),
+                            annotator__in=HumanAnnotator.objects.all()
+                        )
+                else:
+                    lqs = lqs.filter(label__name__in=label_name.split(','))
 
 
         # Filter on tag if requested
@@ -595,6 +636,18 @@ class ImageList(generics.ListAPIView):
             qs = qs.filter(tags__isnull=True)
         elif (tag_name.lower() != 'any'):
             qs = qs.filter(tags__pk=tag_name)
+            
+        # Filter on tag if requested
+        if (annotator_name.lower() != 'any'):
+            lqs = lqs.filter(
+                    annotator__name__in=annotator_name.split(',')
+            )
+            #qs = qs.filter(pk__in = image_ids)
+
+
+        # apply the label and annotator filters
+        qs = qs.filter(pk__in = lqs.values_list('image__image_id'))
+
 
         # if not archving, get a subset of the total
         ts = time.time()

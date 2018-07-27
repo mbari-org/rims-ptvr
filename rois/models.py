@@ -70,7 +70,9 @@ class Annotator(models.Model):
     
     description = models.CharField('Annotator Description', null=True,
             blank=True, max_length=1024, default='')
-    user = models.CharField('Creator name', max_length=1024, default='')
+    user = models.CharField('User name', max_length=1024, default='')
+
+    name = models.CharField('Annotator name', max_length=1024, default='')
 
 """ A Machine Annotator """
 class MachineAnnotator(Annotator):
@@ -79,8 +81,8 @@ class MachineAnnotator(Annotator):
             db_index=True)
     classifier_type = models.CharField('Classifier Type', null=True,
             blank=True, max_length=1024, default='')
-    name = models.CharField('Annotator Name', null=True, blank=True,
-            max_length=1024, default='')
+            
+
 
 """ A Human Annotator """
 class HumanAnnotator(Annotator):
@@ -145,6 +147,7 @@ class TagSet(models.Model):
             return 0
 
 
+
 """ A image of a single object (ROI) """
 class Image(models.Model):
 
@@ -189,11 +192,14 @@ class Image(models.Model):
         default='')
 
     # Labels and tags
+    
     user_labels = models.ManyToManyField(
         Label,related_name='example_image',blank=True)
     machine_labels = models.ManyToManyField(
         Label,related_name='machine_labeled_image',blank=True)
     tags = models.ManyToManyField(Tag,blank=True)
+
+    
 
     # LabelSets and TagSets
     label_set = models.ManyToManyField(LabelSet,blank=True)
@@ -452,12 +458,13 @@ class Image(models.Model):
 
         return True
 
+
 """ Label Instance """
 class LabelInstance(models.Model):
 
-    image = models.ForeignKey(Image, related_name='image')
-    label_set = models.ForeignKey(LabelSet, related_name='label_set')
-    label = models.ForeignKey(Label, related_name='label_info')
+    image = models.ForeignKey(Image, related_name='labels')
+    label_set = models.ForeignKey(LabelSet, related_name='labels')
+    label = models.ForeignKey(Label, related_name='labels')
     confidence = models.FloatField('Confidence Metric', editable=False,
             db_index=True, null=True, blank=True, default=None)
     created = models.DateTimeField('Created', editable=False, db_index=True)

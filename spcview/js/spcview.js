@@ -44,6 +44,7 @@ var spcview = (function() {
     var maxAspect = $('#max-aspect');
     var excludeClipped = $('#exclude-clipped');
     var searchMachineLabels = $('#search-machine-labels');
+    var searchInvertLabels = $('#search-invert-labels');
     var searchHumanLabels = $('#search-human-labels');
     var randomizeResults = $('#randomize-results');
     //var makeArchive = $('#make-archive');
@@ -51,6 +52,7 @@ var spcview = (function() {
     var hideTagged = $('#hide-tagged');
     var camera = $('#camera');
     var searchLabel = $('#search-label');
+    var searchAnnotator = $('#search-annotator');
     var searchTag = $('#search-tag');
     var utcStart = $('#utc-start');
     var utcEnd = $('#utc-end');
@@ -386,7 +388,12 @@ var spcview = (function() {
         //    input_url = input_url + "archive/";
         //else
             input_url = input_url + "skip/";
-        input_url = input_url + searchLabel.val() + "/";
+        invertString = '';
+        if (searchInvertLabels.prop('checked')) {
+          invertString = '!';
+        }
+
+        input_url = input_url + invertString + searchLabel.val() + "/";
         labelType = "anytype";
         if(searchMachineLabels.prop('checked') && !searchHumanLabels.prop('checked'))
             labelType = "machines";
@@ -394,6 +401,7 @@ var spcview = (function() {
             labelType = "humans";
         input_url = input_url + labelType + "/";
         input_url = input_url + searchTag.val() + '/';
+        input_url = input_url + searchAnnotator.val() + '/';
         console.log(input_url);
         return input_url;
     };
@@ -1102,7 +1110,7 @@ var spcview = (function() {
             },
         });
     };
-
+    
     my.getLabels = function() {
         return allLabels;
     };
@@ -1114,6 +1122,55 @@ var spcview = (function() {
         }
         return names;
     };
+    
+    my.loadAnnotators = function() {
+        $.ajax({
+            url: 'http://planktivore.ucsd.edu/caymans_data/rois/annotators/',
+            type: 'GET',
+            success: function (json) {
+                allAnnotators = json['annotators'];
+               
+                allAnnotators.sort(function(a,b) {
+                    if (a.name > b.name)
+                        return 1;
+                    else if (a.name < b.name)
+                        return -1;
+                    else
+                        return 0;
+                });
+
+                // get the name of the current selection
+                var curSel = searchAnnotator.val();
+
+                searchAnnotator.empty();
+                searchAnnotator.append($('<option></option>').attr('value','Any').text('Any'));
+                searchAnnotator.append($('<option></option>').attr('value','Unlabeled').text('Unlabeled'));
+                for (var i = 0; i < allAnnotators.length;i++) {
+                    searchAnnotator.append($("<option></option>").attr("value",allAnnotators[i].name).text(allAnnotators[i].name));
+                }
+                searchAnnotator.val(curSel).prop('selected',true);
+                searchAnnotator.selectpicker('refresh');
+
+
+                $('#label').typeahead('destroy');
+                $('#label').typeahead({'source': allAnnotators});
+            },
+        });
+    };
+    
+    my.getAnnotators = function() {
+        return allAnnotators;
+    };
+    
+    my.getAnnotatorNames = function() {
+        names = [];
+        for (var i =0;i < allAnnotators.length;i++) {
+            names.push(allAnnotators[i].name);
+        }
+        return names;
+    };
+
+
     
     my.loadTags = function() {
         $.ajax({
@@ -1324,7 +1381,7 @@ var spcview = (function() {
                 buildPageNav(json);
                 renderMosaicfromJSON(json);
                 runSearch.show();
-                getArchive.show();
+                //getArchive.show();
             },
             // handle a non-successful response
             error : function(xhr,errmsg,err) {
@@ -1665,6 +1722,7 @@ spcview.loadPreset(urlParams);
 spcview.buildPresetMenu();
 // Load initial data
 spcview.loadLabels();
+spcview.loadAnnotators();
 spcview.loadTags();
 spcview.loadRoiData();
 

@@ -225,21 +225,31 @@
                 </div>
                 <div class="col-lg-2">
                     <div class="input-group">
-                        <span class="input-group-addon">Machine</span>
-                        <select class="selectpicker" id="search-machine"
+                        <span class="input-group-addon">Annotator</span>
+                        <select class="selectpicker" id="search-annotator"
                             data-toggle="tooltip"
                             onchange="spcview.invalidateData()" 
                             title="Search for images labeld by a particular
-                            automated classifier" 
+                            annotator" 
                             data-placement="bottom"
                             multiple>
                             <option value="Any" selected>Any</option>
-                            <option value="Untagged">Untagged</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-2">
+                    <div class="checkbox">
+                        <label>    
+                        <input type="checkbox" value=""
+                        id="search-invert-labels"
+                        type="text" onchange="spcview.invalidateData()"
+                        data-toggle="tooltip" title="search for images that do NOT contain the selected labels" data-placement="bottom">
+                        Invert Labels
+                        </label>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="checkbox">
                         <label>    

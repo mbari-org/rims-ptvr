@@ -17,7 +17,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     image_timestamp = serializers.SerializerMethodField()
     #camera_name = serializers.SerializerMethodField()
     #tag_name = serializers.SerializerMethodField()
-    user_labels = serializers.StringRelatedField(many=True)
+    #user_labels = serializers.StringRelatedField(many=True)
+    user_labels = serializers.SerializerMethodField()
     tags = serializers.StringRelatedField(many=True)
 
     class Meta:
@@ -35,7 +36,16 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
     #def get_api_url(self,obj):
     #    return "#/image/%s" % obj.id
-    
+
+    def get_user_labels(self,obj):
+
+        output = []
+
+        for l in obj.labels.all():
+            output.append(l.label.name)
+
+        return output
+
     def get_image_url(self,obj):
         return obj.get_image_path()
 

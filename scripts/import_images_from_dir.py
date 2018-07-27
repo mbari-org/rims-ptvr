@@ -5,7 +5,7 @@ import sys
 import time
 from multiprocessing import Pool
 
-data_dir = '/home/ptvradmin/inputdata/caymans2017/EC1_SPC_Images_3-COLOR'
+data_dir = '/home/ptvradmin/inputdata/caymans2017/EC3_SPC_Images_3-COLOR/'
 
 def do_import(image_path):
 
@@ -40,7 +40,9 @@ def do_import(image_path):
        
         else:
             im = im[0]
-            print image_name + " already exists in db, will reprocess..."
+            #print image_name + " already exists in db, will reprocess..."
+            print image_name + " already exists in db, skipping..."
+            return
             
         search_time = time.time()-start_time
         # read and process the image
@@ -102,7 +104,7 @@ def run(*args):
     p.join()
     print "finished with import."
     roi_proc_time = len(image_list)/(time.time()-start_time)
-    with open("/data/home/ptvradmin/roi_proc_stats.txt","a") as f:
-        f.write(str(time.time()) + "," + data_dir + ",", + str(roi_proc_time) + "\n")
+    with open("/home/ptvradmin/roi_proc_stats.txt","a+") as f:
+        f.write(str(time.time()) + "," + str(data_dir) + "," + str(roi_proc_time) + "\n")
 
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from rois.models import Image, HumanAnnotator, MachineAnnotator, Annotator, PlanktonCamera, Label, LabelInstance, TagSet, LabelSet, QueryRecord, Tag
-from django_mptt_admin.admin import DjangoMpttAdmin
+#from mptt.admin import DjangoMpttAdmin
 
 class ImageAdmin(admin.ModelAdmin):
     readonly_fields = (

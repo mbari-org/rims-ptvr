@@ -18,12 +18,11 @@ from skimage import morphology, measure, exposure, restoration
 from skimage import transform
 from skimage import util
 from skimage import color
-from skimage.feature import register_translation, canny
+from skimage.feature import canny
 from skimage.filters import threshold_otsu, scharr, gaussian
 from skimage.draw import ellipse_perimeter
 import numpy as np
 from scipy import ndimage
-import xmlsettings
 
 PROC_VERSION = 101
 EDGE_THRESH = 2.0

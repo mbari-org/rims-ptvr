@@ -7,7 +7,7 @@ import os
 import errno
 import datetime
 import pytz
-import cvtools
+import rois.cvtools as cvtools
 import shutil
 import time
 import numpy as np
@@ -32,7 +32,7 @@ class Label(MPTTModel):
 
     # Parent as a MPTT tree 
     parent = TreeForeignKey(
-        'self',null=True,blank=True,related_name='children')
+        'self',null=True,blank=True,related_name='children',on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name or ''
@@ -45,7 +45,7 @@ class Tag(MPTTModel):
 
     name = models.CharField('Tag Name',max_length=64,primary_key=True)
     parent = TreeForeignKey(
-        'self',null=True,blank=True,related_name='children')
+        'self',null=True,blank=True,related_name='children',on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name or ''
@@ -58,7 +58,7 @@ class QueryRecord(models.Model):
     
     submitted = models.DateTimeField(
         'Submitted',editable=False,db_index=True)
-    user = models.ForeignKey(User,null=True)
+    user = models.ForeignKey(User,null=True,on_delete=models.CASCADE)
     path = models.CharField('Query Path',editable=False,max_length=2048)
     remote_addr = models.CharField(
         'Remote IP Address',editable=False,max_length=32,db_index=True,null=True,blank=True)
@@ -99,8 +99,8 @@ class LabelSet(models.Model):
         'Started',editable=False,db_index=True)
     submitted = models.DateTimeField(
         'Submitted',editable=False,db_index=True)
-    label = models.ForeignKey(Label,related_name='label')
-    user = models.ForeignKey(User)
+    label = models.ForeignKey(Label,related_name='label',on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     image_list = ArrayField(models.CharField(max_length=128),null=True)
     confidence_list = ArrayField(models.FloatField(),null=True)
     is_machine = models.BooleanField(default=False)
@@ -128,8 +128,8 @@ class TagSet(models.Model):
         'Started',editable=False,db_index=True)
     submitted = models.DateTimeField(
         'Submitted',editable=False,db_index=True)
-    tag = models.ForeignKey(Tag,related_name='tag')
-    user = models.ForeignKey(User)
+    tag = models.ForeignKey(Tag,related_name='tag',on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     image_list = ArrayField(models.CharField(max_length=128),null=True)
     confidence_list = ArrayField(models.FloatField(),null=True)
     is_machine = models.BooleanField(default=False)
@@ -209,7 +209,7 @@ class Image(models.Model):
     tag_set = models.ManyToManyField(TagSet,blank=True)
     
     # The plankton camera that generated the roi
-    camera = models.ForeignKey('PlanktonCamera',null=True)
+    camera = models.ForeignKey('PlanktonCamera',null=True,on_delete=models.CASCADE)
 
     # Flag to indicate the image may be clipped
     is_clipped = False
@@ -227,7 +227,7 @@ class Image(models.Model):
     # Check for a valid image id
     def valid_image_id(self):
         if (not self.explode_id()):
-            print "Image ID is not valid."
+            print("Image ID is not valid.")
             return False
         return True
 
@@ -440,7 +440,7 @@ class Image(models.Model):
                     str(round(self.aspect_ratio,3))+','+
                     str(round(self.sharpness,3))
                 )
-            print "saving morph data to " + morph_file
+            print("saving morph data to " + morph_file)
             with open(morph_path,"a+") as mf:
                 mf.write(morph_string+'\n')
             with open(id_path,"a+") as mf:
@@ -465,11 +465,11 @@ class Image(models.Model):
 """ Label Instance """
 class LabelInstance(models.Model):
 
-    image = models.ForeignKey(Image, related_name='labels')
-    label_set = models.ForeignKey(LabelSet, related_name='labels')
-    label = models.ForeignKey(Label, related_name='labels')
+    image = models.ForeignKey(Image, related_name='labels',on_delete=models.CASCADE)
+    label_set = models.ForeignKey(LabelSet, related_name='labels',on_delete=models.CASCADE)
+    label = models.ForeignKey(Label, related_name='labels',on_delete=models.CASCADE)
     confidence = models.FloatField('Confidence Metric', editable=False,
             db_index=True, null=True, blank=True, default=None)
     created = models.DateTimeField('Created', editable=False, db_index=True)
-    annotator = models.ForeignKey(Annotator, related_name='annotator')
+    annotator = models.ForeignKey(Annotator, related_name='annotator',on_delete=models.CASCADE)
 

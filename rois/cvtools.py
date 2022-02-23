@@ -86,7 +86,12 @@ def convert_to_8bit(img,auto_scale=True):
 # extract simple features and create a binary representation of the image
 # use the binary image to estimate morphological features and save out
 # a number of intermediate images
-def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix=''):
+def extract_features(img,
+                     original,
+                     proc_settings, 
+                     save_to_disk=False,
+                     abs_path='',
+                     file_prefix=''):
 
     start_time = time.time()
 
@@ -99,15 +104,18 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
     # compute features from gray image
     gray = np.uint8(np.mean(img,2))
     
+    # unpack settings
+    low_threshold = proc_settings['edge_threshold_low']
+    blur_rad = proc_settings['bw_blur_radius']
 
     # edge-based segmentation and region filling to define the object
     edges_mag = scharr(gray)
     edges_med = np.median(edges_mag)
-    edges_thresh = EDGE_THRESH*edges_med
+    edges_thresh = low_threshold*edges_med
     edges = edges_mag >= edges_thresh
-    edges = morphology.closing(edges,morphology.disk(3))
+    edges = morphology.closing(edges,morphology.disk(blur_rad))
     filled_edges = ndimage.binary_fill_holes(edges)
-    edges = morphology.erosion(filled_edges,morphology.disk(3))
+    edges = morphology.erosion(filled_edges,morphology.disk(blur_rad))
     
     # define the binary image for further operations
     bw_img = edges
@@ -203,7 +211,7 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
 
  
     # sharpness analysis of the image using FFTs
-    if ESTIMATE_SHARPNESS:
+    if proc_settings['estimate_sharpness']:
         if valid_object:
 
             gray_img = gray
@@ -260,7 +268,7 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
     else:
         img = np.float32(img)/np.max(img)
         
-    if DECONV:
+    if proc_settings['deconv']:
     
         # Get the intesity image in HSV space for sharpening
         # ignore 0/0 errors here
@@ -270,12 +278,12 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
     
     
         # unsharp mask before masking with binary image
-        if DECONV_METHOD.lower() == "um":
+        if proc_settings['deconv_method'] == "um":
 
             old_mean = np.mean(v_img)
             blurd = gaussian(v_img,1.0)
-            hpfilt = v_img - blurd*DECONV_MASK_WEIGHT
-            v_img = hpfilt/(1-DECONV_MASK_WEIGHT)
+            hpfilt = v_img - blurd*proc_settings['deconv_mask_weight']
+            v_img = hpfilt/(1-proc_settings['deconv_mask_weight'])
 
             new_mean = np.mean(v_img)
 
@@ -287,18 +295,21 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
             v_img = np.uint8(255*v_img)
 
         # mask the raw image with smoothed foreground mask
-        blurd_bw_img = gaussian(bw_img,BW_BLUR_RADIUS)
+        blurd_bw_img = gaussian(bw_img,blur_rad)
         v_img = v_img*blurd_bw_img
 
-        v_img[v_img == 0] = SMALL_FLOAT_VAL
+        v_img[v_img == 0] = proc_settings['small_float_val']
 
-        if DECONV_METHOD.lower() == "lr":
+        if proc_settings['deconv_method'] == "lr":
         
             # Make a guess of the PSF for sharpening
             # for now just use a static kernel size
+            # @TODO : add these to settings
             psf = make_gaussian(5, 3, center=None)
 
-            v_img = restoration.richardson_lucy(v_img, psf, DECONV_ITER)
+            v_img = restoration.richardson_lucy(v_img, 
+                                                psf, 
+                                                proc_settings['deconv_iter'])
 
             v_img[v_img < 0] = 0
 
@@ -308,14 +319,14 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
                 v_img = np.uint8(255*v_img/np.max(v_img))
         
         # restore the rbg image from hsv
-        v_img[v_img == 0] = SMALL_FLOAT_VAL
+        v_img[v_img == 0] = proc_settings['small_float_val']
         hsv_img[:,:,2] = v_img
         img = color.hsv2rgb(hsv_img)
     
     else:
     
         # mask the raw image with smoothed foreground mask
-        blurd_bw_img = gaussian(bw_img,BW_BLUR_RADIUS)
+        blurd_bw_img = gaussian(bw_img,blur_rad)
         for ind in range(0,3):
             img[:,:,ind] = img[:,:,ind]*blurd_bw_img
                
@@ -328,7 +339,7 @@ def extract_features(img,original,save_to_disk=False,abs_path='',file_prefix='')
     output['binary'] = 255*bw_img
     output['data'] = data_img
     output['sharpness'] = 1024*np.max(rad)
-    output['proc_version'] = PROC_VERSION
+    output['proc_version'] = proc_settings['proc_version']
 
     
     # Save the binary image and also color image if requested

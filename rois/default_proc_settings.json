@@ -1,0 +1,19 @@
+{
+    "name" : "Default-Settings",
+    "version" : 101,
+    "descrption" : "Default processing settings for image import",
+    "edge_threshold_low" : 2.0,
+    "edge_threhsold_high" : 2.2,
+    "edge_detector" : "Scharr",
+    "object_selection" : "Full ROI",
+    "load_raw" : false,
+    "is_bayer_pattern" : false,
+    "deconv" : true,
+    "deconv_method" : "LR",
+    "deconv_iter" : 9,
+    "deconv_mask_weight" : 0.5,
+    "estimate_sharpness" : true,
+    "small_float_val" : 0.0001,
+    "bw_blur_radius" : 3,
+    "bayer_pattern" : "RG"
+}

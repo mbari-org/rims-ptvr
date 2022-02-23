@@ -1,3 +1,4 @@
+from asyncio.proactor_events import _ProactorBaseWritePipeTransport
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
@@ -10,7 +11,60 @@ import pytz
 import rois.cvtools as cvtools
 import shutil
 import time
+import json
 import numpy as np
+
+from file_name_formats import FileNameFmt
+
+""" A Description of ROI Processing Settings """
+class ProcSettings(models.Model):
+    
+    # Name, desc and source for the settings
+    name = models.CharField('Proc Settings Name',max_length=64,unique=True)
+    description = models.CharField('Proc Settings Description',max_length=2048)
+    source = models.CharField('Proc Settings Source Code',max_length=8192)
+    
+    # key parameters that all settings much implement and would be
+    # desireable to search by
+    
+    # Threshold used to define an edge
+    edge_threshold_low = models.FloatField(
+        'Edge Threshold Low',editable=False,db_index=True,default=1.0)
+    edge_threshold_high = models.FloatField(
+        'Edge Threshold High',editable=False,db_index=True,default=1.0)
+    
+    # Detector used to find edges
+    edge_detector = models.CharField('Edge Detector',max_length=64)
+    
+    # Loaded from raw images
+    load_raw = models.BooleanField(default=False)
+    
+    # How foreground objects are selected
+    object_selection = models.CharField('Object Selection',max_length=64)
+    
+    # json data
+    json_settings = {}
+    
+    def load_settings(self, filepath):
+        try:
+            self.json_settings = json.load(open(filepath))
+        except:
+            pass
+        
+        # populate DB fields
+        self.source = json.dumps(self.json_settings)
+        self.name = self.json_settings['name']
+        self.description = self.json_settingsp['description']
+        self.edge_threshold_high = self.json_settings['edge_threhsold_high']
+        self.edge_threshold_low = self.json_settings['edge_threhsold_low']
+        self.edge_detector = self.json_settings['edge_detector']
+        self.object_selection = self.json_settings['object_selection']
+        
+    def load_default_settings(self):
+        self.load_settings('default_proc_settings.json')
+    
+    def __str__(self):
+        return self.name or ''
 
 """ A Plankton Camera """
 class PlanktonCamera(models.Model):
@@ -357,7 +411,11 @@ class Image(models.Model):
     
         
     # import and image from the local disk
-    def import_image(self,path,from_raw=False):
+    def import_image(self,path, proc_settings=None):
+        
+        # Load in the settings or a default
+        if proc_settings is not None:
+           pass 
         
         # check for valid id
         if (not self.valid_image_id()):

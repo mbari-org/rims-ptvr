@@ -6,6 +6,7 @@ classes_1516combined.txt
 *.jpg
 *.pyc
 *.prof
+*.dot
 images/
 fonts/
 static/

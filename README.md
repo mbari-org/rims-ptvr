@@ -15,6 +15,8 @@ A framework for maganing and visualization images and/or Regions Of Interest (RO
 ### Install Python Packages
 
 * `pip install opencv-python`
+* `pip install scikit-image`
+* `pip install loguru`
 * `pip install django`
 * `pip install django-extensions`
 * `pip install django-mptt`

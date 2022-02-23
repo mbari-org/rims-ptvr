@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jquery',
+    'django_extensions',
     'rest_framework',
     'corsheaders',
     'mptt',

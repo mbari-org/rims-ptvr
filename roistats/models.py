@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import ArrayField
 
 class DailyHistograms(models.Model):
     day = models.DateField('Date',editable=False,db_index=True)
-    camera = models.ForeignKey('rois.PlanktonCamera',null=True)
+    camera = models.ForeignKey('rois.Camera',null=True)
     total_rois = models.PositiveIntegerField('Total ROIs',
             editable=False,db_index=True,default=0)
 
@@ -23,7 +23,7 @@ class DailyHistograms(models.Model):
 class DailyStats(models.Model):
 
     day = models.DateField('Date',editable=False,db_index=True)
-    camera = models.ForeignKey('rois.PlanktonCamera',null=True)
+    camera = models.ForeignKey('rois.Camera',null=True)
     total_rois = models.PositiveIntegerField('Total ROIs',
             editable=False,db_index=True,default=0)
     average_major_length = models.PositiveSmallIntegerField(
@@ -53,7 +53,7 @@ class DailyStats(models.Model):
 class HourlyStats(models.Model):
 
     hour = models.DateTimeField('Hour',editable=False,db_index=True)
-    camera = models.ForeignKey('rois.PlanktonCamera',null=True)
+    camera = models.ForeignKey('rois.Camera',null=True)
     total_rois = models.PositiveIntegerField('Total ROIs',
             editable=False,db_index=True,default=0)
     average_major_length = models.PositiveSmallIntegerField(

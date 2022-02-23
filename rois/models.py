@@ -1,8 +1,10 @@
+from asyncio.proactor_events import _ProactorBaseWritePipeTransport
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.conf import settings
 from mptt.models import MPTTModel, TreeForeignKey
+from loguru import logger
 import os
 import errno
 import datetime
@@ -10,10 +12,72 @@ import pytz
 import rois.cvtools as cvtools
 import shutil
 import time
+import json
 import numpy as np
+from loguru import logger
 
-""" A Plankton Camera """
-class PlanktonCamera(models.Model):
+from rois.file_name_formats import FileNameFmt
+
+""" A Description of ROI Processing Settings """
+class ProcSettings(models.Model):
+    
+    # Name, desc and source for the settings
+    name = models.CharField('Proc Settings Name',max_length=64,unique=True)
+    description = models.CharField('Proc Settings Description',max_length=2048)
+    source = models.CharField('Proc Settings Source Code',max_length=8192)
+    
+    # key parameters that all settings much implement and would be
+    # desireable to search by
+    
+    # Threshold used to define an edge
+    edge_threshold_low = models.FloatField(
+        'Edge Threshold Low',editable=False,db_index=True,default=1.0)
+    edge_threshold_high = models.FloatField(
+        'Edge Threshold High',editable=False,db_index=True,default=1.0)
+    
+    # Detector used to find edges
+    edge_detector = models.CharField('Edge Detector',max_length=64)
+    
+    # Loaded from raw images
+    load_raw = models.BooleanField(default=False)
+    
+    # How foreground objects are selected
+    object_selection = models.CharField('Object Selection',max_length=64)
+    
+    # json data
+    json_settings = {}
+    
+    def load_settings(self, filepath):
+        try:
+            self.json_settings = json.load(open(filepath))
+        except:
+            logger.error('Could not load settings file: ' + filepath)
+            pass
+        
+        # populate DB fields
+        self.source = json.dumps(self.json_settings)
+        
+        logger.debug(self.source)
+        
+        self.name = self.json_settings['name']
+        self.description = self.json_settings['description']
+        self.edge_threshold_high = self.json_settings['edge_threshold_high']
+        self.edge_threshold_low = self.json_settings['edge_threshold_low']
+        self.edge_detector = self.json_settings['edge_detector']
+        self.object_selection = self.json_settings['object_selection']
+        
+    def load_default_settings(self):
+        self.load_settings('default_proc_settings.json')
+
+    def create(self):
+        self.json_settings = json.loads(self.source)
+        logger.debug(self.json_settings)
+    
+    def __str__(self):
+        return self.name or ''
+
+""" A Camera """
+class Camera(models.Model):
 
     name = models.CharField('Camera Name',max_length=64,unique=True)
     description = models.CharField('Camera Description',max_length=2048)
@@ -209,7 +273,8 @@ class Image(models.Model):
     tag_set = models.ManyToManyField(TagSet,blank=True)
     
     # The plankton camera that generated the roi
-    camera = models.ForeignKey('PlanktonCamera',null=True,on_delete=models.CASCADE)
+    camera = models.ForeignKey('Camera',null=True,on_delete=models.CASCADE)
+    proc_settings = models.ForeignKey('ProcSettings',null=True,on_delete=models.CASCADE)
 
     # Flag to indicate the image may be clipped
     is_clipped = False
@@ -222,7 +287,7 @@ class Image(models.Model):
 
     def get_camera(self):
         meta = self.explode_id()
-        return PlanktonCamera.objects.get(name=meta['camera'])
+        return Camera.objects.get(name=meta['camera'])
 
     # Check for a valid image id
     def valid_image_id(self):
@@ -238,22 +303,9 @@ class Image(models.Model):
     # Map given image_id to relative path
     @staticmethod
     def convert_to_path(image_id):
-
-        # split first on '.' as image_id may have file extension
-        stmp = image_id.split('.')[0].split('-')
-       
-        # resolve issues with multiple dashes in camera name
-        camera_name = stmp[0]
-        offset = 0
-        for tok in stmp[1:]:
-            if len(tok) >= 10 and tok.isdigit():
-                break
-            camera_name = camera_name + '-' + tok
-            offset = offset + 1
-
-        
-        camera_dir = camera_name
-        unixtime = int(stmp[1+offset])
+        data = FileNameFmt.explode_filename(image_id)
+        unixtime = data['unixtime']
+        camera_dir = data['camera']
         
         outer_dir = str(int(unixtime/(86400)))
         inner_dir = str(int(unixtime/(864)))
@@ -275,33 +327,11 @@ class Image(models.Model):
                 raise
         return os.path.join(base_path,rel_path)
 
-    # Explode data from file name
-        length_inc = float(args[2].split(',')[2])/(7.38/1000)
+    def explode_id(self):
 
-    def explode_id(self,filename=''):
-
-        # split first on '.' as image_id may have file extension
-        stmp = self.image_id.split('.')[0].split('-')
-       
-        # resolve issues with multiple dashes in camera name
-        camera_name = stmp[0]
-        offset = 0
-        for tok in stmp[1:]:
-            if len(tok) >= 10 and tok.isdigit():
-                break
-            camera_name = camera_name + '-' + tok
-            offset = offset + 1
-
+        logger.debug(self.image_id)
         try:
-            data = {}
-            data['camera'] = camera_name
-            data['unixtime'] = int(stmp[1+offset])
-            data['image_number'] = int(stmp[2+offset])
-            data['roi_number'] = int(stmp[3+offset])
-            data['left'] = int(stmp[4+offset])
-            data['top'] = int(stmp[5+offset])
-            data['width'] = int(stmp[6+offset])
-            data['height'] = int(stmp[7+offset])
+            data = FileNameFmt.explode_filename(self.image_id)
         except:
             return False
 
@@ -318,7 +348,7 @@ class Image(models.Model):
         )
         image_path = os.path.join(
                 image_dir,
-                image_id.split(".")[0]
+                "".join(image_id.split('.')[0:-1])
         )
         return image_path
 
@@ -357,7 +387,19 @@ class Image(models.Model):
     
         
     # import and image from the local disk
-    def import_image(self,path,from_raw=False):
+    def import_image(self, path, proc_settings=None):
+        
+        # Load in the settings or a default
+        if proc_settings is None:
+            proc_settings = ProcSettings()
+            proc_settings.load_default_settings()
+            ps = ProcSettings.objects.filter(name = proc_settings.name)
+            if not ps.exists():
+                proc_settings.save()
+            else:
+                proc_settings = ps[0]
+
+        self.proc_settings = proc_settings
         
         # check for valid id
         if (not self.valid_image_id()):
@@ -376,30 +418,27 @@ class Image(models.Model):
         
         # Process the image and save the output
         img = np.array([])
-        if self.image_id.split('.')[1] == 'tif':
+        if self.image_id.split('.')[-1] == 'tif':
             # assume tif images are raw from the camera and need to be
             # converted
-            if from_raw:
-                img = cvtools.import_image(path,self.image_id.split('.tif')[0]+'_raw.tif')
+            if proc_settings.json_settings['is_raw']:
+                img = cvtools.import_image(path,self.image_id.split('.tif')[0]+'_raw.tif', proc_settings.json_settings)
             else:
-                img = cvtools.import_image(path,self.image_id,raw=False)
+                img = cvtools.import_image(path,self.image_id, proc_settings.json_settings)
             #print "loading " + path + "/" + self.image_id + " ... "
-            img_c_8bit = cvtools.convert_to_8bit(img)
+            img_c_8bit = cvtools.convert_to_8bit(img, proc_settings.json_settings)
         else:
             # otherwise, png or jpg will just be read
             #print "loading " + path + "/" + self.image_id + " ... "
-            img_c_8bit = cvtools.import_image(path,self.image_id,raw=False)
-
-        #print "Loaded image " + self.image_id
-        
-        #print "Extrcting Features ..."
+            img_c_8bit = cvtools.import_image(path,self.image_id, proc_settings.json_settings)
     
         output = cvtools.extract_features(
             img_c_8bit,
             img,
+            proc_settings.json_settings, 
             save_to_disk=True,
             abs_path=image_storage_path,
-            file_prefix=self.image_id.split('.')[0]
+            file_prefix=os.path.splitext(self.image_id)[0]
         )
         
         proc_end_time = time.time()
@@ -407,11 +446,11 @@ class Image(models.Model):
         #print("proc time: " + str(time.time()-proc_start_time))
 
         # Set the image features
-        self.major_axis_length = output['features']['major_axis_length']
-        self.minor_axis_length = output['features']['minor_axis_length']
+        self.major_axis_length = output['features']['axis_major_length']
+        self.minor_axis_length = output['features']['axis_minor_length']
         self.sharpness = output['sharpness']
         self.proc_time = proc_end_time - proc_start_time
-        self.proc_version = output['proc_version']
+        #self.proc_version = output['proc_version']
         
         if self.major_axis_length != 0:
             self.aspect_ratio = self.minor_axis_length/self.major_axis_length
@@ -424,10 +463,11 @@ class Image(models.Model):
         )
 
         # Set the image width and height
-        self.image_width = image_meta['width']
-        self.image_height = image_meta['height']
+        self.image_width = image_meta['image_width']
+        self.image_height = image_meta['image_height']
 
         # print out the morpho stats with timestamp
+        """
         if output['clipped_fraction'] <= 0.03 and settings.SAVE_MORPH:
             time_code = 7*24*3600*(int(image_meta['unixtime'])/(7*24*3600))
             morph_file = image_meta['camera']+'-'+str(time_code)+'-morph.csv'
@@ -449,13 +489,14 @@ class Image(models.Model):
         # Tag image as clipped if the clip fraction is more than 0.1
         if (output['clipped_fraction'] > 0.03):
             self.is_clipped = True
+        """
             
         
         # Set the camera
-        if (PlanktonCamera.objects.filter(name=image_meta['camera']).exists()):
-            self.camera = PlanktonCamera.objects.get(name=image_meta['camera'])
+        if (Camera.objects.filter(name=image_meta['camera']).exists()):
+            self.camera = Camera.objects.get(name=image_meta['camera'])
         else:
-            c = PlanktonCamera(name=image_meta['camera'])
+            c = Camera(name=image_meta['camera'])
             c.save()
             self.camera = c
 

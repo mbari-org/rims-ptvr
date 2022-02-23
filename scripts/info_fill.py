@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 
 """
 Created Tue May 01, 2018
@@ -26,7 +26,7 @@ def run():
     spcp = 0
     for img in imgs:
         info = img.explode_id()
-        img.camera = PlanktonCamera.objects.get(name=info['camera'])
+        img.camera = Camera.objects.get(name=info['camera'])
         if info['camera'] == 'SPC2':
             spc += 1
         elif info['camera'] == 'SPCP2':

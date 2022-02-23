@@ -1,10 +1,10 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 
 def run():
     count = 0
     images = Image.objects.all()
-    spc = PlanktonCamera.objects.get(name='SPC')
-    spcp = PlanktonCamera.objects.get(name='SPCP')
+    spc = Camera.objects.get(name='SPC')
+    spcp = Camera.objects.get(name='SPCP')
     for img in images.iterator():
 
         meta = img.explode_id()

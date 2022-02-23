@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from roistats.models import DailyStats
 import datetime
 import pytz
@@ -9,7 +9,7 @@ import sys
 
 def run(*args):
 
-    cam = PlanktonCamera.objects.get(name=args[0])
+    cam = Camera.objects.get(name=args[0])
 
     end_day = datetime.date.today()
     start_day = end_day - datetime.timedelta(days=1)

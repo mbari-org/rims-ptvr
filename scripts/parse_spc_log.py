@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from systemstats.models import MinuteStats
 import json
 import datetime
@@ -22,7 +22,7 @@ def add_minute_stats(log,data,camera='SPC2'):
     dt = datetime.timedelta(minutes=3)
     today = datetime.datetime.now(tz=pytz.utc)
 
-    cam = PlanktonCamera.objects.get(name=camera)
+    cam = Camera.objects.get(name=camera)
     
     counts = Image.objects.filter(camera__name=cam.name,timestamp__range=[today-dt,today]).count()
 

@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from roistats.models import HourlyStats
 import datetime
 import pytz
@@ -22,7 +22,7 @@ def run(*args):
             tzinfo=pytz.UTC
     )
     
-    cam = PlanktonCamera.objects.get(name=args[0])
+    cam = Camera.objects.get(name=args[0])
 
     # Loop over all the days and compute stats
     n_hours = 24

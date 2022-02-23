@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from roistats.models import HourlyStats
 import datetime
 import pytz
@@ -23,7 +23,7 @@ def run(*args):
             tzinfo=pytz.UTC
     )
     
-    cam = PlanktonCamera.objects.get(name=args[1])
+    cam = Camera.objects.get(name=args[1])
 
     max_aspect = float(args[3])
 

@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from roistats.models import DailyStats
 import datetime
 import pytz
@@ -9,11 +9,11 @@ import sys
 
 def run(*args):
 
-    print args
+    print(args)
     start_day = datetime.date(year=int(args[0].split('/')[2]),
             month=int(args[0].split('/')[0]),day=int(args[0].split('/')[1]))
 
-    cam = PlanktonCamera.objects.get(name=args[1])
+    cam = Camera.objects.get(name=args[1])
 
     end_day = datetime.date.today()
 
@@ -61,7 +61,7 @@ def run(*args):
         daily_stats.median_minor_length = int(np.median(minor_lengths))
 
         # update display
-        print str(d1) + " found " + str(daily_stats.total_rois) + " rois."
+        print (str(d1) + " found " + str(daily_stats.total_rois) + " rois.")
 
         # Save 
         daily_stats.save()

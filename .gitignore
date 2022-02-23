@@ -10,3 +10,5 @@ images/
 fonts/
 static/
 migrations/
+!rois/test_images/*.tif
+

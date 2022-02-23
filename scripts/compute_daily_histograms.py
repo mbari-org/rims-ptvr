@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from roistats.models import DailyHistograms
 import datetime
 import pytz
@@ -9,7 +9,7 @@ import sys
 
 def run(*args):
 
-    print args
+    print (args)
     start_hour = datetime.datetime(
             year=int(args[0].split('/')[2]),
             month=int(args[0].split('/')[0]),
@@ -35,7 +35,7 @@ def run(*args):
     aspect_bins = np.arange(min_aspect,max_aspect,aspect_inc)
 
     
-    cam = PlanktonCamera.objects.get(name=args[1])
+    cam = Camera.objects.get(name=args[1])
 
     t1 = start_hour
 
@@ -58,7 +58,7 @@ def run(*args):
     daily_hist.total_rois = major_lengths.size
     
     # update display
-    print str(t1) + " found " + str(daily_hist.total_rois) + " rois."
+    print (str(t1) + " found " + str(daily_hist.total_rois) + " rois.")
     
     if len(values_list) == 0:
         daily_hist.save()
@@ -78,5 +78,5 @@ def run(*args):
     # Save 
     daily_hist.save()
 
-    print "Saved to db."
+    print ("Saved to db.")
 

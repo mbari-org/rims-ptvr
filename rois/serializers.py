@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 import pytz
 
-#class PlanktonCameraSerializer(serializers.HyperlinkedModelSerializer):
+#class CameraSerializer(serializers.HyperlinkedModelSerializer):
 #
 #    class Meta:
 #
-#        model = PlanktonCamera
+#        model = Camera
 #        fields = ('name','description')
 
 

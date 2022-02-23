@@ -5,7 +5,7 @@ from django.db import models
 class MinuteStats(models.Model):
 
     timestamp = models.DateTimeField('Timestamp',null=True,editable=False,db_index=True)
-    camera = models.ForeignKey('rois.PlanktonCamera',null=True)
+    camera = models.ForeignKey('rois.Camera',null=True)
     temperature = models.FloatField('Temperature',null=True,editable=False)
     humidity = models.FloatField('Humidity',null=True,editable=False)
     pressure = models.FloatField('Pressure',null=True,editable=False)

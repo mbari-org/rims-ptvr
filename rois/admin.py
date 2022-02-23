@@ -1,5 +1,5 @@
 from django.contrib import admin
-from rois.models import Image, HumanAnnotator, MachineAnnotator, Annotator, PlanktonCamera, Label, LabelInstance, TagSet, LabelSet, QueryRecord, Tag
+from rois.models import Image, HumanAnnotator, MachineAnnotator, Annotator, Camera, Label, LabelInstance, TagSet, LabelSet, QueryRecord, Tag
 #from mptt.admin import DjangoMpttAdmin
 
 class ImageAdmin(admin.ModelAdmin):
@@ -208,7 +208,7 @@ admin.site.register(LabelSet, LabelSetAdmin)
 admin.site.register(TagSet, TagSetAdmin)
 admin.site.register(QueryRecord, QueryRecordAdmin)
 admin.site.register(Tag)
-admin.site.register(PlanktonCamera)
+admin.site.register(Camera)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Annotator)
 admin.site.register(MachineAnnotator)

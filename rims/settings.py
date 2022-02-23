@@ -79,14 +79,21 @@ WSGI_APPLICATION = 'rims.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+    #'default': {
+    #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #    'NAME': 'rims',
+    #    'USER': 'rimsadmin',
+    #    'PASSWORD': 'r1m5831',
+    #    'HOST': 'localhost',
+    #    'PORT': '',
+    #}
+    
+    # For testing use the DB below
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rims',
-        'USER': 'rimsadmin',
-        'PASSWORD': 'r1m5831',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME':  BASE_DIR / 'db.sqlite3',
     }
+    
 }
 
 

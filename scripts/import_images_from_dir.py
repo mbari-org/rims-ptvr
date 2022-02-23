@@ -93,7 +93,7 @@ def run(*args):
     
     # load settings and create new entry if needed or load entry
     proc_settings = ProcSettings()
-    proc_settings.load_settings(proc_settings)
+    proc_settings.load_settings(proc_settings_file)
     ps = ProcSettings.objects.filter(name = proc_settings.name)
     if not ps.exists():
         proc_settings.save()

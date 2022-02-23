@@ -1,4 +1,4 @@
-from rois.models import Image, PlanktonCamera
+from rois.models import Image, Camera
 from roistats.models import DailyHistograms
 import datetime
 import pytz
@@ -36,7 +36,7 @@ def run(*args):
     aspect_bins = np.arange(min_aspect,max_aspect,aspect_inc)
 
     
-    cam = PlanktonCamera.objects.get(name=args[0])
+    cam = Camera.objects.get(name=args[0])
 
     t1 = start_hour - datetime.timedelta(days=1)
 

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 from django.conf import settings
 from mptt.models import MPTTModel, TreeForeignKey
+from loguru import logger
 import os
 import errno
 import datetime
@@ -14,7 +15,7 @@ import time
 import json
 import numpy as np
 
-from file_name_formats import FileNameFmt, AyeRISFileNameFmt
+from rois.file_name_formats import FileNameFmt
 
 """ A Description of ROI Processing Settings """
 class ProcSettings(models.Model):
@@ -49,14 +50,18 @@ class ProcSettings(models.Model):
         try:
             self.json_settings = json.load(open(filepath))
         except:
+            logger.error('Could not load settings file: ' + filepath)
             pass
         
         # populate DB fields
         self.source = json.dumps(self.json_settings)
+        
+        logger.debug(self.source)
+        
         self.name = self.json_settings['name']
-        self.description = self.json_settingsp['description']
-        self.edge_threshold_high = self.json_settings['edge_threhsold_high']
-        self.edge_threshold_low = self.json_settings['edge_threhsold_low']
+        self.description = self.json_settings['description']
+        self.edge_threshold_high = self.json_settings['edge_threshold_high']
+        self.edge_threshold_low = self.json_settings['edge_threshold_low']
         self.edge_detector = self.json_settings['edge_detector']
         self.object_selection = self.json_settings['object_selection']
         

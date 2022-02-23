@@ -1,26 +1,27 @@
 import os
 import sys
 import glob
+import datetime
 
 class FileNameFmt:
     
+    # define the required infomation in the file
+    # name based on format spec
+    info_tokens = [
+        'deployment', 
+        'sys_time',
+        'camera',
+        'frame_number',
+        'roi_number',
+        'roi_left',
+        'roi_top', 
+        'roi_front',
+        'roi_width',
+        'roi_height',
+        'roi_extent',
+    ]
+    
     def __init__(self, delim='_', ext='.tif'):
-        
-        # define the required infomation in the file
-        # name based on format spec
-        self.info_tokens = [
-            'deployment', 
-            'sys_time',
-            'camera',
-            'frame_number',
-            'roi_number',
-            'roi_left',
-            'roi_top', 
-            'roi_front',
-            'roi_width',
-            'roi_height',
-            'roi_extent',
-        ]
         
         # Hold values for tokens here
         self.info_values = {}
@@ -29,15 +30,31 @@ class FileNameFmt:
         self.delim = delim
         self.ext = ext
         
+    @staticmethod
+    def explode_filename(filename, delim='_'):
+        
+        tokens = filename.split(delim)
+        filename_meta = {}
+        
+        if len(tokens) != len(FileNameFmt.info_tokens):
+            raise ValueError('File name pattern does not match format spec.')
+        
+        for i, t in enumerate(FileNameFmt.info_tokens):
+            filename_meta[t] = tokens[i]
+            
+        filename_meta['unixtime'] = datetime.datetime.strptime(filename_meta['sys_time'],"%Y%m%dT%H%M%S.%fZ").timestamp()
+            
+        return filename_meta
+        
     def parse_filename(self, filename):
             
-        tokens = filename.split('.')[0].split(self.delim)
+        tokens = filename.split(self.delim)
         
         if len(tokens) != len(self.info_tokens):
             raise ValueError('File name pattern does not match format spec.')
         
         for i, t in enumerate(self.info_tokens):
-            self.info_values[t] = str(tokens[i])
+            self.info_values[t] = tokens[i]
     
     def build_filename(self, output_path, delim='_', ext='tif'):
         
@@ -55,7 +72,7 @@ class FileNameFmt:
         
         return output_path
     
-class EyeRISFileNameFmt(FileNameFmt):
+class AyeRISFileNameFmt(FileNameFmt):
     
     def load_from_roi(self, output_path, 
                filename, 

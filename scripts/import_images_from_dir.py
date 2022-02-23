@@ -5,9 +5,11 @@ import sys
 import time
 from loguru import logger
 from multiprocessing import Pool
+from rois.file_name_formats import FileNameFmt, AyeRISFileNameFmt
 
 def do_import(import_data):
 
+    data_dir = import_data['data_dir']
     image_path = import_data['image_path']
     proc_settings = import_data['proc_settings']
 
@@ -22,15 +24,19 @@ def do_import(import_data):
 
     # Otherwise insert into DB
     try:
+        
+        # set file name parser
+        if proc_settings.json_settings['file_name_fmt'] == 'AyeRIS':
+            fnf = AyeRISFileNameFmt()
+        else:
+            fnf = FileNameFmt()
+            
+        # Get the image meta data from filename
+        image_name = os.path.basename(image_path)
+        fnf.parse_filename(image_name)
 
-        # extract the image id
-        image_name = image_path.split('/')[-1]
+        # start processing timer...
         start_time = time.time()
-        # remove _raw from image id if it exists 
-        from_raw = False
-        if len(image_name.split('_raw')) > 1:
-            image_name = image_name.split('_raw')[0] + '.tif'
-            from_raw = True
 
         # Don't import if image exists already
         #print "Importing " + image_name
@@ -49,7 +55,7 @@ def do_import(import_data):
         search_time = time.time()-start_time
         # read and process the image
         start_time = time.time()
-        im.import_image(data_dir,from_raw)
+        im.import_image(data_dir,proc_settings)
         proc_time = time.time()-start_time
         
         start_time = time.time()
@@ -107,6 +113,7 @@ def run(*args):
     for img in image_list:
         
         import_data = {}
+        import_data['data_dir'] = data_dir
         import_data['image_path'] = img
         import_data['proc_settings'] = proc_settings.json_settings
         

@@ -57,21 +57,37 @@ def make_gaussian(size, fwhm = 3, center=None):
 
     return output
 
+# Encode Bayer pattern string into CV2 bayer pattren code
+def get_bayer_pattern(proc_settings):
+    if proc_settings['bayer_pattern'] == 'RG':
+        bayer_pattern = cv2.COLOR_BAYER_RG2RGB
+    elif proc_settings['bayer_pattern'] == 'BG':
+        bayer_pattern = cv2.COLOR_BAYER_BG2RGB
+    elif proc_settings['bayer_pattern'] == 'GR':
+        bayer_pattern = cv2.COLOR_BAYER_GR2RGB
+    else:
+        bayer_pattern = cv2.COLOR_BAYER_GB2RGB
+        
+    return bayer_pattern
+
 # import raw image
-def import_image(abs_path,filename,raw=True,bayer_pattern=BAYER_PATTERN):
+def import_image(abs_path, filename, proc_settings):
+    
+    if proc_settings['is_raw']:
+        bayer_pattern = get_bayer_pattern(proc_settings)
 
     # Load and convert image as needed
     img_c = cv2.imread(os.path.join(abs_path,filename),cv2.IMREAD_UNCHANGED)
-    if raw:
+    if proc_settings['is_raw']:
         img_c = cv2.cvtColor(img_c,bayer_pattern)
 
     return img_c
 
 # convert image to 8 bit with or without autoscaling
-def convert_to_8bit(img,auto_scale=True):
+def convert_to_8bit(img, proc_settings):
 
     # Convert to 8 bit and autoscale
-    if auto_scale:
+    if proc_settings['autoscale']:
 
         result = np.float32(img)-np.min(img)
         if np.max(img) != 0:

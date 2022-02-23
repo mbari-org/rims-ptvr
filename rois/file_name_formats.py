@@ -13,12 +13,12 @@ class FileNameFmt:
         'camera',
         'frame_number',
         'roi_number',
-        'roi_left',
-        'roi_top', 
-        'roi_front',
-        'roi_width',
-        'roi_height',
-        'roi_extent',
+        'image_left',
+        'image_top', 
+        'image_front',
+        'image_width',
+        'image_height',
+        'image_extent',
     ]
     
     def __init__(self, delim='_', ext='.tif'):

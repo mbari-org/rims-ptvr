@@ -14,6 +14,7 @@ import shutil
 import time
 import json
 import numpy as np
+from loguru import logger
 
 from rois.file_name_formats import FileNameFmt
 
@@ -67,6 +68,10 @@ class ProcSettings(models.Model):
         
     def load_default_settings(self):
         self.load_settings('default_proc_settings.json')
+
+    def create(self):
+        self.json_settings = json.loads(self.source)
+        logger.debug(self.json_settings)
     
     def __str__(self):
         return self.name or ''
@@ -298,7 +303,6 @@ class Image(models.Model):
     # Map given image_id to relative path
     @staticmethod
     def convert_to_path(image_id):
-
         data = FileNameFmt.explode_filename(image_id)
         unixtime = data['unixtime']
         camera_dir = data['camera']
@@ -323,10 +327,11 @@ class Image(models.Model):
                 raise
         return os.path.join(base_path,rel_path)
 
-    def explode_id(self,filename=''):
+    def explode_id(self):
 
+        logger.debug(self.image_id)
         try:
-            data = FileNameFmt.explode_filename(filename)
+            data = FileNameFmt.explode_filename(self.image_id)
         except:
             return False
 
@@ -393,6 +398,8 @@ class Image(models.Model):
                 proc_settings.save()
             else:
                 proc_settings = ps[0]
+
+        self.proc_settings = proc_settings
         
         # check for valid id
         if (not self.valid_image_id()):
@@ -417,13 +424,13 @@ class Image(models.Model):
             if proc_settings.json_settings['is_raw']:
                 img = cvtools.import_image(path,self.image_id.split('.tif')[0]+'_raw.tif', proc_settings.json_settings)
             else:
-                img = cvtools.import_image(path,self.image_id, proc_settings.json_settings, raw=False)
+                img = cvtools.import_image(path,self.image_id, proc_settings.json_settings)
             #print "loading " + path + "/" + self.image_id + " ... "
-            img_c_8bit = cvtools.convert_to_8bit(img)
+            img_c_8bit = cvtools.convert_to_8bit(img, proc_settings.json_settings)
         else:
             # otherwise, png or jpg will just be read
             #print "loading " + path + "/" + self.image_id + " ... "
-            img_c_8bit = cvtools.import_image(path,self.image_id, proc_settings.json_settings, raw=False)
+            img_c_8bit = cvtools.import_image(path,self.image_id, proc_settings.json_settings)
     
         output = cvtools.extract_features(
             img_c_8bit,
@@ -431,7 +438,7 @@ class Image(models.Model):
             proc_settings.json_settings, 
             save_to_disk=True,
             abs_path=image_storage_path,
-            file_prefix=self.image_id.split('.')[0]
+            file_prefix=os.path.splitext(self.image_id)[0]
         )
         
         proc_end_time = time.time()
@@ -439,11 +446,11 @@ class Image(models.Model):
         #print("proc time: " + str(time.time()-proc_start_time))
 
         # Set the image features
-        self.major_axis_length = output['features']['major_axis_length']
-        self.minor_axis_length = output['features']['minor_axis_length']
+        self.major_axis_length = output['features']['axis_major_length']
+        self.minor_axis_length = output['features']['axis_minor_length']
         self.sharpness = output['sharpness']
         self.proc_time = proc_end_time - proc_start_time
-        self.proc_version = output['proc_version']
+        #self.proc_version = output['proc_version']
         
         if self.major_axis_length != 0:
             self.aspect_ratio = self.minor_axis_length/self.major_axis_length
@@ -456,10 +463,11 @@ class Image(models.Model):
         )
 
         # Set the image width and height
-        self.image_width = image_meta['width']
-        self.image_height = image_meta['height']
+        self.image_width = image_meta['image_width']
+        self.image_height = image_meta['image_height']
 
         # print out the morpho stats with timestamp
+        """
         if output['clipped_fraction'] <= 0.03 and settings.SAVE_MORPH:
             time_code = 7*24*3600*(int(image_meta['unixtime'])/(7*24*3600))
             morph_file = image_meta['camera']+'-'+str(time_code)+'-morph.csv'
@@ -481,6 +489,7 @@ class Image(models.Model):
         # Tag image as clipped if the clip fraction is more than 0.1
         if (output['clipped_fraction'] > 0.03):
             self.is_clipped = True
+        """
             
         
         # Set the camera

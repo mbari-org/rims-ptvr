@@ -23,6 +23,8 @@ def do_import(import_data):
         return
 
     # Otherwise insert into DB
+    image_name = os.path.basename(image_path)  # get the image name
+    logger.debug(image_path)
     try:
         
         # set file name parser
@@ -32,7 +34,6 @@ def do_import(import_data):
             fnf = FileNameFmt()
             
         # Get the image meta data from filename
-        image_name = os.path.basename(image_path)
         fnf.parse_filename(image_name)
 
         # start processing timer...
@@ -99,6 +100,8 @@ def run(*args):
         proc_settings.save()
     else:
         proc_settings = ps[0]
+    
+    proc_settings.create()
 
     # List and group various image types
     image_list_raw1 = glob.glob(os.path.join(data_dir,'*[0-9].tif'))
@@ -115,15 +118,18 @@ def run(*args):
         import_data = {}
         import_data['data_dir'] = data_dir
         import_data['image_path'] = img
-        import_data['proc_settings'] = proc_settings.json_settings
+        import_data['proc_settings'] = proc_settings
         
         import_list.append(import_data)
         
 
     logger.info("Found " + str(len(image_list)) + " images to import...")
 
+    for ii in import_list:
+        do_import(ii)
     # map import to threads rather than single loop,
     # Yay!!
+    """
     start_time = time.time()
     p = Pool(12)
     logger.info("mapping to cores...")
@@ -134,7 +140,8 @@ def run(*args):
     p.join()
     logger.info("finished with import.")
     roi_proc_time = len(image_list)/(time.time()-start_time)
-    with open("/home/ptvradmin/roi_proc_stats.txt","a+") as f:
-        f.write(str(time.time()) + "," + str(data_dir) + "," + str(roi_proc_time) + "\n")
+    """
+    #with open("/home/ptvradmin/roi_proc_stats.txt","a+") as f:
+    #    f.write(str(time.time()) + "," + str(data_dir) + "," + str(roi_proc_time) + "\n")
 
 

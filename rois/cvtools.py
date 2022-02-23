@@ -118,7 +118,13 @@ def extract_features(img,
     output['rawcolor'] = np.copy(img)
     
     # compute features from gray image
-    gray = np.uint8(np.mean(img,2))
+    if proc_settings['channels'] == 3:
+        gray = np.uint8(np.mean(img,2))
+    else:
+        gray = img
+        print(img.shape)
+        img = np.dstack((img, img, img))
+        print(img.shape)
     
     # unpack settings
     low_threshold = proc_settings['edge_threshold_low']
@@ -137,7 +143,7 @@ def extract_features(img,
     bw_img = edges
 
     # Compute morphological descriptors
-    label_img = morphology.label(bw_img,neighbors=8,background=0)
+    label_img = morphology.label(bw_img,connectivity=2,background=0)
     props = measure.regionprops(label_img,gray)
 
     valid_object = False
@@ -174,18 +180,18 @@ def extract_features(img,
 
         # Save simple features of the object
         features['area'] = props[ii].area
-        features['minor_axis_length'] = props[ii].minor_axis_length
-        features['major_axis_length'] = props[ii].major_axis_length
-        if props[ii].major_axis_length == 0:
+        features['minor_axis_length'] = props[ii].axis_minor_length
+        features['major_axis_length'] = props[ii].axis_major_length
+        if props[ii].axis_major_length == 0:
             features['aspect_ratio'] = 1
         else:
-            features['aspect_ratio'] = props[ii].minor_axis_length/props[ii].major_axis_length
+            features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
         features['orientation'] = props[ii].orientation
         
         # draw an ellipse using the major and minor axis lengths
         cv2.ellipse(data_img,
             (int(props[ii].centroid[1]),int(props[ii].centroid[0])),
-            (int(props[ii].major_axis_length/2),int(props[ii].minor_axis_length/2)),
+            (int(props[ii].axis_major_length/2),int(props[ii].axis_minor_length/2)),
             180 - 180/np.pi*props[ii].orientation,
             0,
             360,
@@ -238,7 +244,7 @@ def extract_features(img,
                 if np.max(gray_img.shape) <= 2**s:
                     pad_r = 2**s - gray_img.shape[0]
                     pad_c = 2**s - gray_img.shape[1]
-                    real_img = util.pad(gray_img,[(0,pad_r),(0,pad_c)],mode='constant') # default is 0 for pad value
+                    real_img = np.pad(gray_img,[(0,pad_r),(0,pad_c)],mode='constant') # default is 0 for pad value
                 #print "Pad size: " + str(2**s)
                     pad_size = 2**s
                     break
@@ -355,7 +361,7 @@ def extract_features(img,
     output['binary'] = 255*bw_img
     output['data'] = data_img
     output['sharpness'] = 1024*np.max(rad)
-    output['proc_version'] = proc_settings['proc_version']
+    #output['proc_version'] = proc_settings['proc_version']
 
     
     # Save the binary image and also color image if requested

@@ -348,7 +348,7 @@ class Image(models.Model):
         )
         image_path = os.path.join(
                 image_dir,
-                "".join(image_id.split('.')[0:-1])
+                os.path.splitext(image_id)[0]
         )
         return image_path
 
@@ -457,10 +457,11 @@ class Image(models.Model):
         else:
             self.aspect_ratio = 1
 
-        self.timestamp = datetime.datetime.fromtimestamp(
-                image_meta['unixtime'],
-                tz=pytz.UTC
+        tz = pytz.timezone('UTC')
+        self.timestamp = tz.localize(
+                datetime.datetime.fromtimestamp(image_meta['unixtime'])
         )
+
 
         # Set the image width and height
         self.image_width = image_meta['image_width']

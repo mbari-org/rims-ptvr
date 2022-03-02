@@ -51,7 +51,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_image_timestamp(self,obj):
         tz = pytz.timezone('America/Los_Angeles')
-        return  tz.normalize(obj.timestamp).strftime('%c %Z')
+        return  obj.timestamp.strftime('%c %Z')
 
     def get_camera_name(self,obj):
         return obj.camera.name

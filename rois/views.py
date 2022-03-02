@@ -14,7 +14,7 @@ from rois.serializers import ImageSerializer, ImageValueSerializer
 from rest_framework.renderers import JSONRenderer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from utils import convert_date
+from rois.utils import convert_date
 import numpy as np
 import json
 import datetime
@@ -43,7 +43,8 @@ def totals(request,camera='SPC2'):
     ds = datetime.datetime(dn.year,dn.month,dn.day,0,0,0,0,tzinfo=local_tz)
     resp['totals'] = Image.objects.filter(
             camera__name=camera,
-            timestamp__range=[ds,dn]).count()
+            timestamp__range=[ds,dn]
+            ).count()
     return HttpResponse(json.dumps(resp),content_type="application/json")
 
 def labels(request):
@@ -89,7 +90,7 @@ def login_user(request):
 @ensure_csrf_cookie
 def get_user(request):
     resp = {}
-    resp['is_authenticated'] = request.user.is_authenticated()
+    resp['is_authenticated'] = request.user.is_authenticated
     if (resp['is_authenticated']):
         resp['username'] = request.user.get_username()
     else:
@@ -475,6 +476,7 @@ class ImageList(generics.ListAPIView):
         #response.data['image_data']['results'] = sorted(response.data['image_data']['results'],key=lambda o:-o.image_height)
 
         # Create a record of the request
+        """
         qr = QueryRecord()
         qr.path = request.path
         qr.user_agent = request.META['HTTP_USER_AGENT']
@@ -483,7 +485,7 @@ class ImageList(generics.ListAPIView):
         if (request.user.is_authenticated()):
             qr.user = request.user
         qr.save()
-       
+        """
 
         return response
 

@@ -133,11 +133,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+IMAGE_STORE = STATIC_URL + 'images/'
 import os 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # test directory for image import
-IMAGE_STORE_FULL_PATH = os.path.join(STATIC_ROOT, 'image_import_test')
+IMAGE_STORE_FULL_PATH = os.path.join(STATIC_ROOT, 'images')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

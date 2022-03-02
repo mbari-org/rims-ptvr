@@ -347,7 +347,8 @@ def extract_features(img,
     
     else:
     
-        pass
+        # Need to restore image to 8-bit
+        img = np.uint8(255*img)
 
         # mask the raw image with smoothed foreground mask
         #blurd_bw_img = gaussian(bw_img,blur_rad)

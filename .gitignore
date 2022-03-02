@@ -8,8 +8,13 @@ classes_1516combined.txt
 *.prof
 *.dot
 images/
-fonts/
-static/
+static/images/
+static/admin/
+static/django_extensions/
+static/js/
+static/mptt/
+static/rest_framework/
 migrations/
 !rois/test_images/*.tif
+
 

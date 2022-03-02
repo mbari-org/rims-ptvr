@@ -60,7 +60,7 @@ def annotators(request):
 def logout_user(request):
     if (request.is_ajax() and request.user.is_authenticated()):
         if request.method == 'POST':
-            logout(request);
+            logout(request)
             return HttpResponse("OK")
     else:
         return HttpResponse("ERR")

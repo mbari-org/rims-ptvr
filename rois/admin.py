@@ -1,6 +1,39 @@
 from django.contrib import admin
-from rois.models import Image, HumanAnnotator, MachineAnnotator, Annotator, Camera, Label, LabelInstance, TagSet, LabelSet, QueryRecord, Tag
+from rois.models import ProcSettings, Image, HumanAnnotator, MachineAnnotator, Annotator, Camera, Label, LabelInstance, TagSet, LabelSet, QueryRecord, Tag
 #from mptt.admin import DjangoMpttAdmin
+
+
+class ProcSettingsAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        'name',
+        'description',
+        'edge_threshold_high',
+        'edge_threshold_low',
+        'edge_detector',
+        'object_selection',
+        'source'
+    )
+
+    fields = (
+        'name',
+        'description',
+        'edge_threshold_high',
+        'edge_threshold_low',
+        'edge_detector',
+        'object_selection',
+        'source'
+    )
+
+    list_display = (
+        'name',
+        'description',
+        'edge_threshold_high',
+        'edge_threshold_low',
+        'edge_detector',
+        'object_selection',
+        'source'
+    )
+
 
 class ImageAdmin(admin.ModelAdmin):
     readonly_fields = (
@@ -201,7 +234,10 @@ class QueryRecordAdmin(admin.ModelAdmin):
             'submitted',
             'remote_addr',
     )
+
+
 # Register your models here.
+admin.site.register(ProcSettings, ProcSettingsAdmin)
 admin.site.register(Label)
 admin.site.register(LabelInstance,LabelInstanceAdmin)
 admin.site.register(LabelSet, LabelSetAdmin)

@@ -7,6 +7,7 @@ classes_1516combined.txt
 *.pyc
 *.prof
 *.dot
+*.sqlite3
 images/
 static/images/
 static/admin/

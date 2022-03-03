@@ -54,6 +54,16 @@ ExecStart=/home/rimsadmin/software/rims/rimsenv/bin/gunicorn \
 	--bind unix:/run/gunicorn.sock \
 	rims.wsgi:application
 ```
+
+## Import images from directory
+
+`$ ./manage.py runscript import_images_from_dir /path/to/temp/image_directory /path/to/processing/settings.ext`
+
+## Access web browser
+Access the user interface by going to [http://deeprip.shore.mbari.org/static/spcview/spcview.html#](http://deeprip.shore.mbari.org/static/spcview/spcview.html#) 
+
+*Insert screenshot of browser here*
+
 ## Tests
 
 -   Working on it...

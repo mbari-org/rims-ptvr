@@ -11,9 +11,9 @@ A framework for maganing and visualization images and/or Regions Of Interest (RO
 * nginx
 
 ## Installation
-Clone and cd into this repo then follow the [Digital Ocean setup instructions](https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-20-04) for Django with Postgres, Nginx, and Gunicorn on Ubuntu 20.04. 
 
-After confirming install per the Digital Ocean article, set up as There are some slight modifications and several extra packages that need to be installed via pip (both for image processing and extra db management tools).
+### Preliminaries
+Clone the RIMS repo and cd into it. From there follow the [Digital Ocean setup instructions](https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-20-04) for Django with Postgres, Nginx, and Gunicorn on Ubuntu 20.04.
 
 ### Install Python Packages
 Install the following extra Django management functionality via pip
@@ -39,9 +39,9 @@ INSTALLED_APPS = [
 ]
 ```
 
-### Install Python Packages for Image Processing
+Then install a few further packages for the image processing routines and pretty error logging.
 
-`pip install opencv-python scikit-image loguru`
+`$ pip install opencv-python scikit-image loguru`
 
 ### Update service to reload
 Tell gunicorn to automatically reload upon edit by changing `ExecStart` in `etc/systemd/gunicorn.service`

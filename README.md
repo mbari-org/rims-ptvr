@@ -11,20 +11,49 @@ A framework for maganing and visualization images and/or Regions Of Interest (RO
 * nginx
 
 ## Installation
+Clone and cd into this repo then follow the [Digital Ocean setup instructions](https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-20-04) for Django with Postgres, Nginx, and Gunicorn on Ubuntu 20.04. 
+
+After confirming install per the Digital Ocean article, set up as There are some slight modifications and several extra packages that need to be installed via pip (both for image processing and extra db management tools).
 
 ### Install Python Packages
+Install the following extra Django management functionality via pip
 
-* `pip install opencv-python`
-* `pip install scikit-image`
-* `pip install loguru`
-* `pip install django`
-* `pip install django-extensions`
-* `pip install django-mptt`
-* `pip install django-jquery`
-* `pip install django-rest-framework`
-* `pip install django-cors-headers`
-* `pip install psycopg2`
+`$ pip install django-extensions django-mptt django-jquery django-rest-framework django-cors-headers`
 
+Make sure to incude the apps in the `rims/settings.py`:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'jquery',
+    'django_extensions',
+    'rest_framework',
+    'corsheaders',
+    'mptt',
+    'rois',
+]
+```
+
+### Install Python Packages for Image Processing
+
+`pip install opencv-python scikit-image loguru`
+
+### Update service to reload
+Tell gunicorn to automatically reload upon edit by changing `ExecStart` in `etc/systemd/gunicorn.service`
+
+```
+ExecStart=/home/rimsadmin/software/rims/rimsenv/bin/gunicorn \
+	--access-logfile - \
+	--workers 4 \
+	--reload \
+	--bind unix:/run/gunicorn.sock \
+	rims.wsgi:application
+```
 ## Tests
 
 -   Working on it...

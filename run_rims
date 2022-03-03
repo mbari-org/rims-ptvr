@@ -1,0 +1,1 @@
+//home/rimsadmin/software/rims/rimsenv/bin/gunicorn -c /home/rimsadmin/software/rims/gunicorn.conf.py rims.wsgi

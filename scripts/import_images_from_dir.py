@@ -24,7 +24,7 @@ def do_import(import_data):
 
     # Otherwise insert into DB
     image_name = os.path.basename(image_path)  # get the image name
-    logger.debug(image_path)
+    #logger.debug(image_path)
     try:
         
         # set file name parser

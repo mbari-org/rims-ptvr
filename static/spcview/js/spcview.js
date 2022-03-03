@@ -7,16 +7,17 @@ var spcview = (function() {
     var singleDayQuery = true;
     var cameraID = 0;
     var loadedCounter = 0;
-    var cameraNames = ["SPC-BIG"];
+    var cameraNames = ["AyeRISCAM00"];
     var imagePostfix = ['.jpg','_binary.png','_boundary.png','.png'];
     var imagePostfixIndex = 0;
-    var cameraRes = [22.6/1000];
+    var cameraRes = [120.0/1000];
     var dataLoaded = false;
-    var siteURL = "http://planktivore.ucsd.edu";
-    var newSiteURL = "http://planktivore.ucsd.edu";
-    var roiImagesBase = "caymans_data/rois/images/";
-    var roiArchiveBase = "caymans_data/rois/imagearchive/";
-    var dailyStatsBase = "http://planktivore.ucsd.edu/caymans_data/roistats/dailystats/";
+    var siteURL = "http://deeprip.shore.mbari.org";
+    var newSiteURL = "http://deeprip.shore.mbari.org";
+    var roiImagesBase = "rois/images/";
+    var roiArchiveBase = "rois/imagearchive/";
+    var dailyStatsBase = "roistats/dailystats/";
+    var viewerBase  = '/static/spcview/spcview.html';
     var dailyStats = [];
     var allLabels = [];
     var allTags = [];
@@ -69,64 +70,14 @@ var spcview = (function() {
 
     var queryPresets = [
         {
-            "name": "spc-big-1",
-            "label": "Small [0.88,2.0]",
-            "title": "Images in the range 0.88 mm to 2.0 mm",
-            "camera": "SPC-BIG",
-            "minmaj": .88,
-            "maxmaj": 2.0,
-            "minasp": 0.05,
-            "maxasp": 1.0,
-        },
-        {
-            "name": "spc-big-2",
-            "label": "Large [2.0,20.0]",
-            "title": "Images in the range 2.0 mm to 20.0 mm",
-            "camera": "SPC-BIG",
-            "minmaj": 2,
-            "maxmaj": 20.0,
-            "minasp": 0.05,
-            "maxasp": 1.0,
-        },
-        {
-            "name": "circular-small",
-            "label": "Circular [0.7,2.0]",
-            "title": "Circular images in the range 0.7 to 2.0 mm",
-            "camera": "SPC-BIG",
-            "minmaj": .7,
-            "maxmaj": 2.0,
-            "minasp": 0.9,
-            "maxasp": 1.0,
-        },
-        {
-            "name": "circular-big",
-            "label": "Circular [2.0,20.0]",
-            "title": "Circular images in the range 2.0 to 20.0 mm",
-            "camera": "SPC-BIG",
-            "minmaj": 2.0,
-            "maxmaj": 20.0,
-            "minasp": 0.9,
-            "maxasp": 1.0,
-        },
-        {
-            "name": "small-lines",
-            "label": "Linear [0.7,2.0]",
-            "title": "Line-like images in the range 0.7 to 2.0 mm",
-            "camera": "SPC-BIG",
-            "minmaj": .7,
-            "maxmaj": 2.0,
+            "name": "ayeris-cam",
+            "label": "AyeRIS Cam 00",
+            "title": "Images from AyeRIS Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 0,
+            "maxmaj": 100,
             "minasp": 0,
-            "maxasp": 0.15,
-        },
-        {
-            "name": "big-lines",
-            "label": "Linear [2.0,20.0]",
-            "title": "Line-like images in the range 2.0 to 20.0 mm",
-            "camera": "SPC-BIG",
-            "minmaj": 2.0,
-            "maxmaj": 20.0,
-            "minasp": 0,
-            "maxasp": 0.15,
+            "maxasp": 1.0,
         },
     ];
 
@@ -157,8 +108,8 @@ var spcview = (function() {
 
 
     d1 = new Date();
-    utcStart.val('02/01/2017 00:00:00');
-    utcEnd.val(' 03/01/2017 23:59:59');
+    utcStart.val('11/09/2021 00:00:00');
+    utcEnd.val(' 11/14/2021 23:59:59');
 
     //var queryStartTime = 0;
     var queryStartTime = 0;
@@ -174,20 +125,11 @@ var spcview = (function() {
     //utcEnd.val('04/15/2014');
     camera.val(cameraID); 
     
-    function isANumber(str){
-        return !/\D/.test(str);
-    }
-    
     function getCameraName(image_id) {
-        stmp = image_id.split('-');
+        stmp = image_id.split('_');
         
-        cameraName = stmp[0];
-    
-        for (var i=1;i <= stmp.length;i++) {
-            if (stmp[i].length >= 10 && isANumber(stmp[i]))
-                break;
-            cameraName += '-' + stmp[i]
-        } 
+        cameraName = stmp[2];
+
         return cameraName;
     
     }
@@ -205,7 +147,7 @@ var spcview = (function() {
         prepAjax();
         data = {'user': username};
         $.ajax({
-            url: siteURL + '/caymans_data/rois/logout_user',
+            url: siteURL + '/rois/logout_user',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -243,7 +185,7 @@ var spcview = (function() {
     
     function getUser() {
         $.ajax({
-            url: siteURL + '/caymans_data/rois/get_user',
+            url: siteURL + '/rois/get_user',
             type: 'GET',
             success: function (json) {
                 isAuthenticated = json['is_authenticated'];
@@ -266,7 +208,7 @@ var spcview = (function() {
         prepAjax();
         data = {'username': user, 'password': pass};
         $.ajax({
-            url: siteURL + '/caymans_data/rois/login_user',
+            url: siteURL + '/rois/login_user',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -609,7 +551,7 @@ var spcview = (function() {
         //var cameraIndex = camera.val();
         var res = cameraRes[cameraNames.indexOf(camName)];
         
-        var base_url = getBaseURL()+data.image_url;
+        var base_url = getBaseURL()+ "/" + data.image_url;
         var image_url = base_url + imagePostfix[imagePostfixIndex];
         $('#TargetImg').attr("src",image_url);
         // Compute Image size from ImageDetail Container 
@@ -665,7 +607,7 @@ var spcview = (function() {
     function showImageDetail(data) {
         // Otherwise show image detail
         //var data = this.roi_data;
-        var base_url = getBaseURL()+data.image_url;
+        var base_url = getBaseURL() + "/" + data.image_url;
 
         // get archive data and extract to temperature containers
         JSZipUtils.getBinaryContent(base_url+'.zip', function (err, zipdata) {
@@ -690,7 +632,7 @@ var spcview = (function() {
         $('#DownloadImage').on('click', data, function (event) {
             imagePostfixIndex = 3;
             var link = document.createElement('a'); 
-            var image_url = getBaseURL() + event.data.image_url + '.zip';
+            var image_url = getBaseURL() + "/" + event.data.image_url + '.zip';
             //var image_url = siteURL + event.data.image_url + imagePostfix[imagePostfixIndex];
             //$('#TargetImg').attr("src",image_url);
             link.id = 'dnld_image';
@@ -707,7 +649,7 @@ var spcview = (function() {
         //});
         $('#ShowImage').on('click', data, function (event) {
             imagePostfixIndex = 0;
-            var image_url = getBaseURL() + event.data.image_url + imagePostfix[imagePostfixIndex];
+            var image_url = getBaseURL() + "/" + event.data.image_url + imagePostfix[imagePostfixIndex];
             $('#TargetImg').attr("src",image_url);
         });
         //$('#ShowBinaryImage').on('click', data, function (event) {
@@ -882,7 +824,7 @@ var spcview = (function() {
         function getItemElement(data) {
             var elem = document.createElement('div');
             var img = new Image();
-            img.src = getBaseURL()+data.image_url+".jpg";
+            img.src = getBaseURL()+ "/" + data.image_url+".jpg";
             img.onload = function() {
                 loadedCounter++;
                 elem.style.backgroundImage = "url('"+img.src+"')";
@@ -995,7 +937,7 @@ var spcview = (function() {
                 .appendTo($('#search-presets'));
             var a = $('<a/>')
                 .addClass('ui-all')
-                .attr('href', 'http://planktivore.ucsd.edu/caymans_viewer/spcview.html?preset='+preset.name)
+                .attr('href', getBaseURL() + viewerBase + '?preset='+preset.name)
                 .text(preset.label)
                 .appendTo(li);
         });
@@ -1078,7 +1020,7 @@ var spcview = (function() {
 
     my.loadLabels = function() {
         $.ajax({
-            url: 'http://planktivore.ucsd.edu/caymans_data/rois/labels/',
+            url: getBaseURL() + '/rois/labels',
             type: 'GET',
             success: function (json) {
                 allLabels = json['labels'];
@@ -1125,7 +1067,7 @@ var spcview = (function() {
     
     my.loadAnnotators = function() {
         $.ajax({
-            url: 'http://planktivore.ucsd.edu/caymans_data/rois/annotators/',
+            url: getBaseURL() + '/rois/annotators',
             type: 'GET',
             success: function (json) {
                 allAnnotators = json['annotators'];
@@ -1174,7 +1116,7 @@ var spcview = (function() {
     
     my.loadTags = function() {
         $.ajax({
-            url: 'http://planktivore.ucsd.edu/caymans_data/rois/tags/',
+            url: getBaseURL() + '/rois/tags',
             type: 'GET',
             success: function (json) {
                 allTags = json['tags'];
@@ -1501,7 +1443,7 @@ var spcview = (function() {
         //console.log(JSON.stringify(labelsAndTags));
         $.ajax({
             //url: getBaseURL() + '/data/rois/label_images',
-            url: siteURL + '/caymans_data/rois/label_images',
+            url: siteURL + '/rois/label_images',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,

@@ -347,10 +347,13 @@ def extract_features(img,
     
     else:
     
+        # Need to restore image to 8-bit
+        img = np.uint8(255*img)
+
         # mask the raw image with smoothed foreground mask
-        blurd_bw_img = gaussian(bw_img,blur_rad)
-        for ind in range(0,3):
-            img[:,:,ind] = img[:,:,ind]*blurd_bw_img
+        #blurd_bw_img = gaussian(bw_img,blur_rad)
+        #for ind in range(0,3):
+        #    img[:,:,ind] = img[:,:,ind]*blurd_bw_img
                
     
     # Check for clipped image

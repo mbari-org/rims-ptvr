@@ -1,1 +1,0 @@
-//home/eorenstein/software/rims/rimsenv/bin/gunicorn -c /home/eorenstein/software/rims/gunicorn_config.py rims.wsgi

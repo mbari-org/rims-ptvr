@@ -7,9 +7,15 @@ classes_1516combined.txt
 *.pyc
 *.prof
 *.dot
+*.sqlite3
 images/
-fonts/
-static/
+static/images/
+static/admin/
+static/django_extensions/
+static/js/
+static/mptt/
+static/rest_framework/
 migrations/
 !rois/test_images/*.tif
+
 

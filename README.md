@@ -55,15 +55,31 @@ ExecStart=/home/rimsadmin/software/rims/rimsenv/bin/gunicorn \
 	rims.wsgi:application
 ```
 
+## Tests
+Run unit tests with Django's [https://docs.djangoproject.com/en/4.0/topics/testing/overview/](test features). In the ROIs directory write test models that will function in that framework:
+
+```python
+from django.test import TestCase
+from scripts.import_images_from_dir import do_import, run
+
+# Create your tests here.
+class ImportTestCase(TestCase):
+    run('rois/test_images', 'rois/default_proc_settings.json')
+```
+
+Put a small set of images into the `rois/test_images` file and make sure the jsons settings file exists in the correct place.
+
+From the command line while in the database virtual environment run:
+
+`$ python manage.py test rois.tests`
+
+This command should spin up a small test database and run the `import_images_form_dir.py` script
+
 ## Import images from directory
 
-`$ ./manage.py runscript import_images_from_dir /path/to/temp/image_directory /path/to/processing/settings.ext`
+`$ ./manage.py runscript import_images_from_dir /path/to/temp/image_directory /path/to/processing/settings.json`
 
 ## Access web browser
 Access the user interface by going to [http://deeprip.shore.mbari.org/static/spcview/spcview.html#](http://deeprip.shore.mbari.org/static/spcview/spcview.html#) 
 
 *Insert screenshot of browser here*
-
-## Tests
-
--   Working on it...

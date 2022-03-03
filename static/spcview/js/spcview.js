@@ -10,7 +10,7 @@ var spcview = (function() {
     var cameraNames = ["AyeRISCAM00"];
     var imagePostfix = ['.jpg','_binary.png','_boundary.png','.png'];
     var imagePostfixIndex = 0;
-    var cameraRes = [22.6/1000];
+    var cameraRes = [120.0/1000];
     var dataLoaded = false;
     var siteURL = "http://deeprip.shore.mbari.org";
     var newSiteURL = "http://deeprip.shore.mbari.org";
@@ -70,9 +70,9 @@ var spcview = (function() {
 
     var queryPresets = [
         {
-            "name": "AyeRISCAM00",
-            "label": "",
-            "title": "Test",
+            "name": "ayeris-cam",
+            "label": "AyeRIS Cam 00",
+            "title": "Images from AyeRIS Cam 00",
             "camera": "AyeRISCAM00",
             "minmaj": 0,
             "maxmaj": 100,
@@ -108,8 +108,8 @@ var spcview = (function() {
 
 
     d1 = new Date();
-    utcStart.val('02/01/2017 00:00:00');
-    utcEnd.val(' 03/01/2017 23:59:59');
+    utcStart.val('11/09/2021 00:00:00');
+    utcEnd.val(' 11/14/2021 23:59:59');
 
     //var queryStartTime = 0;
     var queryStartTime = 0;
@@ -632,7 +632,7 @@ var spcview = (function() {
         $('#DownloadImage').on('click', data, function (event) {
             imagePostfixIndex = 3;
             var link = document.createElement('a'); 
-            var image_url = getBaseURL() + event.data.image_url + '.zip';
+            var image_url = getBaseURL() + "/" + event.data.image_url + '.zip';
             //var image_url = siteURL + event.data.image_url + imagePostfix[imagePostfixIndex];
             //$('#TargetImg').attr("src",image_url);
             link.id = 'dnld_image';

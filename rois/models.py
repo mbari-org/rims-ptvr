@@ -329,7 +329,7 @@ class Image(models.Model):
 
     def explode_id(self):
 
-        logger.debug(self.image_id)
+        #logger.debug(self.image_id)
         try:
             data = FileNameFmt.explode_filename(self.image_id)
         except:

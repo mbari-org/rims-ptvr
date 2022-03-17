@@ -82,4 +82,6 @@ This command should spin up a small test database and run the `import_images_for
 ## Access web browser
 Access the user interface by going to [http://deeprip.shore.mbari.org/static/spcview/spcview.html#](http://deeprip.shore.mbari.org/static/spcview/spcview.html#) 
 
-*Insert screenshot of browser here*
+You should see a mosaic like the one below
+
+![example](/static/examples/browser.jpg)

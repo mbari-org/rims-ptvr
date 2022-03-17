@@ -17,5 +17,6 @@ static/mptt/
 static/rest_framework/
 migrations/
 !rois/test_images/*.tif
+!static/examples/*
 
 

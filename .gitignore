@@ -18,5 +18,6 @@ static/rest_framework/
 migrations/
 !rois/test_images/*.tif
 !static/examples/*
+!static/examples/test_images/*
 
 

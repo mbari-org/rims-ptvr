@@ -67,7 +67,7 @@ class ImportTestCase(TestCase):
     run('rois/test_images', 'rois/default_proc_settings.json')
 ```
 
-Put a small set of images into the `rois/test_images` file and make sure the jsons settings file exists in the correct place.
+Put a small set of images into the `rois/test_images` file and make sure the json settings file exists in the correct place. There are four images included in static/examples/test_images that can be used for this purpose. Currently these images will be removed each time you run the test import.
 
 From the command line while in the database virtual environment run:
 

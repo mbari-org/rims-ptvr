@@ -137,7 +137,7 @@ def extract_features(img,
     edges = edges_mag >= edges_thresh
     edges = morphology.closing(edges,morphology.disk(blur_rad))
     filled_edges = ndimage.binary_fill_holes(edges)
-    edges = morphology.erosion(filled_edges,morphology.disk(blur_rad))
+    #edges = morphology.erosion(filled_edges,morphology.disk(blur_rad))
     
     # define the binary image for further operations
     bw_img = edges
@@ -162,7 +162,9 @@ def extract_features(img,
         ii = max_area_ind
 
         # Save only the BW image with the largets area
-        bw_img = (label_img)== props[ii].label
+        if not proc_settings['object_selection'] == "Full ROI":
+            bw_img = (label_img)== props[ii].label
+        
 
         # Check for clipped image
         if np.max(bw_img) == 0:
@@ -179,14 +181,24 @@ def extract_features(img,
 
 
         # Save simple features of the object
-        features['area'] = props[ii].area
-        features['minor_axis_length'] = props[ii].axis_minor_length
-        features['major_axis_length'] = props[ii].axis_major_length
-        if props[ii].axis_major_length == 0:
-            features['aspect_ratio'] = 1
+        if not proc_settings['object_selection'] == "Full ROI":
+            features['area'] = props[ii].area
+            features['minor_axis_length'] = props[ii].axis_minor_length
+            features['major_axis_length'] = props[ii].axis_major_length
+            if props[ii].axis_major_length == 0:
+                features['aspect_ratio'] = 1
+            else:
+                features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
+            features['orientation'] = props[ii].orientation
         else:
-            features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
-        features['orientation'] = props[ii].orientation
+            features['area'] = bw.shape[0]*bw.shape[1]
+            features['minor_axis_length'] = np.min([bw.shape[0], bw.shape[1]])
+            features['major_axis_length'] = np.max([bw.shape[0], bw.shape[1]])
+            if props[ii].axis_major_length == 0:
+                features['aspect_ratio'] = 1
+            else:
+                features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
+            features['orientation'] = 0
         
         # draw an ellipse using the major and minor axis lengths
         cv2.ellipse(data_img,
@@ -316,6 +328,7 @@ def extract_features(img,
             v_img[v_img > 1] = 1
             v_img = np.uint8(255*v_img)
 
+
         # mask the raw image with smoothed foreground mask
         blurd_bw_img = gaussian(bw_img,blur_rad)
         v_img = v_img*blurd_bw_img
@@ -344,6 +357,9 @@ def extract_features(img,
         v_img[v_img == 0] = proc_settings['small_float_val']
         hsv_img[:,:,2] = v_img
         img = color.hsv2rgb(hsv_img)
+
+        # Need to restore image to 8-bit
+        img = np.uint8(255*img)
     
     else:
     
@@ -353,8 +369,7 @@ def extract_features(img,
         # mask the raw image with smoothed foreground mask
         #blurd_bw_img = gaussian(bw_img,blur_rad)
         #for ind in range(0,3):
-        #    img[:,:,ind] = img[:,:,ind]*blurd_bw_img
-               
+        #    img[:,:,ind] = img[:,:,ind]*blurd_bw_img   
     
     # Check for clipped image
     output['clipped_fraction'] = features['clipped_fraction']

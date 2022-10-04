@@ -9,14 +9,14 @@
     "object_selection" : "Full ROI",
     "is_raw" : false,
     "is_bayer_pattern" : false,
-    "autoscale" : true,
+    "autoscale" : false,
     "deconv" : false,
-    "deconv_method" : "LR",
+    "deconv_method" : "UM",
     "deconv_iter" : 9,
     "deconv_mask_weight" : 0.5,
     "estimate_sharpness" : true,
     "small_float_val" : 0.0001,
-    "bw_blur_radius" : 3,
+    "bw_blur_radius" : 1.5,
     "bayer_pattern" : "RG",
-    "channels": 1
+    "channels": 3
 }

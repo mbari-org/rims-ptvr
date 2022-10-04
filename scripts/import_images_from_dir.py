@@ -4,7 +4,7 @@ import os
 import sys
 import time
 from loguru import logger
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 from rois.file_name_formats import FileNameFmt, AyeRISFileNameFmt
 
 def do_import(import_data):
@@ -129,9 +129,8 @@ def run(*args):
         do_import(ii)
     # map import to threads rather than single loop,
     # Yay!!
-    """
     start_time = time.time()
-    p = Pool(12)
+    p = Pool(processes=12)
     logger.info("mapping to cores...")
     p.map(do_import,import_list)
     logger.info("mapped.")
@@ -140,7 +139,7 @@ def run(*args):
     p.join()
     logger.info("finished with import.")
     roi_proc_time = len(image_list)/(time.time()-start_time)
-    """
+
     #with open("/home/ptvradmin/roi_proc_stats.txt","a+") as f:
     #    f.write(str(time.time()) + "," + str(data_dir) + "," + str(roi_proc_time) + "\n")
 

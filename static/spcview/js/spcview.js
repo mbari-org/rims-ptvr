@@ -7,16 +7,16 @@ var spcview = (function() {
     var singleDayQuery = true;
     var cameraID = 0;
     var loadedCounter = 0;
-    var cameraNames = ["AyeRISCAM00"];
+    var cameraNames = ["AyeRISCAM00","AyeRISCAM01","AyeRISCAM02","AyeRISCAM03","AyeRISCAM04","AyeRISCAM05","AyeRISCAM0C"];
     var imagePostfix = ['.jpg','_binary.png','_boundary.png','.png'];
     var imagePostfixIndex = 0;
-    var cameraRes = [120.0/1000];
+    var cameraRes = [60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000];
     var dataLoaded = false;
     var siteURL = "http://deeprip.shore.mbari.org";
     var newSiteURL = "http://deeprip.shore.mbari.org";
-    var roiImagesBase = "rois/images/";
-    var roiArchiveBase = "rois/imagearchive/";
-    var dailyStatsBase = "roistats/dailystats/";
+    var roiImagesBase = "rims/rois/images/";
+    var roiArchiveBase = "rims/rois/imagearchive/";
+    var dailyStatsBase = "rims/roistats/dailystats/";
     var viewerBase  = '/static/spcview/spcview.html';
     var dailyStats = [];
     var allLabels = [];
@@ -71,7 +71,7 @@ var spcview = (function() {
     var queryPresets = [
         {
             "name": "ayeris-cam",
-            "label": "AyeRIS Cam 00",
+            "label": "AyeRIS Default",
             "title": "Images from AyeRIS Cam 00",
             "camera": "AyeRISCAM00",
             "minmaj": 0,
@@ -84,9 +84,9 @@ var spcview = (function() {
     var imageDetailActive = false;
     
     // Set Defaults
-    nImages.val('500');
-    minMaj.val('0.88');
-    maxMaj.val('2');
+    nImages.val('5000');
+    minMaj.val('1');
+    maxMaj.val('40');
     minAspect.val('.05');
     maxAspect.val('1');
     camera.val("0");
@@ -109,7 +109,7 @@ var spcview = (function() {
 
     d1 = new Date();
     utcStart.val('11/09/2021 00:00:00');
-    utcEnd.val(' 11/14/2021 23:59:59');
+    utcEnd.val(' 11/14/2022 23:59:59');
 
     //var queryStartTime = 0;
     var queryStartTime = 0;
@@ -147,7 +147,7 @@ var spcview = (function() {
         prepAjax();
         data = {'user': username};
         $.ajax({
-            url: siteURL + '/rois/logout_user',
+            url: siteURL + '/rims/rois/logout_user',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -185,7 +185,7 @@ var spcview = (function() {
     
     function getUser() {
         $.ajax({
-            url: siteURL + '/rois/get_user',
+            url: siteURL + '/rims/rois/get_user',
             type: 'GET',
             success: function (json) {
                 isAuthenticated = json['is_authenticated'];
@@ -208,7 +208,7 @@ var spcview = (function() {
         prepAjax();
         data = {'username': user, 'password': pass};
         $.ajax({
-            url: siteURL + '/rois/login_user',
+            url: siteURL + '/rims/rois/login_user',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -1020,7 +1020,7 @@ var spcview = (function() {
 
     my.loadLabels = function() {
         $.ajax({
-            url: getBaseURL() + '/rois/labels',
+            url: getBaseURL() + '/rims/rois/labels',
             type: 'GET',
             success: function (json) {
                 allLabels = json['labels'];
@@ -1067,7 +1067,7 @@ var spcview = (function() {
     
     my.loadAnnotators = function() {
         $.ajax({
-            url: getBaseURL() + '/rois/annotators',
+            url: getBaseURL() + '/rims/rois/annotators',
             type: 'GET',
             success: function (json) {
                 allAnnotators = json['annotators'];
@@ -1116,7 +1116,7 @@ var spcview = (function() {
     
     my.loadTags = function() {
         $.ajax({
-            url: getBaseURL() + '/rois/tags',
+            url: getBaseURL() + '/rims/rois/tags',
             type: 'GET',
             success: function (json) {
                 allTags = json['tags'];
@@ -1443,7 +1443,7 @@ var spcview = (function() {
         //console.log(JSON.stringify(labelsAndTags));
         $.ajax({
             //url: getBaseURL() + '/data/rois/label_images',
-            url: siteURL + '/rois/label_images',
+            url: siteURL + '/rims/rois/label_images',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,

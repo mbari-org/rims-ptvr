@@ -209,7 +209,9 @@ def get_histograms(request):
 @csrf_exempt
 def label_images(request):
 
-    if (request.is_ajax() and request.user.is_authenticated()):
+    is_ajax = request.META.get("CONTENT_TYPE") == "application/json"
+
+    if (request.user.is_authenticated):
         if request.method == 'POST':
             #print ('Raw Data:',request.body)
 
@@ -407,7 +409,7 @@ def label_images(request):
             resp['tagged_images'] = tagged_images
             return HttpResponse(json.dumps(resp),content_type="application/json")
     else:
-        return HttpResponse("Not Logged In.")
+        return HttpResponse("Not Logged In. " + str(is_ajax))
 
 def tags(request):
     resp = {}

@@ -23,6 +23,9 @@ from skimage.filters import threshold_otsu, scharr, gaussian
 from skimage.draw import ellipse_perimeter
 import numpy as np
 from scipy import ndimage
+from loguru import logger
+
+from skimage.segmentation import morphological_chan_vese, checkerboard_level_set 
 
 PROC_VERSION = 101
 EDGE_THRESH = 2.0
@@ -153,14 +156,25 @@ def extract_features(img,
         edges_med = np.median(edges_mag)
         edges_thresh = low_threshold*edges_med
         edges = edges_mag > edges_thresh
-    else:
+        edges = morphology.closing(edges,morphology.square(blur_rad))
+        filled_edges = ndimage.binary_fill_holes(edges)
+        filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
+    elif proc_settings['edge_detector'] == 'Canny':
         edges = cv2.Canny(gray, low_threshold, high_threshold)
         edges_mag = edges
+        edges = morphology.closing(edges,morphology.square(blur_rad))
+        filled_edges = ndimage.binary_fill_holes(edges)
+        filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
+    else:
+        init_ls = checkerboard_level_set(gray.shape, 6)
+        # List with intermediate results for plotting the evolution
+        ls = morphological_chan_vese(gray, num_iter=11, init_level_set=init_ls,smoothing=3)
+        edges_mag = ls
+        filled_edges = ls
         
-
-    edges = morphology.closing(edges,morphology.square(blur_rad))
-    filled_edges = ndimage.binary_fill_holes(edges)
-    filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
+    
+    # Perform a final region growing opertation to connect isolated parts of 
+    # distributed objects together
     
     # define the binary image for further operations
     bw_img = filled_edges
@@ -177,12 +191,18 @@ def extract_features(img,
         # use only the features from the object with the largest area
         max_area = 0
         max_area_ind = 0
+        
+        #logger.info("Total contours: " + str(len(props)))
+        
+        #area_list = []
+        
         for f in range(0,len(props)):
             if props[f].area > max_area:
                 max_area = props[f].area
                 max_area_ind = f
 
         ii = max_area_ind
+
 
         # Save only the BW image with the largets area
         if not proc_settings['object_selection'] == "Full ROI":

@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import TransactionTestCase
 from scripts.import_images_from_dir import do_import, run
 
 # Create your tests here.
-class ImportTestCase(TestCase):
+class ImportTestCase(TransactionTestCase):
     run('/nvme-pool/rims/image_import/test_ayeris_to_rims', 'rois/default_proc_settings.json')
 
 #class LargeImportTestCase(TestCase):

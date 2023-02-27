@@ -194,19 +194,35 @@ def extract_features(img,
         
         #logger.info("Total contours: " + str(len(props)))
         
-        #area_list = []
+        area_list = []
         
         for f in range(0,len(props)):
+            area_list.append(props[f].area)
             if props[f].area > max_area:
                 max_area = props[f].area
                 max_area_ind = f
+                
+        area_list = sorted(area_list,reverse=True)
+        
+        # determine type of object from decending list of areas
+        object_type = 'Isolated'
+        if len(area_list) >= 3:
+            if area_list[0] > 10*area_list[1] or area_list[0] > 10*area_list[2]:
+                object_type = 'Isolated'
+            else:
+                object_type = 'Aggregate'
 
         ii = max_area_ind
 
 
         # Save only the BW image with the largets area
-        if not proc_settings['object_selection'] == "Full ROI":
+        if not proc_settings['object_selection'] == "Full ROI" and not object_type == "Aggregate":
             bw_img = (label_img) == props[ii].label
+        else:
+            bw_img = label_img > 0
+            # recompute props on single mask
+            props = measure.regionprops(bw_img.astype(np.uint8),gray)
+            ii = 0
         
 
         # Check for clipped image

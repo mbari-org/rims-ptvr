@@ -4,10 +4,13 @@ import os
 import sys
 import time
 from loguru import logger
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 from rois.file_name_formats import FileNameFmt, AyeRISFileNameFmt
 
 def do_import(import_data):
+    
+    from django.db import connection    
+    connection.connect()
 
     data_dir = import_data['data_dir']
     image_path = import_data['image_path']
@@ -71,7 +74,7 @@ def do_import(import_data):
             im.save()
                 
         # Remove the image
-        os.remove(image_path)
+        #os.remove(image_path)
         
         logger.info(image_name + " : " + str(search_time) + "," + str(proc_time) + "," + str(save_time))
 
@@ -125,13 +128,12 @@ def run(*args):
 
     logger.info("Found " + str(len(image_list)) + " images to import...")
 
-    for ii in import_list:
-        do_import(ii)
+    #for ii in import_list:
+    #    do_import(ii)
     # map import to threads rather than single loop,
     # Yay!!
-    """
     start_time = time.time()
-    p = Pool(12)
+    p = Pool(processes=64)
     logger.info("mapping to cores...")
     p.map(do_import,import_list)
     logger.info("mapped.")
@@ -140,7 +142,7 @@ def run(*args):
     p.join()
     logger.info("finished with import.")
     roi_proc_time = len(image_list)/(time.time()-start_time)
-    """
+
     #with open("/home/ptvradmin/roi_proc_stats.txt","a+") as f:
     #    f.write(str(time.time()) + "," + str(data_dir) + "," + str(roi_proc_time) + "\n")
 

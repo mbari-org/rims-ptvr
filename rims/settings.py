@@ -87,6 +87,7 @@ DATABASES = {
         'PASSWORD': 'r1m5831',
         'HOST': 'localhost',
         'PORT': '',
+        'CONN_MAX_AGE': 500,
     }
     
     # For testing use the DB below

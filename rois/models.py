@@ -29,6 +29,12 @@ class ProcSettings(models.Model):
     # key parameters that all settings much implement and would be
     # desireable to search by
     
+    # Preprecessing steps before detecting edges
+    downsample_factor = models.IntegerField(
+        'Downsample Factor',editable=False,db_index=True,default=2)
+    channel_selector = models.IntegerField(
+        'Channel Selector',editable=False,db_index=True,default=1)
+    
     # Threshold used to define an edge
     edge_threshold_low = models.FloatField(
         'Edge Threshold Low',editable=False,db_index=True,default=1.0)
@@ -239,6 +245,17 @@ class Image(models.Model):
         
     proc_version = models.PositiveSmallIntegerField(
         'Process Version',editable=False,db_index=True,default=0)
+    
+    # Location information about the image, editable so it can be refined later
+    # after inital image import
+    latitude = models.FloatField(
+        'Latitude',editable=True,db_index=True,default=0.0)
+    
+    longitude = models.FloatField(
+        'Longitude',editable=True,db_index=True,default=0.0)
+    
+    depth = models.FloatField(
+        'Depth',editable=True,db_index=True,default=0.0)
 
     # removed in favor of FFT-based sharpness estimate
     #blur_kernel_radius = models.PositiveSmallIntegerField(

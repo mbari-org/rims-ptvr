@@ -23,6 +23,9 @@ from skimage.filters import threshold_otsu, scharr, gaussian
 from skimage.draw import ellipse_perimeter
 import numpy as np
 from scipy import ndimage
+from loguru import logger
+
+from skimage.segmentation import morphological_chan_vese, checkerboard_level_set 
 
 PROC_VERSION = 101
 EDGE_THRESH = 2.0
@@ -119,28 +122,62 @@ def extract_features(img,
     
     # compute features from gray image
     if proc_settings['channels'] == 3:
-        gray = np.uint8(np.mean(img,2))
+        if proc_settings['channel_selector'] in [0,1,2]:
+            gray = img[:,:,proc_settings['channel_selector']]
+        else:
+            gray = np.uint8(np.mean(img,2))
     else:
         gray = img
-        print(img.shape)
+        #print(img.shape)
         img = np.dstack((img, img, img))
-        print(img.shape)
+        #$print(img.shape)
+        
+    
     
     # unpack settings
+    high_threshold = proc_settings['edge_threshold_high']
     low_threshold = proc_settings['edge_threshold_low']
     blur_rad = proc_settings['bw_blur_radius']
 
+    # If requested, downsample and upsample before computing edges to remove bayer pattern noise
+    if proc_settings['downsample_factor'] > 1:
+        gray = cv2.resize(gray,(int(gray.shape[1]/proc_settings['downsample_factor']), int(gray.shape[0]/proc_settings['downsample_factor'])), cv2.INTER_AREA)
+        gray = cv2.resize(gray,(int(proc_settings['downsample_factor']*gray.shape[1]), int(proc_settings['downsample_factor']*gray.shape[0])), cv2.INTER_LINEAR)
+
+    # remove background from images
+    bg_threshold = threshold_otsu(gray)
+    #bg_scale = 1 + bg_threshold - gray
+    #bg_scale[bg_scale < 1] = 1
+    gray[gray < bg_threshold] = 0
+
     # edge-based segmentation and region filling to define the object
-    edges_mag = scharr(gray)
-    edges_med = np.median(edges_mag)
-    edges_thresh = low_threshold*edges_med
-    edges = edges_mag >= edges_thresh
-    edges = morphology.closing(edges,morphology.disk(blur_rad))
-    filled_edges = ndimage.binary_fill_holes(edges)
-    edges = morphology.erosion(filled_edges,morphology.disk(blur_rad))
+    if proc_settings['edge_detector'] == 'Scharr':
+        edges_mag = scharr(gray)
+        edges_med = np.median(edges_mag)
+        edges_thresh = low_threshold*edges_med
+        edges = edges_mag > edges_thresh
+        edges = morphology.closing(edges,morphology.square(blur_rad))
+        filled_edges = ndimage.binary_fill_holes(edges)
+        filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
+    elif proc_settings['edge_detector'] == 'Canny':
+        edges = cv2.Canny(gray, low_threshold, high_threshold)
+        edges_mag = edges
+        edges = morphology.closing(edges,morphology.square(blur_rad))
+        filled_edges = ndimage.binary_fill_holes(edges)
+        filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
+    else:
+        init_ls = checkerboard_level_set(gray.shape, 6)
+        # List with intermediate results for plotting the evolution
+        ls = morphological_chan_vese(gray, num_iter=11, init_level_set=init_ls,smoothing=3)
+        edges_mag = ls
+        filled_edges = ls
+        
+    
+    # Perform a final region growing opertation to connect isolated parts of 
+    # distributed objects together
     
     # define the binary image for further operations
-    bw_img = edges
+    bw_img = filled_edges
 
     # Compute morphological descriptors
     label_img = morphology.label(bw_img,connectivity=2,background=0)
@@ -154,15 +191,39 @@ def extract_features(img,
         # use only the features from the object with the largest area
         max_area = 0
         max_area_ind = 0
+        
+        #logger.info("Total contours: " + str(len(props)))
+        
+        area_list = []
+        
         for f in range(0,len(props)):
+            area_list.append(props[f].area)
             if props[f].area > max_area:
                 max_area = props[f].area
                 max_area_ind = f
+                
+        area_list = sorted(area_list,reverse=True)
+        
+        # determine type of object from decending list of areas
+        object_type = 'Isolated'
+        if len(area_list) >= 3:
+            if area_list[0] > 10*area_list[1] or area_list[0] > 10*area_list[2]:
+                object_type = 'Isolated'
+            else:
+                object_type = 'Aggregate'
 
         ii = max_area_ind
 
+
         # Save only the BW image with the largets area
-        bw_img = (label_img)== props[ii].label
+        if not proc_settings['object_selection'] == "Full ROI" and not object_type == "Aggregate":
+            bw_img = (label_img) == props[ii].label
+        else:
+            bw_img = label_img > 0
+            # recompute props on single mask
+            props = measure.regionprops(bw_img.astype(np.uint8),gray)
+            ii = 0
+        
 
         # Check for clipped image
         if np.max(bw_img) == 0:
@@ -179,14 +240,24 @@ def extract_features(img,
 
 
         # Save simple features of the object
-        features['area'] = props[ii].area
-        features['minor_axis_length'] = props[ii].axis_minor_length
-        features['major_axis_length'] = props[ii].axis_major_length
-        if props[ii].axis_major_length == 0:
-            features['aspect_ratio'] = 1
+        if not proc_settings['object_selection'] == "Full ROI":
+            features['area'] = props[ii].area
+            features['minor_axis_length'] = props[ii].axis_minor_length
+            features['major_axis_length'] = props[ii].axis_major_length
+            if props[ii].axis_major_length == 0:
+                features['aspect_ratio'] = 1
+            else:
+                features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
+            features['orientation'] = props[ii].orientation
         else:
-            features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
-        features['orientation'] = props[ii].orientation
+            features['area'] = bw.shape[0]*bw.shape[1]
+            features['minor_axis_length'] = np.min([bw.shape[0], bw.shape[1]])
+            features['major_axis_length'] = np.max([bw.shape[0], bw.shape[1]])
+            if props[ii].axis_major_length == 0:
+                features['aspect_ratio'] = 1
+            else:
+                features['aspect_ratio'] = props[ii].axis_minor_length/props[ii].axis_major_length
+            features['orientation'] = 0
         
         # draw an ellipse using the major and minor axis lengths
         cv2.ellipse(data_img,
@@ -316,6 +387,7 @@ def extract_features(img,
             v_img[v_img > 1] = 1
             v_img = np.uint8(255*v_img)
 
+
         # mask the raw image with smoothed foreground mask
         blurd_bw_img = gaussian(bw_img,blur_rad)
         v_img = v_img*blurd_bw_img
@@ -344,6 +416,9 @@ def extract_features(img,
         v_img[v_img == 0] = proc_settings['small_float_val']
         hsv_img[:,:,2] = v_img
         img = color.hsv2rgb(hsv_img)
+
+        # Need to restore image to 8-bit
+        img = np.uint8(255*img)
     
     else:
     
@@ -353,8 +428,7 @@ def extract_features(img,
         # mask the raw image with smoothed foreground mask
         #blurd_bw_img = gaussian(bw_img,blur_rad)
         #for ind in range(0,3):
-        #    img[:,:,ind] = img[:,:,ind]*blurd_bw_img
-               
+        #    img[:,:,ind] = img[:,:,ind]*blurd_bw_img   
     
     # Check for clipped image
     output['clipped_fraction'] = features['clipped_fraction']

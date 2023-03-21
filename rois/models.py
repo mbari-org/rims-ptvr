@@ -503,12 +503,10 @@ class Image(models.Model):
                 mf.write(morph_string+'\n')
             with open(id_path,"a+") as mf:
                 mf.write(morph_string+','+self.image_id+'\n')
-
+        """
         # Tag image as clipped if the clip fraction is more than 0.1
         if (output['clipped_fraction'] > 0.03):
             self.is_clipped = True
-        """
-            
         
         # Set the camera
         if (Camera.objects.filter(name=image_meta['camera']).exists()):

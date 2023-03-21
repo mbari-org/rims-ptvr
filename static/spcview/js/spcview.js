@@ -70,15 +70,97 @@ var spcview = (function() {
 
     var queryPresets = [
         {
-            "name": "ayeris-cam",
-            "label": "AyeRIS Default",
-            "title": "Images from AyeRIS Cam 00",
+            "name": "small-elongate",
+            "label": "small-elongate",
+            "title": "small-elongate images from Chiton Cam 00",
             "camera": "AyeRISCAM00",
-            "minmaj": 0,
+            "minmaj": 0.5,
+            "maxmaj": 3,
+            "minasp": 0,
+            "maxasp": .4,
+        },
+        {
+            "name": "medium-elongate",
+            "label": "medium-elongate",
+            "title": "medium-elongate images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 5,
+            "maxmaj": 20,
+            "minasp": 0,
+            "maxasp": .4,
+        },
+        {
+            "name": "large-elongate",
+            "label": "large-elongate",
+            "title": "large-elongate images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 20,
             "maxmaj": 100,
             "minasp": 0,
-            "maxasp": 1.0,
+            "maxasp": .4,
         },
+        {
+            "name": "small-round",
+            "label": "small-round",
+            "title": "small-round images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 0.5,
+            "maxmaj": 3,
+            "minasp": .75,
+            "maxasp": 1,
+        },
+        {
+            "name": "medium-round",
+            "label": "medium-round",
+            "title": "medium-round images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 5,
+            "maxmaj": 20,
+            "minasp": .75,
+            "maxasp": 1,
+        },
+        {
+            "name": "large-round",
+            "label": "large-round",
+            "title": "large-round images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 20,
+            "maxmaj": 100,
+            "minasp": .75,
+            "maxasp": 1,
+        },
+        {
+            "name": "small",
+            "label": "small",
+            "title": "small images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": .5,
+            "maxmaj": 3,
+            "minasp": 0.05,
+            "maxasp": 1,
+        },
+        {
+            "name": "medium",
+            "label": "medium",
+            "title": "medium images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 5,
+            "maxmaj": 20,
+            "minasp": 0.05,
+            "maxasp": 1,
+        },
+        {
+            "name": "large",
+            "label": "large",
+            "title": "large images from Chiton Cam 00",
+            "camera": "AyeRISCAM00",
+            "minmaj": 20,
+            "maxmaj": 100,
+            "minasp": 0.05,
+            "maxasp": 1,
+        },
+
+
     ];
 
     var imageDetailActive = false;
@@ -108,8 +190,8 @@ var spcview = (function() {
 
 
     d1 = new Date();
-    utcStart.val('11/09/2021 00:00:00');
-    utcEnd.val(' 11/14/2022 23:59:59');
+    utcStart.val('11/01/2022 00:00:00');
+    utcEnd.val(' 12/30/2022 23:59:59');
 
     //var queryStartTime = 0;
     var queryStartTime = 0;

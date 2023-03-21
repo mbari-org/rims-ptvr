@@ -38,7 +38,7 @@ def run(*args):
             daily_stats.camera = cam
             daily_stats.day = d1
         else:
-            print "Entry exists, updating..."
+            print("Entry exists, updating...")
             daily_stats = DailyStats.objects.get(
                                 day=d1,
                                 camera__name=cam.name
@@ -68,7 +68,7 @@ def run(*args):
         daily_stats.median_minor_length = int(np.median(minor_lengths))
 
         # update display
-        print str(d1) + " found " + str(daily_stats.total_rois) + " rois."
+        print (str(d1) + " found " + str(daily_stats.total_rois) + " rois.")
 
         # Save 
         daily_stats.save()

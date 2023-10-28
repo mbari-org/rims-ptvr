@@ -1,8 +1,8 @@
 {
     "name" : "Default-Settings",
-    "version" : 101,
+    "version" : 201,
     "description" : "Default processing settings for image import",
-    "file_name_fmt" : "Chiton",
+    "file_name_fmt" : "PTVR",
     "edge_threshold_low" : 2.5,
     "edge_threshold_high" : 3,
     "edge_detector" : "Scharr",

@@ -228,12 +228,12 @@ class Image(models.Model):
     timestamp = models.DateTimeField(
         'Timestamp',editable=False,db_index=True)
     major_axis_length = models.PositiveSmallIntegerField(
-        'Major Axis Length',editable=False,db_index=True) 
+        'Major Axis Length',editable=True,db_index=True) 
     minor_axis_length = models.PositiveSmallIntegerField(
-        'Minor Axis Length',editable=False,db_index=True)
+        'Minor Axis Length',editable=True,db_index=True)
 
     aspect_ratio = models.FloatField(
-        'Aspect Ratio',editable=False,db_index=True,default=0.0)
+        'Aspect Ratio',editable=True,db_index=True,default=0.0)
 
     image_width = models.PositiveSmallIntegerField(
         'Image Width',editable=False,db_index=True,default=0)
@@ -414,7 +414,7 @@ class Image(models.Model):
     
         
     # import and image from the local disk
-    def import_image(self, path, proc_settings=None):
+    def import_image(self, path, alt_file_name=None, proc_settings=None):
         
         # Load in the settings or a default
         if proc_settings is None:
@@ -427,6 +427,11 @@ class Image(models.Model):
                 proc_settings = ps[0]
 
         self.proc_settings = proc_settings
+        
+        if alt_file_name == None:
+            filename = self.image_id
+        else:
+            filename = alt_file_name
         
         # check for valid id
         if (not self.valid_image_id()):
@@ -445,19 +450,16 @@ class Image(models.Model):
         
         # Process the image and save the output
         img = np.array([])
-        if self.image_id.split('.')[-1] == 'tif':
+        if filename.split('.')[-1] == 'tif':
             # assume tif images are raw from the camera and need to be
             # converted
-            if proc_settings.json_settings['is_raw']:
-                img = cvtools.import_image(path,self.image_id.split('.tif')[0]+'_raw.tif', proc_settings.json_settings)
-            else:
-                img = cvtools.import_image(path,self.image_id, proc_settings.json_settings)
-            #print "loading " + path + "/" + self.image_id + " ... "
+            img = cvtools.import_image(path,filename, proc_settings.json_settings)
+            #print "loading " + path + "/" + filename + " ... "
             img_c_8bit = cvtools.convert_to_8bit(img, proc_settings.json_settings)
         else:
             # otherwise, png or jpg will just be read
-            #print "loading " + path + "/" + self.image_id + " ... "
-            img_c_8bit = cvtools.import_image(path,self.image_id, proc_settings.json_settings)
+            #print "loading " + path + "/" + filename + " ... "
+            img_c_8bit = cvtools.import_image(path,filename, proc_settings.json_settings)
     
         output = cvtools.extract_features(
             img_c_8bit,

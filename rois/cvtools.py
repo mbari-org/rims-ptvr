@@ -159,6 +159,16 @@ def extract_features(img,
         edges = morphology.closing(edges,morphology.square(blur_rad))
         filled_edges = ndimage.binary_fill_holes(edges)
         filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
+    # edge-based segmentation and region filling to define the object
+    elif proc_settings['edge_detector'] == 'Scharr-with-mean':
+        edges_mag = scharr(gray)
+        edges_mean = np.mean(edges_mag)
+        edges_std = np.std(edges_mag)
+        edges_thresh = edges_mean + edges_std
+        edges = edges_mag > edges_thresh
+        edges = morphology.closing(edges,morphology.square(blur_rad))
+        filled_edges = ndimage.binary_fill_holes(edges)
+        filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))
     elif proc_settings['edge_detector'] == 'Canny':
         edges = cv2.Canny(gray, low_threshold, high_threshold)
         edges_mag = edges

@@ -256,7 +256,17 @@ class Image(models.Model):
     
     depth = models.FloatField(
         'Depth',editable=True,db_index=True,default=0.0)
-
+    
+    # Aux sensor information acquired with the image
+    temperature = models.FloatField(
+        'Temperature',editable=True,db_index=True,default=0.0)
+    
+    salinity = models.FloatField(
+        'Salinity',editable=True,db_index=True,default=0.0)
+    
+    chlorophyll = models.FloatField(
+        'Chlorophyll',editable=True,db_index=True,default=0.0)
+    
     # removed in favor of FFT-based sharpness estimate
     #blur_kernel_radius = models.PositiveSmallIntegerField(
     #    'Blur Kernel Radius',editable=False,db_index=True,default=1)

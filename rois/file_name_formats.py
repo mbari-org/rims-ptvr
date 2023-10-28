@@ -72,7 +72,7 @@ class FileNameFmt:
         
         return output_path
     
-class AyeRISFileNameFmt(FileNameFmt):
+class ChitonFileNameFmt(FileNameFmt):
     
     def load_from_roi(self, output_path, 
                filename, 
@@ -80,7 +80,7 @@ class AyeRISFileNameFmt(FileNameFmt):
                frame_number,
                roi_number,
                deployment='LRGA2',
-               camera='AyeRISCAM00',
+               camera='ChitonSCAM00',
                ):
     
         # parse out the roi_info from filename and bounding box

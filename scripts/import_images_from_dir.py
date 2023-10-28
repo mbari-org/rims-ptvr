@@ -5,7 +5,7 @@ import sys
 import time
 from loguru import logger
 from multiprocessing import Pool, cpu_count
-from rois.file_name_formats import FileNameFmt, AyeRISFileNameFmt
+from rois.file_name_formats import FileNameFmt, ChitonFileNameFmt
 
 def do_import(import_data):
     
@@ -31,8 +31,8 @@ def do_import(import_data):
     try:
         
         # set file name parser
-        if proc_settings.json_settings['file_name_fmt'] == 'AyeRIS':
-            fnf = AyeRISFileNameFmt()
+        if proc_settings.json_settings['file_name_fmt'] == 'Chiton':
+            fnf = ChitonFileNameFmt()
         else:
             fnf = FileNameFmt()
             
@@ -83,18 +83,17 @@ def do_import(import_data):
         logger.error("Unexpected error:", sys.exc_info()[0])
         logger.error("Exception: " + str(e))
         return
-
-def run(*args):
-
-    logger.info("starting import...")
     
-    if len(args) < 2:
-        logger.critical("Please pass the source directory and proc settings path as arguments.")
-        exit()
-        
-    data_dir = args[0]
-    proc_settings_file = args[1]
+def find_all_images(data_dir):
+    # List and group various image types
+    image_list_raw1 = glob.glob(os.path.join(data_dir,'*[0-9].tif'))
+    image_list_raw2 = glob.glob(os.path.join(data_dir,'*[0-9]_raw.tif'))
+    image_list_png = glob.glob(os.path.join(data_dir,'*[0-9].png'))
+    image_list_jpg = glob.glob(os.path.join(data_dir,'*[0-9].jpg'))
     
+    return image_list_raw1 + image_list_raw2 + image_list_png + image_list_jpg
+
+def load_proc_settings(proc_settings_file):
     # load settings and create new entry if needed or load entry
     proc_settings = ProcSettings()
     proc_settings.load_settings(proc_settings_file)
@@ -104,44 +103,64 @@ def run(*args):
     else:
         proc_settings = ps[0]
     
+    #populate settings from json
     proc_settings.create()
-
-    # List and group various image types
-    image_list_raw1 = glob.glob(os.path.join(data_dir,'*[0-9].tif'))
-    image_list_raw2 = glob.glob(os.path.join(data_dir,'*[0-9]_raw.tif'))
-    image_list_png = glob.glob(os.path.join(data_dir,'*[0-9].png'))
-    image_list_jpg = glob.glob(os.path.join(data_dir,'*[0-9].jpg'))
-    image_list = image_list_raw1 + image_list_raw2 + image_list_png + image_list_jpg
     
+    return proc_settings
     
-    # Populate packages to send to map
-    import_list = []
-    for img in image_list:
-        
-        import_data = {}
-        import_data['data_dir'] = data_dir
-        import_data['image_path'] = img
-        import_data['proc_settings'] = proc_settings
-        
-        import_list.append(import_data)
-        
 
-    logger.info("Found " + str(len(image_list)) + " images to import...")
+def run(*args):
+    
+    if len(args) < 2:
+        logger.critical("Please pass the source directory and proc settings path as arguments.")
+        exit()
+    
+    # modified to walk a directory of image directories
+    base_dir = args[0]
+    dir_list = glob.glob(os.path.join(base_dir,'*[0-9]'))
+    
+    # load or select proc_settings
+    proc_settings_file = args[1]
+    proc_settings = load_proc_settings(proc_settings_file)
+    
+    logger.info("Starting import...")
+    logger.info("Found " + str(len(dir_list)) + " directories...")
+    
+    for data_dir in dir_list:
 
-    #for ii in import_list:
-    #    do_import(ii)
-    # map import to threads rather than single loop,
-    # Yay!!
-    start_time = time.time()
-    p = Pool(processes=64)
-    logger.info("mapping to cores...")
-    p.map(do_import,import_list)
-    logger.info("mapped.")
-    p.close()
-    logger.info("closed.")
-    p.join()
-    logger.info("finished with import.")
-    roi_proc_time = len(image_list)/(time.time()-start_time)
+        image_list = find_all_images(data_dir)
+        
+        # Populate packages to send to map
+        import_list = []
+        for img in image_list:
+            
+            import_data = {}
+            import_data['data_dir'] = data_dir
+            import_data['image_path'] = img
+            import_data['proc_settings'] = proc_settings
+            
+            import_list.append(import_data)
+            
+        logger.info("Importing from " + data_dir)
+        logger.info("Found " + str(len(image_list)) + " images to import...")
+
+        # Single process mode
+        #for ii in import_list:
+        #    do_import(ii)
+        
+        # Multiprocess mode
+        start_time = time.time()
+        p = Pool(processes=48)
+        logger.info("mapping to cores...")
+        p.map(do_import,import_list)
+        logger.info("mapped.")
+        p.close()
+        logger.info("closed.")
+        p.join()
+        logger.info("finished with import.")
+        roi_proc_time = len(image_list)/(time.time()-start_time)
+        
+        logger.info("Average ROI process time: " + str(roi_proc_time))
 
     #with open("/home/ptvradmin/roi_proc_stats.txt","a+") as f:
     #    f.write(str(time.time()) + "," + str(data_dir) + "," + str(roi_proc_time) + "\n")

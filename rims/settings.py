@@ -82,8 +82,8 @@ WSGI_APPLICATION = 'rims.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rims',
-        'USER': 'rimsadmin',
+        'NAME': 'rims_ptvr',
+        'USER': 'rims_ptvr',
         'PASSWORD': 'r1m5831',
         'HOST': 'localhost',
         'PORT': '',

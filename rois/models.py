@@ -249,23 +249,23 @@ class Image(models.Model):
     # Location information about the image, editable so it can be refined later
     # after inital image import
     latitude = models.FloatField(
-        'Latitude',editable=True,db_index=True,default=0.0)
+        'Latitude',editable=True,db_index=True,default=360.0)
     
     longitude = models.FloatField(
-        'Longitude',editable=True,db_index=True,default=0.0)
+        'Longitude',editable=True,db_index=True,default=360.0)
     
     depth = models.FloatField(
-        'Depth',editable=True,db_index=True,default=0.0)
+        'Depth',editable=True,db_index=True,default=-10.0)
     
     # Aux sensor information acquired with the image
     temperature = models.FloatField(
-        'Temperature',editable=True,db_index=True,default=0.0)
+        'Temperature',editable=True,db_index=True,default=-10.0)
     
     salinity = models.FloatField(
-        'Salinity',editable=True,db_index=True,default=0.0)
+        'Salinity',editable=True,db_index=True,default=-10.0)
     
     chlorophyll = models.FloatField(
-        'Chlorophyll',editable=True,db_index=True,default=0.0)
+        'Chlorophyll',editable=True,db_index=True,default=-10.0)
     
     # removed in favor of FFT-based sharpness estimate
     #blur_kernel_radius = models.PositiveSmallIntegerField(

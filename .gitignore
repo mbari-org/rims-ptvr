@@ -19,5 +19,5 @@ migrations/
 !rois/test_images/*.tif
 !static/examples/*
 !static/examples/test_images/*
-
+!rims-ptvr.png
 

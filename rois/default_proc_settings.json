@@ -11,7 +11,7 @@
     "object_selection" : "Largest Area",
     "is_raw" : false,
     "is_bayer_pattern" : false,
-    "autoscale" : false,
+    "autoscale" : true,
     "deconv" : true,
     "deconv_method" : "LR",
     "deconv_iter" : 7,
@@ -20,5 +20,5 @@
     "small_float_val" : 0.0001,
     "bw_blur_radius" : 3,
     "bayer_pattern" : "RG",
-    "channels": 3
+    "channels": 1
 }

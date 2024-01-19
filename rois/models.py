@@ -73,7 +73,7 @@ class ProcSettings(models.Model):
         self.object_selection = self.json_settings['object_selection']
         
     def load_default_settings(self):
-        self.load_settings('default_proc_settings.json')
+        self.load_settings('./default_proc_settings.json')
 
     def create(self):
         self.json_settings = json.loads(self.source)
@@ -358,6 +358,7 @@ class Image(models.Model):
 
         #logger.debug(self.image_id)
         try:
+            #logger.info(self.image_id)
             data = FileNameFmt.explode_filename(self.image_id)
         except:
             return False
@@ -420,11 +421,17 @@ class Image(models.Model):
         if proc_settings is None:
             proc_settings = ProcSettings()
             proc_settings.load_default_settings()
-            ps = ProcSettings.objects.filter(name = proc_settings.name)
-            if not ps.exists():
-                proc_settings.save()
-            else:
-                proc_settings = ps[0]
+        elif isinstance(proc_settings, str):
+            proc_settings_path = proc_settings
+            proc_settings = ProcSettings()
+            proc_settings.load_settings(proc_settings_path)
+            
+        ps = ProcSettings.objects.filter(name = proc_settings.name)
+        if not ps.exists():
+            proc_settings.save()
+        else:
+            proc_settings = ps[0]
+            proc_settings.create()
 
         self.proc_settings = proc_settings
         

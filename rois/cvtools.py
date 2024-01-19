@@ -16,6 +16,7 @@ from math import pi
 import cv2
 from skimage import morphology, measure, exposure, restoration
 from skimage import transform
+from skimage.transform import resize
 from skimage import util
 from skimage import color
 from skimage.feature import canny
@@ -98,7 +99,7 @@ def convert_to_8bit(img, proc_settings):
 
         img_8bit = np.uint8(255*result)
     else:
-        img_8bit = np.unit8(img)
+        img_8bit = np.uint8(img)
 
     return img_8bit
 
@@ -371,6 +372,8 @@ def extract_features(img,
     else:
         img = np.float32(img)/np.max(img)
         
+
+        
     if proc_settings['deconv']:
     
         # Get the intesity image in HSV space for sharpening
@@ -379,6 +382,7 @@ def extract_features(img,
             hsv_img = color.rgb2hsv(img)
         v_img = hsv_img[:,:,2]
     
+
     
         # unsharp mask before masking with binary image
         if proc_settings['deconv_method'] == "um":
@@ -397,6 +401,8 @@ def extract_features(img,
             v_img[v_img > 1] = 1
             v_img = np.uint8(255*v_img)
 
+        # Coerce images to be the same size
+        bw_img = resize(bw_img, v_img.shape)
 
         # mask the raw image with smoothed foreground mask
         blurd_bw_img = gaussian(bw_img,blur_rad)

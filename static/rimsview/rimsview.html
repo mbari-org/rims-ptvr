@@ -83,14 +83,13 @@
                         <span class="input-group-addon">Camera</span>
                         <select class="form-control" id="camera"
                             data-toggle="tooltip"
-                            onchange="spcview.invalidateData()" title="The name of camera to use for the image search" data-placement="bottom">
-                            <option selected value="0">ChitonCAM00</option>
-                            <option selected value="1">ChitonCAM01</option>
-                            <option selected value="2">ChitonCAM02</option>
-                            <option selected value="3">ChitonCAM03</option>
-                            <option selected value="4">ChitonCAM04</option>
-                            <option selected value="5">ChitonCAM05</option>
-                            <option selected value="6">ChitonCAM0C</option>
+                            onchange="rimsview.invalidateData()" title="The name of camera to use for the image search" data-placement="bottom">
+                            <option selected value="0">PTVR01HM</option>
+                            <option selected value="1">PTVR01LM</option>
+                            <option selected value="2">PTVR02HM</option>
+                            <option selected value="3">PTVR01LM</option>
+                            <option selected value="4">PTVR03HM</option>
+                            <option selected value="5">PTVR03LM</option>
                         </select>
                     </div>
                 </div>
@@ -98,7 +97,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">Start</span>
                         <input type="text" id="utc-start" class="form-control"
-                        onchange="spcview.invalidateData()"
+                        onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="The start date and time for the image search" data-placement="bottom">                       
                     </div>
                 </div>
@@ -106,7 +105,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">End</span>
                         <input type="text" class="form-control" id="utc-end"
-                        onchange="spcview.invalidateData()"
+                        onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="The end date and time for the image search" data-placement="bottom">
                     </div>
                 </div>
@@ -114,7 +113,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">Images/Page</span>
                         <input type="text" class="form-control" id="n-images"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="The number of images to
                         return per page" data-placement="bottom">
                     </div>
@@ -125,20 +124,20 @@
                 <div class="col-lg-2">
                     <div class="input-group">
                         <span class="input-group-addon">Min Length (mm)</span>
-                        <input type="text" class="form-control" id="min-maj" type="text" onchange="spcview.invalidateData()" data-toggle="tooltip" title="The minimum major axis length for the image search" data-placement="bottom">
+                        <input type="text" class="form-control" id="min-maj" type="text" onchange="rimsview.invalidateData()" data-toggle="tooltip" title="The minimum major axis length for the image search" data-placement="bottom">
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="input-group">
                         <span class="input-group-addon">Max Length (mm)</span>
-                        <input type="text" class="form-control" id="max-maj" type="text" onchange="spcview.invalidateData()" data-toggle="tooltip" title="The maximum major axis length for the image search" data-placement="bottom">
+                        <input type="text" class="form-control" id="max-maj" type="text" onchange="rimsview.invalidateData()" data-toggle="tooltip" title="The maximum major axis length for the image search" data-placement="bottom">
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="input-group">
                         <span class="input-group-addon">Min Aspect Ratio</span>
                         <input type="text" class="form-control" id="min-aspect"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="The minimum aspect ratio
                         (most elongated) for the image search" data-placement="bottom">
                     </div>
@@ -147,7 +146,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">Max Aspect Ratio</span>
                         <input type="text" class="form-control" id="max-aspect"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="The maximum aspect ratio
                         (most spherical) for the image search" data-placement="bottom">
                     </div>
@@ -160,7 +159,7 @@
                         <label>    
                         <input type="checkbox" value=""
                         id="exclude-clipped"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="Exclude clipped images
                         from the image search" data-placement="bottom">
                         Exclude Clipped Images
@@ -172,7 +171,7 @@
                         <label>    
                         <input type="checkbox" value=""
                         id="randomize-results"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="Randomize search results" data-placement="bottom">
                         Randomize
                         </label>
@@ -184,7 +183,7 @@
                         <label>    
                         <input type="checkbox" value=""
                         id="make-archive"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="Build downloadable archive
                         of results" data-placement="bottom">
                         Download Archive
@@ -203,7 +202,7 @@
                         <span class="input-group-addon">Label</span>
                         <select class="selectpicker" id="search-label"
                             data-toggle="tooltip"
-                            onchange="spcview.invalidateData()" 
+                            onchange="rimsview.invalidateData()" 
                             title="Search for images with the given label" 
                             data-placement="bottom"
                             multiple>
@@ -217,7 +216,7 @@
                         <span class="input-group-addon">Tag</span>
                         <select class="selectpicker" id="search-tag"
                             data-toggle="tooltip"
-                            onchange="spcview.invalidateData()" 
+                            onchange="rimsview.invalidateData()" 
                             title="Search for images with a given tag" 
                             data-placement="bottom"
                             multiple>
@@ -231,7 +230,7 @@
                         <span class="input-group-addon">Annotator</span>
                         <select class="selectpicker" id="search-annotator"
                             data-toggle="tooltip"
-                            onchange="spcview.invalidateData()" 
+                            onchange="rimsview.invalidateData()" 
                             title="Search for images labeld by a particular
                             annotator" 
                             data-placement="bottom"
@@ -247,7 +246,7 @@
                         <label>    
                         <input type="checkbox" value=""
                         id="search-invert-labels"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="search for images that do NOT contain the selected labels" data-placement="bottom">
                         Invert Labels
                         </label>
@@ -258,7 +257,7 @@
                         <label>    
                         <input type="checkbox" value=""
                         id="search-machine-labels"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="Search Machine Labels
                         from the image search" data-placement="bottom">
                         Search Machine Labels
@@ -270,7 +269,7 @@
                         <label>    
                         <input type="checkbox" value=""
                         id="search-human-labels"
-                        type="text" onchange="spcview.invalidateData()"
+                        type="text" onchange="rimsview.invalidateData()"
                         data-toggle="tooltip" title="Search Human Labels
                         from the image search" data-placement="bottom">
                         Search Human Labels
@@ -448,7 +447,7 @@
     <script>
     var node = document.createElement("script"); 
         node.type = "text/javascript";
-            node.src = 'js/spcview.js?'+Math.floor(Math.random()*999999999);
+            node.src = 'js/rimsview.js?'+Math.floor(Math.random()*999999999);
                 document.getElementsByTagName("head")[0].appendChild(node);
     </script>
     <script src="http://code.highcharts.com/highcharts.js"></script>

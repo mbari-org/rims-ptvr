@@ -1,4 +1,4 @@
-var spcview = (function() {
+var rimsview = (function() {
     
     //$('#include-nav').load('nav.html');
     //$('#include-search-params').load('search-params.html');
@@ -147,7 +147,7 @@ var spcview = (function() {
         prepAjax();
         data = {'user': username};
         $.ajax({
-            url: siteURL + '/rims/rois/logout_user',
+            url: siteURL + '/rims-ptvr/rois/logout_user',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -185,7 +185,7 @@ var spcview = (function() {
     
     function getUser() {
         $.ajax({
-            url: siteURL + '/rims/rois/get_user',
+            url: siteURL + '/rims-ptvr/rois/get_user',
             type: 'GET',
             success: function (json) {
                 isAuthenticated = json['is_authenticated'];
@@ -208,7 +208,7 @@ var spcview = (function() {
         prepAjax();
         data = {'username': user, 'password': pass};
         $.ajax({
-            url: siteURL + '/rims/rois/login_user',
+            url: siteURL + '/rims-ptvr/rois/login_user',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -704,7 +704,7 @@ var spcview = (function() {
             if (previousPage == null)
                 $('#pages').append('<li class="disabled"><a href="#">Prev</a></li>');
             else
-                $('#pages').append('<li><a href="#" onclick="spcview.getPage(' + (currentPage-1) +')">Prev</a></li>');
+                $('#pages').append('<li><a href="#" onclick="rimsview.getPage(' + (currentPage-1) +')">Prev</a></li>');
             if (totalPages < 12) {
                 for (var i=1;i <= totalPages;i++) {
 
@@ -715,10 +715,10 @@ var spcview = (function() {
 
                     if (currentPage == i) {
                             $('#pages').append(
-                                    '<li class="active"><a href="#" onclick="spcview.getPage(' + i +')">' + i + '</a></li>');
+                                    '<li class="active"><a href="#" onclick="rimsview.getPage(' + i +')">' + i + '</a></li>');
                         }
                         else {
-                            $('#pages').append('<li><a href="#" onclick="spcview.getPage('+i+')">' + i + '</a></li>');
+                            $('#pages').append('<li><a href="#" onclick="rimsview.getPage('+i+')">' + i + '</a></li>');
                     }
                 }
             }
@@ -735,17 +735,17 @@ var spcview = (function() {
 
                         if (currentPage == i) {
                             $('#pages').append(
-                                    '<li class="active"><a href="#" onclick="spcview.getPage(' + i +')">' + i + '</a></li>');
+                                    '<li class="active"><a href="#" onclick="rimsview.getPage(' + i +')">' + i + '</a></li>');
                         }
                         else {
-                            $('#pages').append('<li><a href="#" onclick="spcview.getPage('+i+')">' + i + '</a></li>');
+                            $('#pages').append('<li><a href="#" onclick="rimsview.getPage('+i+')">' + i + '</a></li>');
                         }
                     }
                     $('#pages').append('<li class="disabled"><a href="#">...</a></li>');
-                    $('#pages').append('<li><a  href="#" onclick="spcview.getPage('+totalPages+')">' + totalPages + '</a></li>');
+                    $('#pages').append('<li><a  href="#" onclick="rimsview.getPage('+totalPages+')">' + totalPages + '</a></li>');
                 }
                 else if (currentPage >= totalPages - 3) {
-                    $('#pages').append('<li><a  href="#" onclick="spcview.getPage(1)">1</a></li>');
+                    $('#pages').append('<li><a  href="#" onclick="rimsview.getPage(1)">1</a></li>');
                     
                     $('#pages').append('<li class="disabled"><a href="#">...</a></li>');
                     
@@ -758,15 +758,15 @@ var spcview = (function() {
 
                         if (currentPage == i) {
                             $('#pages').append(
-                                    '<li class="active"><a href="#" onclick="spcview.getPage(' + i +')">' + i + '</a></li>');
+                                    '<li class="active"><a href="#" onclick="rimsview.getPage(' + i +')">' + i + '</a></li>');
                         }
                         else {
-                            $('#pages').append('<li><a href="#" onclick="spcview.getPage('+i+')">' + i + '</a></li>');
+                            $('#pages').append('<li><a href="#" onclick="rimsview.getPage('+i+')">' + i + '</a></li>');
                         }
                     }
                 }
                 else {
-                    $('#pages').append('<li><a  href="#" onclick="spcview.getPage(1)">1</a></li>');
+                    $('#pages').append('<li><a  href="#" onclick="rimsview.getPage(1)">1</a></li>');
                     
                     $('#pages').append('<li class="disabled"><a href="#">...</a></li>');
                     
@@ -779,16 +779,16 @@ var spcview = (function() {
 
                         if (currentPage == i) {
                             $('#pages').append(
-                                    '<li class="active"><a href="#" onclick="spcview.getPage(' + i +')">' + i + '</a></li>');
+                                    '<li class="active"><a href="#" onclick="rimsview.getPage(' + i +')">' + i + '</a></li>');
                         }
                         else {
-                            $('#pages').append('<li><a href="#" onclick="spcview.getPage('+i+')">' + i + '</a></li>');
+                            $('#pages').append('<li><a href="#" onclick="rimsview.getPage('+i+')">' + i + '</a></li>');
                         }
                     }
 
 
                     $('#pages').append('<li class="disabled"><a href="#">...</a></li>');
-                    $('#pages').append('<li><a  href="#" onclick="spcview.getPage('+totalPages+')">'+ totalPages +'</a></li>');
+                    $('#pages').append('<li><a  href="#" onclick="rimsview.getPage('+totalPages+')">'+ totalPages +'</a></li>');
 
                 } 
 
@@ -796,7 +796,7 @@ var spcview = (function() {
             if (nextPage == null)
                 $('#pages').append('<li class="disabled"><a href="#">Next</a></li>');
             else
-                $('#pages').append('<li><a href="#" onclick="spcview.getPage(' + (currentPage+1) +')">Next</a></li>');
+                $('#pages').append('<li><a href="#" onclick="rimsview.getPage(' + (currentPage+1) +')">Next</a></li>');
             
         }
     };
@@ -1020,7 +1020,7 @@ var spcview = (function() {
 
     my.loadLabels = function() {
         $.ajax({
-            url: getBaseURL() + '/rims/rois/labels',
+            url: getBaseURL() + '/rims-ptvr/rois/labels',
             type: 'GET',
             success: function (json) {
                 allLabels = json['labels'];
@@ -1067,7 +1067,7 @@ var spcview = (function() {
     
     my.loadAnnotators = function() {
         $.ajax({
-            url: getBaseURL() + '/rims/rois/annotators',
+            url: getBaseURL() + '/rims-ptvr/rois/annotators',
             type: 'GET',
             success: function (json) {
                 allAnnotators = json['annotators'];
@@ -1116,7 +1116,7 @@ var spcview = (function() {
     
     my.loadTags = function() {
         $.ajax({
-            url: getBaseURL() + '/rims/rois/tags',
+            url: getBaseURL() + '/rims-ptvr/rois/tags',
             type: 'GET',
             success: function (json) {
                 allTags = json['tags'];
@@ -1443,7 +1443,7 @@ var spcview = (function() {
         //console.log(JSON.stringify(labelsAndTags));
         $.ajax({
             //url: getBaseURL() + '/data/rois/label_images',
-            url: siteURL + '/rims/rois/label_images',
+            url: siteURL + '/rims-ptvr/rois/label_images',
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             processData: false,
@@ -1658,18 +1658,18 @@ var urlParams;
        urlParams[decode(match[1])] = decode(match[2]);
 })();
 
-spcview.loadPreset(urlParams);
+rimsview.loadPreset(urlParams);
 
 
-spcview.buildPresetMenu();
+rimsview.buildPresetMenu();
 // Load initial data
-spcview.loadLabels();
-spcview.loadAnnotators();
-spcview.loadTags();
-spcview.loadRoiData();
+rimsview.loadLabels();
+rimsview.loadAnnotators();
+rimsview.loadTags();
+rimsview.loadRoiData();
 
 // Check for login
-spcview.checkAuth();
+rimsview.checkAuth();
 
 $(function() {
     $('[data-toggle="tooltip"]').tooltip()

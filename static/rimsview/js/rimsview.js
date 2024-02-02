@@ -7,17 +7,17 @@ var spcview = (function() {
     var singleDayQuery = true;
     var cameraID = 0;
     var loadedCounter = 0;
-    var cameraNames = ["ChitonCAM00","ChitonCAM01","ChitonCAM02","ChitonCAM03","ChitonCAM04","ChitonCAM05","ChitonCAM0C"];
+    var cameraNames = ["PTVR01HM","PTVR01LM","PTVR02HM","PTVR02LM","PTVR03HM","PTVR03LM"];
     var imagePostfix = ['.jpg','_binary.png','_boundary.png','.png'];
     var imagePostfixIndex = 0;
     var cameraRes = [60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000];
     var dataLoaded = false;
     var siteURL = "http://deeprip.shore.mbari.org";
     var newSiteURL = "http://deeprip.shore.mbari.org";
-    var roiImagesBase = "rims/rois/images/";
-    var roiArchiveBase = "rims/rois/imagearchive/";
-    var dailyStatsBase = "rims/roistats/dailystats/";
-    var viewerBase  = '/static/spcview/spcview.html';
+    var roiImagesBase = "rims-ptvr/rois/images/";
+    var roiArchiveBase = "rims-ptvr/rois/imagearchive/";
+    var dailyStatsBase = "rims-ptvr/roistats/dailystats/";
+    var viewerBase  = '/static/rimsview/rimsview.html';
     var dailyStats = [];
     var allLabels = [];
     var allTags = [];
@@ -70,105 +70,23 @@ var spcview = (function() {
 
     var queryPresets = [
         {
-            "name": "small-elongate",
-            "label": "small-elongate",
-            "title": "small-elongate images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 0.5,
-            "maxmaj": 3,
+            "name": "example-images",
+            "label": "example-images",
+            "title": "Nice images from Planktivore 2 Low-Mag",
+            "camera": "PTVR02LM",
+            "minmaj": 0.1,
+            "maxmaj": 1.0,
             "minasp": 0,
             "maxasp": .4,
         },
-        {
-            "name": "medium-elongate",
-            "label": "medium-elongate",
-            "title": "medium-elongate images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 5,
-            "maxmaj": 20,
-            "minasp": 0,
-            "maxasp": .4,
-        },
-        {
-            "name": "large-elongate",
-            "label": "large-elongate",
-            "title": "large-elongate images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 20,
-            "maxmaj": 100,
-            "minasp": 0,
-            "maxasp": .4,
-        },
-        {
-            "name": "small-round",
-            "label": "small-round",
-            "title": "small-round images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 0.5,
-            "maxmaj": 3,
-            "minasp": .75,
-            "maxasp": 1,
-        },
-        {
-            "name": "medium-round",
-            "label": "medium-round",
-            "title": "medium-round images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 5,
-            "maxmaj": 20,
-            "minasp": .75,
-            "maxasp": 1,
-        },
-        {
-            "name": "large-round",
-            "label": "large-round",
-            "title": "large-round images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 20,
-            "maxmaj": 100,
-            "minasp": .75,
-            "maxasp": 1,
-        },
-        {
-            "name": "small",
-            "label": "small",
-            "title": "small images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": .5,
-            "maxmaj": 3,
-            "minasp": 0.05,
-            "maxasp": 1,
-        },
-        {
-            "name": "medium",
-            "label": "medium",
-            "title": "medium images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 5,
-            "maxmaj": 20,
-            "minasp": 0.05,
-            "maxasp": 1,
-        },
-        {
-            "name": "large",
-            "label": "large",
-            "title": "large images from Chiton Cam 00",
-            "camera": "ChitonCAM00",
-            "minmaj": 20,
-            "maxmaj": 100,
-            "minasp": 0.05,
-            "maxasp": 1,
-        },
-
-
     ];
 
     var imageDetailActive = false;
     
     // Set Defaults
     nImages.val('5000');
-    minMaj.val('1');
-    maxMaj.val('40');
+    minMaj.val('.5');
+    maxMaj.val('5');
     minAspect.val('.05');
     maxAspect.val('1');
     camera.val("0");
@@ -190,8 +108,8 @@ var spcview = (function() {
 
 
     d1 = new Date();
-    utcStart.val('11/01/2022 00:00:00');
-    utcEnd.val(' 12/30/2022 23:59:59');
+    utcStart.val('11/01/2021 00:00:00');
+    utcEnd.val(' 12/30/2024 23:59:59');
 
     //var queryStartTime = 0;
     var queryStartTime = 0;

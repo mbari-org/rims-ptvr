@@ -481,6 +481,10 @@ class Image(models.Model):
 
         #print("proc time: " + str(time.time()-proc_start_time))
 
+        if not 'axis_major_length' in output['features']:
+            logger.warning('Skipping image with no detected objects.')
+            return False   
+
         # Set the image features
         self.major_axis_length = output['features']['axis_major_length']
         self.minor_axis_length = output['features']['axis_minor_length']

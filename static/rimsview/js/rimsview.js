@@ -10,7 +10,7 @@ var rimsview = (function() {
     var cameraNames = ["PTVR01HM","PTVR01LM","PTVR02HM","PTVR02LM","PTVR03HM","PTVR03LM"];
     var imagePostfix = ['.jpg','_binary.png','_boundary.png','.png'];
     var imagePostfixIndex = 0;
-    var cameraRes = [60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000, 60.0/1000];
+    var cameraRes = [0.86/1000, 6.9/1000, 0.86/1000, 6.9/1000, 0.86/1000/1000, 6.9/1000];
     var dataLoaded = false;
     var siteURL = "http://deeprip.shore.mbari.org";
     var newSiteURL = "http://deeprip.shore.mbari.org";
@@ -75,9 +75,9 @@ var rimsview = (function() {
             "title": "Nice images from Planktivore 2 Low-Mag",
             "camera": "PTVR02LM",
             "minmaj": 0.1,
-            "maxmaj": 1.0,
+            "maxmaj": 5.0,
             "minasp": 0,
-            "maxasp": .4,
+            "maxasp": 1.0,
         },
     ];
 

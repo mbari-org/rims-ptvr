@@ -92,8 +92,9 @@ def convert_to_8bit(img, proc_settings):
 
     # Convert to 8 bit and autoscale
     if proc_settings['autoscale']:
-
+        
         result = np.float32(img)-np.min(img)
+        result[result<0.0] = 0.0
         if np.max(img) != 0:
             result = result/np.max(img)
 
@@ -145,18 +146,19 @@ def extract_features(img,
         gray = cv2.resize(gray,(int(gray.shape[1]/proc_settings['downsample_factor']), int(gray.shape[0]/proc_settings['downsample_factor'])), cv2.INTER_AREA)
         gray = cv2.resize(gray,(int(proc_settings['downsample_factor']*gray.shape[1]), int(proc_settings['downsample_factor']*gray.shape[0])), cv2.INTER_LINEAR)
 
+    # This method is no needed for PTVR images use edge detection only
     # remove background from images
-    bg_threshold = threshold_otsu(gray)
+    #bg_threshold = threshold_otsu(gray)
     #bg_scale = 1 + bg_threshold - gray
     #bg_scale[bg_scale < 1] = 1
-    gray[gray < bg_threshold] = 0
+    #gray[gray < bg_threshold] = 0
 
     # edge-based segmentation and region filling to define the object
     if proc_settings['edge_detector'] == 'Scharr':
         edges_mag = scharr(gray)
         edges_med = np.median(edges_mag)
         edges_thresh = low_threshold*edges_med
-        edges = edges_mag > edges_thresh
+        edges = edges_mag >= edges_thresh
         edges = morphology.closing(edges,morphology.square(blur_rad))
         filled_edges = ndimage.binary_fill_holes(edges)
         filled_edges = morphology.erosion(filled_edges,morphology.square(blur_rad))

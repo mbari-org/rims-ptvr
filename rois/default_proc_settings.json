@@ -6,11 +6,11 @@
     "edge_threshold_low" : 2.5,
     "edge_threshold_high" : 3,
     "edge_detector" : "Scharr",
-    "downsample_factor" : 2,
+    "downsample_factor" : 1,
     "channel_selector" : -1,
     "object_selection" : "Largest Area",
-    "is_raw" : false,
-    "is_bayer_pattern" : false,
+    "is_raw" : true,
+    "is_bayer_pattern" : true,
     "autoscale" : true,
     "deconv" : true,
     "deconv_method" : "LR",
@@ -20,5 +20,5 @@
     "small_float_val" : 0.0001,
     "bw_blur_radius" : 3,
     "bayer_pattern" : "RG",
-    "channels": 1
+    "channels": 3
 }

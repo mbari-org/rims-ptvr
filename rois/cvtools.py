@@ -79,26 +79,32 @@ def import_image(abs_path, filename, proc_settings):
     
     if proc_settings['is_raw']:
         bayer_pattern = get_bayer_pattern(proc_settings)
-
-    # Load and convert image as needed
-    img_c = cv2.imread(os.path.join(abs_path,filename),cv2.IMREAD_UNCHANGED)
-    if proc_settings['is_raw']:
-        img_c = cv2.cvtColor(img_c,bayer_pattern)
+    try:
+        # Load and convert image as needed
+        img_c = cv2.imread(os.path.join(abs_path,filename),cv2.IMREAD_UNCHANGED)
+        if proc_settings['is_raw']:
+            img_c = cv2.cvtColor(img_c,bayer_pattern)
+    except Exception as e:
+        logger.error(e)
 
     return img_c
 
 # convert image to 8 bit with or without autoscaling
 def convert_to_8bit(img, proc_settings):
 
+
     # Convert to 8 bit and autoscale
     if proc_settings['autoscale']:
-        
-        result = np.float32(img)-np.min(img)
-        result[result<0.0] = 0.0
-        if np.max(img) != 0:
-            result = result/np.max(img)
+        try:
+            result = np.float32(img)-np.min(img)
+            result[result<0.0] = 0.0
+            if np.max(img) != 0:
+                result = result/np.max(img)
 
-        img_8bit = np.uint8(255*result)
+            img_8bit = np.uint8(255*result)
+        except Exception as e:
+            img_8bit = None
+            logger.error(e)
     else:
         img_8bit = np.uint8(img)
 
@@ -210,20 +216,20 @@ def extract_features(img,
         area_list = []
         
         for f in range(0,len(props)):
-            area_list.append(props[f].area)
-            if props[f].area > max_area:
-                max_area = props[f].area
+            area_list.append(props[f].axis_major_length)
+            if props[f].axis_major_length > max_area:
+                max_area = props[f].axis_major_length
                 max_area_ind = f
                 
         area_list = sorted(area_list,reverse=True)
         
         # determine type of object from decending list of areas
         object_type = 'Isolated'
-        if len(area_list) >= 3:
-            if area_list[0] > 10*area_list[1] or area_list[0] > 10*area_list[2]:
-                object_type = 'Isolated'
-            else:
-                object_type = 'Aggregate'
+        #if len(area_list) >= 3:
+        #    if area_list[0] > 10*area_list[1] or area_list[0] > 10*area_list[2]:
+        #        object_type = 'Isolated'
+        #    else:
+        #        object_type = 'Aggregate'
 
         ii = max_area_ind
 
@@ -275,7 +281,7 @@ def extract_features(img,
         # draw an ellipse using the major and minor axis lengths
         cv2.ellipse(data_img,
             (int(props[ii].centroid[1]),int(props[ii].centroid[0])),
-            (int(props[ii].axis_major_length/2),int(props[ii].axis_minor_length/2)),
+            (int(props[ii].axis_minor_length/2),int(props[ii].axis_major_length/2)),
             180 - 180/np.pi*props[ii].orientation,
             0,
             360,
@@ -368,12 +374,18 @@ def extract_features(img,
     
         rad = 0
 
+
+    # mask the raw image with smoothed foreground mask
+    blurd_bw_img = gaussian(bw_img,blur_rad)
+    blurd_bw_img = blurd_bw_img/np.max(blurd_bw_img)
+    for ind in range(0,3):
+        img[:,:,ind] = img[:,:,ind]*blurd_bw_img   
+
     # normalize the image as a float
     if np.max(img) == 0:
         img = np.float32(img)
     else:
         img = np.float32(img)/np.max(img)
-        
 
         
     if proc_settings['deconv']:
@@ -383,6 +395,7 @@ def extract_features(img,
         with np.errstate(divide='ignore'):
             hsv_img = color.rgb2hsv(img)
         v_img = hsv_img[:,:,2]
+        #v_img = v_img*blurd_bw_img
     
 
     
@@ -405,10 +418,6 @@ def extract_features(img,
 
         # Coerce images to be the same size
         bw_img = resize(bw_img, v_img.shape)
-
-        # mask the raw image with smoothed foreground mask
-        blurd_bw_img = gaussian(bw_img,blur_rad)
-        v_img = v_img*blurd_bw_img
 
         v_img[v_img == 0] = proc_settings['small_float_val']
 
@@ -443,10 +452,7 @@ def extract_features(img,
         # Need to restore image to 8-bit
         img = np.uint8(255*img)
 
-        # mask the raw image with smoothed foreground mask
-        #blurd_bw_img = gaussian(bw_img,blur_rad)
-        #for ind in range(0,3):
-        #    img[:,:,ind] = img[:,:,ind]*blurd_bw_img   
+
     
     # Check for clipped image
     output['clipped_fraction'] = features['clipped_fraction']
@@ -483,6 +489,7 @@ def extract_features(img,
         cv2.imwrite(os.path.join(abs_path,file_prefix+"_ellipse.jpg"),output['data'])
         cv2.imwrite(os.path.join(abs_path,file_prefix+"_edges.png"),255*edges_mag)
         cv2.imwrite(os.path.join(abs_path,file_prefix+"_edges.jpg"),255*edges_mag)
+        cv2.imwrite(os.path.join(abs_path,file_prefix+"_mask.png"),255*blurd_bw_img)
         if original.size:
             cv2.imwrite(os.path.join(abs_path,file_prefix+"_original.tif"),original)
 
@@ -493,6 +500,7 @@ def extract_features(img,
                 os.path.join(abs_path,file_prefix+"_ellipse.png ") +
                 os.path.join(abs_path,file_prefix+"_ellipse.jpg ") +
                 os.path.join(abs_path,file_prefix+"_edges.png ") +
+                os.path.join(abs_path,file_prefix+"_mask.png ") +
                 os.path.join(abs_path,file_prefix+"_edges.jpg ") +
                 os.path.join(abs_path,file_prefix+"_features.csv")
             )

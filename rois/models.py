@@ -467,6 +467,9 @@ class Image(models.Model):
             # otherwise, png or jpg will just be read
             #print "loading " + path + "/" + filename + " ... "
             img_c_8bit = cvtools.import_image(path,filename, proc_settings.json_settings)
+            
+        if img_c_8bit is None:
+            return False
     
         output = cvtools.extract_features(
             img_c_8bit,

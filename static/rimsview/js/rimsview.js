@@ -70,14 +70,28 @@ var rimsview = (function() {
 
     var queryPresets = [
         {
-            "name": "example-images",
-            "label": "example-images",
-            "title": "Nice images from Planktivore 2 Low-Mag",
+            "name": "Ahi 11 i2MAP LM",
+            "label": "LRAH-11-LM",
+            "title": "Images from the Ahi 11 Deployment Low-Mag Camera",
             "camera": "PTVR02LM",
-            "minmaj": 0.1,
+            "minmaj": 0.5,
             "maxmaj": 5.0,
-            "minasp": 0,
+            "minasp": 0.5,
             "maxasp": 1.0,
+            "utcStart": "2024-03-20 12:00:00",
+            "utcEnd": "2024-03-21 12:00:00",
+        },
+        {
+            "name": "Ahi 11 i2MAP HM",
+            "label": "LRAH-11-HM",
+            "title": "Images from the Ahi 11 Deployment High-Mag Camera",
+            "camera": "PTVR02HM",
+            "minmaj": 0.03,
+            "maxmaj": 1.0,
+            "minasp": 0.1,
+            "maxasp": 1.0,
+            "utcStart": "2024-03-20 12:00:00",
+            "utcEnd": "2024-03-21 12:00:00",
         },
     ];
 
@@ -955,6 +969,8 @@ var rimsview = (function() {
                     minAspect.val(preset['minasp'].toString());
                     maxAspect.val(preset['maxasp'].toString());
                     camera.val(cameraNames.indexOf(preset['camera']).toString());
+                    utcStart.val(preset['utcStart'].toString());
+                    utcEnd.val(preset['utcEnd'].toString());
                 }
             }
             //console.log(preset);

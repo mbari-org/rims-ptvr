@@ -77,7 +77,9 @@ This command should spin up a small test database and run the `import_images_for
 
 ## Import images from directory
 
-`$ ./manage.py runscript import_images_from_dir /path/to/temp/image_directory /path/to/processing/settings.json`
+`$ ./manage.py runscript import_images_from_dir --script-args /path/to/temp/image_directory /path/to/processing/settings.json`
+
+Where `/path/to/temp/image_directory` is a directory of raw images to import, and `/path/to/processing/settings.json` is the path to the proc_settings JSON file, typically in rois/default_proc_settings.json
 
 ## Access web browser
 Access the user interface by going to [http://deeprip.shore.mbari.org/static/spcview/spcview.html#](http://deeprip.shore.mbari.org/static/spcview/spcview.html#) 

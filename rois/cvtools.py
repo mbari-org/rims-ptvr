@@ -152,7 +152,7 @@ def extract_features(img,
         gray = cv2.resize(gray,(int(gray.shape[1]/proc_settings['downsample_factor']), int(gray.shape[0]/proc_settings['downsample_factor'])), cv2.INTER_AREA)
         gray = cv2.resize(gray,(int(proc_settings['downsample_factor']*gray.shape[1]), int(proc_settings['downsample_factor']*gray.shape[0])), cv2.INTER_LINEAR)
 
-    # This method is no needed for PTVR images use edge detection only
+    # This method is not needed for PTVR images use edge detection only
     # remove background from images
     #bg_threshold = threshold_otsu(gray)
     #bg_scale = 1 + bg_threshold - gray
@@ -400,7 +400,7 @@ def extract_features(img,
 
     
         # unsharp mask before masking with binary image
-        if proc_settings['deconv_method'] == "um":
+        if proc_settings['deconv_method'].lower() == "um":
 
             old_mean = np.mean(v_img)
             blurd = gaussian(v_img,1.0)
@@ -421,7 +421,7 @@ def extract_features(img,
 
         v_img[v_img == 0] = proc_settings['small_float_val']
 
-        if proc_settings['deconv_method'] == "lr":
+        if proc_settings['deconv_method'].lower() == "lr":
         
             # Make a guess of the PSF for sharpening
             # for now just use a static kernel size

@@ -9,6 +9,8 @@ image_list_params = '/'.join([
         '<str:utcend>',
         '<str:hourstart>',
         '<str:hourend>',
+        '<str:mindepth>',
+        '<str:maxdepth>',
         '<str:nimages>',
         '<str:minlen>',
         '<str:maxlen>',

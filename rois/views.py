@@ -524,6 +524,8 @@ class ImageList(generics.ListAPIView):
         maxlen = self.kwargs['maxlen']
         minaspect = self.kwargs['minaspect']
         maxaspect = self.kwargs['maxaspect']
+        mindepth = self.kwargs['mindepth']
+        maxdepth = self.kwargs['maxdepth']
         exclude = self.kwargs['exclude']
         ordering = self.kwargs['ordering']
         do_archive = self.kwargs['archive']
@@ -560,6 +562,7 @@ class ImageList(generics.ListAPIView):
                 #timestamp__hour = hour_start,
                 major_axis_length__range = [minlen,maxlen],
                 aspect_ratio__range = [minaspect,maxaspect],
+                depth__range = [mindepth, maxdepth],
         ).prefetch_related('tags','user_labels')
         #)
       

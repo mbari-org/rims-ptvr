@@ -31,7 +31,8 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         #)
         fields = ('image_timestamp','major_axis_length',
                 'minor_axis_length','aspect_ratio','image_url',
-                'image_width','image_id','image_height','user_labels','tags',
+                'image_width','image_id','image_height','depth', 
+                'temperature', 'chlorophyll', 'latitude', 'longitude', 'user_labels','tags',
         )
 
     #def get_api_url(self,obj):

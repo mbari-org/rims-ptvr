@@ -377,7 +377,8 @@ def extract_features(img,
 
     # mask the raw image with smoothed foreground mask
     blurd_bw_img = gaussian(bw_img,blur_rad)
-    blurd_bw_img = blurd_bw_img/np.max(blurd_bw_img)
+    if np.max(blurd_bw_img) > 0:
+        blurd_bw_img = blurd_bw_img/np.max(blurd_bw_img)
     for ind in range(0,3):
         img[:,:,ind] = img[:,:,ind]*blurd_bw_img   
 
@@ -395,7 +396,7 @@ def extract_features(img,
         with np.errstate(divide='ignore'):
             hsv_img = color.rgb2hsv(img)
         v_img = hsv_img[:,:,2]
-        #v_img = v_img*blurd_bw_img
+        v_img = v_img*blurd_bw_img
     
 
     
@@ -445,7 +446,12 @@ def extract_features(img,
         img = color.hsv2rgb(hsv_img)
 
         # Need to restore image to 8-bit
-        img = np.uint8(255*img)
+        img_min = np.min(img)
+        img_range = np.max(img)-img_min
+        if img_range == 0:
+            img = np.zeros(img.shape(),dtype=np.uint8)
+        else:
+            img = np.uint8(255*(img-img_min)/img_range)
     
     else:
     

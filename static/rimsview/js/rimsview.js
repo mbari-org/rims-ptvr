@@ -57,6 +57,8 @@ var rimsview = (function() {
     var searchTag = $('#search-tag');
     var utcStart = $('#utc-start');
     var utcEnd = $('#utc-end');
+    var minDepth = $('#min-depth');
+    var maxDepth = $('#max-depth');
     //var hourStart = $('#hour-start');
     //var hourEnd = $('#hour-end');
     var labelSelect = $('#label');
@@ -93,6 +95,30 @@ var rimsview = (function() {
             "utcStart": "2024-03-20 12:00:00",
             "utcEnd": "2024-03-21 12:00:00",
         },
+        {
+            "name": "Ahi 12 Synchro Medium Round",
+            "label": "LRAH-12-SYNC-MR",
+            "title": "Images from the Ahi 12 Deployment of medium round objects",
+            "camera": "PTVR02LM",
+            "minmaj": 0.5,
+            "maxmaj": 2.0,
+            "minasp": 0.6,
+            "maxasp": 1.0,
+            "utcStart": "2024-04-15 00:00:00",
+            "utcEnd": "2024-04-16 12:00:00",
+        },
+        {
+            "name": "Ahi 12 Synchro Small Round",
+            "label": "LRAH-12-SYNC-SR",
+            "title": "Images from the Ahi 12 Deployment of small round objects",
+            "camera": "PTVR02HM",
+            "minmaj": 0.03,
+            "maxmaj": 2.0,
+            "minasp": 0.6,
+            "maxasp": 1.0,
+            "utcStart": "2024-04-15 00:00:00",
+            "utcEnd": "2024-04-16 12:00:00",
+        },
     ];
 
     var imageDetailActive = false;
@@ -104,6 +130,8 @@ var rimsview = (function() {
     minAspect.val('.05');
     maxAspect.val('1');
     camera.val("0");
+    minDepth.val("0.0");
+    maxDepth.val("300.0");
     //hourStart.val("0");
     //hourEnd.val("24");
     excludeClipped.prop('checked',true);
@@ -327,6 +355,8 @@ var rimsview = (function() {
         input_url = input_url + dateStringtoUnixtime(utcEnd.val()) + "/";
         input_url = input_url + '0' + "/";
         input_url = input_url + '24' + "/";
+        input_url = input_url + minDepth.val() + "/";
+        input_url = input_url + maxDepth.val() + "/";
         input_url = input_url + nImages.val() + "/";
         input_url = input_url + Math.floor(minMaj.val()/res) + "/";
         input_url = input_url + Math.ceil(maxMaj.val()/res) + "/";
@@ -589,12 +619,16 @@ var rimsview = (function() {
 
         // Info
         //console.log(data);
-        $('#ImageName').html("<h5 class='info-label'>Image ID</h5>" + "<h4>" + data.image_id + "</h4>");
-        $('#Timestamp').html("<h5 class='info-label'>Collection Datetime</h5>" + "<h4>" + data.image_timestamp + "</h4>");
-        $('#MajorAxisLength').html("<h5 class='info-label'>Major Axis Length</h5>" + "<h4>" + (data.major_axis_length*res).toPrecision(3) + " mm</h4>");
-        $('#MinorAxisLength').html("<h5 class='info-label'>Minor Axis Length</h5>" + "<h4>" + (data.minor_axis_length*res).toPrecision(3) + " mm</h4>");
-        $('#AspectRatio').html("<h5 class='info-label'>Aspect Ratio </h5>" + "<h4>" + (data.aspect_ratio).toPrecision(3) + "</h4>");
-        
+        $('#ImageName').html("<h6 class='info-label'>Image ID</h6>" + "<h5>" + data.image_id + "</h5>");
+        $('#Timestamp').html("<h6 class='info-label'>Collection Datetime</h6>" + "<h5>" + data.image_timestamp + "</h5>");
+        $('#MajorAxisLength').html("<h6 class='info-label'>Major Axis Length</h6>" + "<h5>" + (data.major_axis_length*res).toFixed(2) + " mm</h5>");
+        $('#MinorAxisLength').html("<h6 class='info-label'>Minor Axis Length</h6>" + "<h5>" + (data.minor_axis_length*res).toFixed(2) + " mm</h5>");
+        $('#AspectRatio').html("<h6 class='info-label'>Aspect Ratio </h6>" + "<h5>" + (data.aspect_ratio).toFixed(2) + "</h5>");
+        $('#Depth').html("<h6 class='info-label'>Depth </h6>" + "<h5>" + (data.depth).toFixed(2) + " m </h5>");
+        $('#Temperature').html("<h6 class='info-label'>Temperature </h6>" + "<h5>" + (data.temperature).toFixed(2) + " C</h5>");
+        $('#Chlorophyll').html("<h6 class='info-label'>Chlorophyll </h6>" + "<h5>" + (data.chlorophyll).toFixed(3) + " ug/l</h5>");
+        $('#Latitude').html("<h6 class='info-label'>Latitude </h6>" + "<h5>" + (data.latitude).toFixed(5) + " deg.</h5>");
+        $('#Longitude').html("<h6 class='info-label'>Longitude </h6>" + "<h5>" + (data.longitude).toFixed(5) + " deg.</h5>");
     };
     
     function addImageFromZip(zip,data,imagePath,buttonObj,imageObj) {
@@ -999,11 +1033,14 @@ var rimsview = (function() {
         allOkay = checkFloatInput(maxAspect,0,1) == allOkay;
         allOkay = checkFloatInput(maxMaj,0,100) == allOkay;
         allOkay = checkFloatInput(minMaj,0,100) == allOkay;
+        allOkay = checkFloatInput(maxDepth,0,1000) == allOkay;
+        allOkay = checkFloatInput(minDepth,0,1000) == allOkay;
         allOkay = checkDatetimeInput(utcStart) == allOkay;
         allOkay = checkDatetimeInput(utcEnd) == allOkay;
         allOkay = checkDateRange(utcStart,utcEnd) == allOkay;
         allOkay = checkFloatRange(minMaj,maxMaj) == allOkay;
         allOkay = checkFloatRange(minAspect,maxAspect) == allOkay;
+        allOkay = checkFloatRange(minDepth,maxDepth) == allOkay;
         //allOkay = checkFloatRange(hourStart,hourEnd) == allOkay;
 
         if (allOkay) {

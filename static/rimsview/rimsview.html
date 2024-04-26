@@ -110,6 +110,22 @@
                 </div>
                 <div class="col-lg-2">
                     <div class="input-group">
+                        <span class="input-group-addon">Min Depth (m)</span>
+                        <input type="text" id="min-depth" class="form-control"
+                        onchange="rimsview.invalidateData()"
+                        data-toggle="tooltip" title="The minimum search depth in meters" data-placement="bottom">                       
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">Max Depth (m)</span>
+                        <input type="text" class="form-control" id="max-depth"
+                        onchange="rimsview.invalidateData()"
+                        data-toggle="tooltip" title="The maximum search depth in meters" data-placement="bottom">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="input-group">
                         <span class="input-group-addon">Images/Page</span>
                         <input type="text" class="form-control" id="n-images"
                         type="text" onchange="rimsview.invalidateData()"
@@ -409,6 +425,11 @@
                             <li id="MajorAxisLength" class="list-group-item"></li>
                             <li id="MinorAxisLength" class="list-group-item"></li>
                             <li id="AspectRatio" class="list-group-item"></li>
+                            <li id="Depth" class="list-group-item"></li>
+                            <li id="Temperature" class="list-group-item"></li>
+                            <li id="Chlorophyll" class="list-group-item"></li>
+                            <li id="Latitude" class="list-group-item"></li>
+                            <li id="Longitude" class="list-group-item"></li>
                         </ul>
                     </div>
                 </div>

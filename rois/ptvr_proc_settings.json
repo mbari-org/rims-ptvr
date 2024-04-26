@@ -14,7 +14,7 @@
     "autoscale" : true,
     "deconv" : true,
     "deconv_method" : "LR",
-    "deconv_iter" : 7,
+    "deconv_iter" : 13,
     "deconv_mask_weight" : 0.5,
     "estimate_sharpness" : true,
     "small_float_val" : 0.0001,

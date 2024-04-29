@@ -1102,6 +1102,7 @@ var rimsview = (function() {
 
                 $('#label').typeahead('destroy');
                 $('#label').typeahead({'source': allLabels});
+                console.log(allLabels);
             },
         });
     };

@@ -25,6 +25,11 @@ import shutil
 import sys
 import subprocess
 
+# From https://stackoverflow.com/questions/70419441/attributeerror-wsgirequest-object-has-no-attribute-is-ajax
+# work around deprecated is_ajax call
+def is_ajax(request):
+    return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
 # Create your views here.
 def browser(request):
     image_list = Image.objects.filter(image_id__contains='SPC-').filter(
@@ -57,17 +62,18 @@ def annotators(request):
     resp['annotators'] = list(Annotator.objects.all().values())
     return HttpResponse(json.dumps(resp),content_type="application/json")
 
+#@csrf_exempt
 def logout_user(request):
-    if (request.is_ajax() and request.user.is_authenticated()):
-        if request.method == 'POST':
-            logout(request)
-            return HttpResponse("OK")
-    else:
-        return HttpResponse("ERR")
+    #if (is_ajax(request) and request.user.is_authenticated()):
+    #    if request.method == 'POST':
+    logout(request)
+    return HttpResponse("OK")
+    #else:
+    #    return HttpResponse(str(request))
 
 #@csrf_exempt
 def login_user(request):
-    if (request.is_ajax()):
+    if (is_ajax(request)):
         if request.method == 'POST':
             data = json.loads(request.body)
             username = data['username']

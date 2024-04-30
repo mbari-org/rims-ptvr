@@ -135,8 +135,8 @@ var rimsview = (function() {
     //hourStart.val("0");
     //hourEnd.val("24");
     excludeClipped.prop('checked',true);
-    hideLabeled.prop('checked',true);
-    hideTagged.prop('checked',true);
+    hideLabeled.prop('checked',false);
+    hideTagged.prop('checked',false);
     
     searchLabel.val("Any")
     searchTag.val("Any")    
@@ -1621,12 +1621,12 @@ var rimsview = (function() {
         $('.image-item').addClass('selected-image-item');
     });
     
-    /*$('#hide-labeled').on('click',function() {
+    $('#hide-labeled').on('click',function() {
         if (hideLabeled.prop('checked') == true)
             $('.labeled-image-item').hide();
         else
             $('.labeled-image-item').show();
-    });*/
+    });
     
     $('#clear-selected').on('click', function () {
         $('.image-item').removeClass('selected-image-item');

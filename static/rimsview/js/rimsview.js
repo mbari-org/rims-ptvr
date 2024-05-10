@@ -30,8 +30,8 @@ var rimsview = (function() {
     var statusBar = $('#status-bar');
     var statusText = $('#status-text');
     var queryText = $('#query-text');
-    var timeline = $('#timeline');
-    var timelineToggle = $('#toggle-timeline');
+    var imageMap = $('#image-map');
+    var imageMapToggle = $('#toggle-map');
     var searchParamsToggle = $('#toggle-search-params');
     var searchLabelParamsToggle = $('#toggle-label-params');
     var runSearch = $('#run-search');
@@ -118,6 +118,30 @@ var rimsview = (function() {
             "maxasp": 1.0,
             "utcStart": "2024-04-15 00:00:00",
             "utcEnd": "2024-04-16 12:00:00",
+        },
+        {
+            "name": "Ahi 12 Synchro Small Round",
+            "label": "LRAH-12-SYNC-SR",
+            "title": "Images from the Ahi 12 Deployment of small round objects",
+            "camera": "PTVR02HM",
+            "minmaj": 0.03,
+            "maxmaj": 2.0,
+            "minasp": 0.6,
+            "maxasp": 1.0,
+            "utcStart": "2024-04-15 00:00:00",
+            "utcEnd": "2024-04-16 12:00:00",
+        },
+        {
+            "name": "Ahi 12 Synchro Small Round 2",
+            "label": "LRAH-12-SYNC-SR2",
+            "title": "Images from the Ahi 12 Deployment of small round objects",
+            "camera": "PTVR02HM",
+            "minmaj": 0.03,
+            "maxmaj": 2.0,
+            "minasp": 0.6,
+            "maxasp": 1.0,
+            "utcStart": "2024-04-15 00:00:00",
+            "utcEnd": "2024-04-15 13:00:00",
         },
     ];
 
@@ -850,7 +874,7 @@ var rimsview = (function() {
     };
     
     // Render mosaic using isotope
-    function renderMosaicfromJSON(JSONData) {
+    async function renderMosaicfromJSON(JSONData) {
        
         clearServerLoading();
         if (JSONData.image_data.results.length == 0) {
@@ -862,11 +886,71 @@ var rimsview = (function() {
         JSONData.image_data.results = JSONData.image_data.results.sort( function (a,b) {
             return b.image_height - a.image_height;
         });
-        
+
+        const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+
+        // Create map
+        const map = new google.maps.Map(document.getElementById("google-image-map"), {
+            zoom: 12,
+            center: { lat: 36.7999, lng: -121.9152 },
+            mapId: "4504f8b37365c3d0",
+            mapTypeId: 'satellite',
+        });
+
+        const markers = [];
+
         for ( var i = 0; i < JSONData.image_data.results.length; i++ ) {
             var elem = getItemElement(JSONData.image_data.results[i]);
+            var data_item = JSONData.image_data.results[i];
+            const markerImg = document.createElement("img");
+            markerImg.src = getBaseURL()+ "/" + data_item.image_url+".jpg";
+            markerImg.style="width: 30px; height: 30px";
+            // Add map markers
+            position = {lat: parseFloat(data_item.latitude.toFixed(4)), lng: parseFloat(data_item.longitude.toFixed(4))};
+            const marker = new AdvancedMarkerElement({
+                position,
+                map,
+                content: markerImg,
+                title: data_item.image_timestamp,
+              });
+
+            marker.imageData = data_item;
+
+            const infoImg = document.createElement("img");
+            infoImg.src = getBaseURL()+ "/" + data_item.image_url+".jpg";
+            infoImg.style="width: 100px";
+
+            const infowindow = new google.maps.InfoWindow({
+                content: infoImg,
+                ariaLabel: "Uluru",
+              });
+          
+              // Add a click listener for each marker, and set up the info window.
+              marker.addListener("click", function() {
+                showImageDetail(this.imageData);
+                //console.log(this.imageData);
+              });
+              marker.addListener('mouseover', function() {
+                infowindow.open(map, this);
+            });
+            marker.addListener('mouseout', function() {
+                infowindow.close(map, this);
+              }, false);
+            markers.push(marker);
+
+            elem.marker = marker;
+
             mosaicContainer.append(elem);
         }
+
+        // Options to pass along to the marker clusterer
+        const clusterOptions = {
+            zoomOnClick: true,
+        };
+
+        // Add a marker clusterer to manage the markers.
+        new markerClusterer.MarkerClusterer({ markers, map }, clusterOptions);
 
         // create item element for each image
         function getItemElement(data) {
@@ -929,9 +1013,15 @@ var rimsview = (function() {
                     text = text + data.tags[k];
                 }
             }
+
+            google.maps.event.trigger(this.marker, "mouseover");
             
             statusText.html(text);
             
+        });
+
+        $('.image-item').on('mouseout', function(){
+            google.maps.event.trigger(this.marker, "mouseout");
         });
 
         // Make images draggable (test)
@@ -1033,8 +1123,8 @@ var rimsview = (function() {
         allOkay = checkFloatInput(maxAspect,0,1) == allOkay;
         allOkay = checkFloatInput(maxMaj,0,100) == allOkay;
         allOkay = checkFloatInput(minMaj,0,100) == allOkay;
-        allOkay = checkFloatInput(maxDepth,0,1000) == allOkay;
-        allOkay = checkFloatInput(minDepth,0,1000) == allOkay;
+        allOkay = checkFloatInput(maxDepth,-20,1000) == allOkay;
+        allOkay = checkFloatInput(minDepth,-20,1000) == allOkay;
         allOkay = checkDatetimeInput(utcStart) == allOkay;
         allOkay = checkDatetimeInput(utcEnd) == allOkay;
         allOkay = checkDateRange(utcStart,utcEnd) == allOkay;
@@ -1102,7 +1192,7 @@ var rimsview = (function() {
 
                 $('#label').typeahead('destroy');
                 $('#label').typeahead({'source': allLabels});
-                console.log(allLabels);
+                //(allLabels);
             },
         });
     };
@@ -1397,98 +1487,43 @@ var rimsview = (function() {
 
 
     // Render timeline using highcharts
-    my.renderTimeline = function() {
-        var width= $("#timeline").width();
-        // Prepare data
+    my.renderImageMap = function() {
+
+
+        // Google Map API Key
+        // AIzaSyDyA7fR3IAXuT_gPyLDijLRdei2cD9zuWg
+
+        const map = new google.maps.Map(document.getElementById("google-image-map"), {
+            zoom: 12,
+            center: { lat: 36.7999, lng: -121.9152 },
+          });
+          // Set LatLng and title text for the markers. The first marker (Boynton Pass)
+          // receives the initial focus when tab is pressed. Use arrow keys to
+          // move between markers; press tab again to cycle through the map controls.
+          const tourStops = [
+            [{ lat: 36.7999, lng: -121.9152 }, "C1"],
+          ];
+          // Create an info window to share between markers.
+          const infoWindow = new google.maps.InfoWindow();
         
-        dat = [];
-        //console.log(dailyStats);
-        for (var k=0;k<dailyStats.length;k++) {
-            dat[k] = $.map(dailyStats[k],function (val,i) {
-                if (val.total_rois == 0)
-                    return [[Date.parse(val.day + " PST"),1]];
-                else
-                    return [[Date.parse(val.day + " PST"),val.total_rois]];
+          // Create the markers.
+          tourStops.forEach(([position, title], i) => {
+            const marker = new google.maps.Marker({
+              position,
+              map,
+              title: `${i + 1}. ${title}`,
+              label: `${i + 1}`,
+              optimized: false,
             });
-            //console.log(dat[k]);
-        }
         
-        $('#timeline').highcharts({
-            chart: {
-                zoomType: 'x',
-                backgroundColor: '#000000',
-                plotBackgroundColor: '#000000',
-                width: width,
-                events: {
-                            
-                },
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                type: 'datetime',
-                minRange: 14 * 24 * 3600000 // fourteen days
-            },
-            yAxis: {
-                type: 'logarithmic',
-                title: {
-                    text: 'Counts'
-                },
-                min: 1000,
-                tickInterval: 1,
-            },
-            legend: {
-                enabled: true
-            },
-            tooltip: { 
-                enabled: false 
-            },
-            plotOptions: {
-                area: {
-                    trackByArea: true,
-                    events: {
-                        click: function(e) {
-                            updateSearchDateTime(e.point.x);
-                            my.invalidateData();
-                        }
-                    }
-                },
-                series: {
-                    point: {
-                        events: {
-                            mouseOver: function () {
-                                updateDateTimeHover(this.x,this.y);
-                            }
-                        }
-                    }
-                }
-            },
-            
-        });
-        
-        // Add any more series
-        for (var i = 0; i< dat.length;i++) {
-            //console.log(cameraNames[i]);
-            $('#timeline').highcharts().addSeries({
-                type: 'area',
-                name: cameraNames[i],
-                pointInterval: 24 * 3600*1000,
-                pointStart: Date.UTC(2014, 2, 09),
-                data: dat[i]
+            // Add a click listener for each marker, and set up the info window.
+            marker.addListener("click", () => {
+              infoWindow.close();
+              infoWindow.setContent(marker.getTitle());
+              infoWindow.open(marker.getMap(), marker);
             });
-        }
-        
-        // Add plotline with the current selected date
-        $('#timeline').highcharts().xAxis[0].addPlotLine({
-            value: Date.parse(utcStart.val()),
-            width: 5,
-            color: '#FFF',
-            id: 'selected-line'
-        });
+          });
+     
     };
     
     my.labelSelectedImages = function(labelsAndTags) {
@@ -1561,10 +1596,9 @@ var rimsview = (function() {
     getUser();
 
     //Register callbacks
-    timelineToggle.on( "click", function() {
-        timeline.toggleClass('collapse');
-        timeline.width('100%');
-        my.renderTimeline();
+    imageMapToggle.on( "click", function() {
+        imageMap.toggleClass('collapse');
+        imageMap.width('100%');
         $(this).toggleClass('active');
     });
     

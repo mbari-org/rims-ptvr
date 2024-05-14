@@ -61,8 +61,8 @@ var rimsview = (function() {
     var maxDepth = $('#max-depth');
     //var hourStart = $('#hour-start');
     //var hourEnd = $('#hour-end');
-    var labelSelect = $('#label');
-    var tagSelect = $('#tag');
+    var labelSelect = $('#image-label');
+    var tagSelect = $('#image-tag');
     var username = '';
     var isAuthenaticated = false;
     var startedTime = 0;
@@ -142,6 +142,31 @@ var rimsview = (function() {
             "maxasp": 1.0,
             "utcStart": "2024-04-15 00:00:00",
             "utcEnd": "2024-04-15 13:00:00",
+        },
+        {
+            "name": "Ahi 13 Proxies Small Round",
+            "label": "LRAH-13-PROX-SR",
+            "title": "Images from the Ahi 13 Deployment of small round objects",
+            "camera": "PTVR02HM",
+            "minmaj": 0.065,
+            "maxmaj": 0.12,
+            "minasp": 0.8,
+            "maxasp": 1.0,
+            "utcStart": "2024-04-29 00:00:00",
+            "utcEnd": "2024-05-04 00:00:00",
+        },
+
+        {
+            "name": "Ahi 13 Proxies Chains",
+            "label": "LRAH-13-PROX-CHAINS",
+            "title": "Images from the Ahi 13 Deployment of chain-like objects",
+            "camera": "PTVR02HM",
+            "minmaj": 0.04,
+            "maxmaj": 2.0,
+            "minasp": 0.0,
+            "maxasp": 0.1,
+            "utcStart": "2024-04-29 00:00:00",
+            "utcEnd": "2024-05-04 00:00:00",
         },
     ];
 
@@ -1190,9 +1215,9 @@ var rimsview = (function() {
                 searchLabel.selectpicker('refresh');
 
 
-                $('#label').typeahead('destroy');
-                $('#label').typeahead({'source': allLabels});
-                //(allLabels);
+                $('#image-label').typeahead('destroy');
+                $('#image-label').typeahead({'source': allLabels});
+                console.log(allLabels);
             },
         });
     };
@@ -1286,8 +1311,8 @@ var rimsview = (function() {
                 searchTag.val(curSel).prop('selected',true);
                 searchTag.selectpicker("refresh");
                 
-                $('#tag').typeahead('destroy');
-                $('#tag').typeahead({'source': allTags});
+                $('#image-tag').typeahead('destroy');
+                $('#image-tag').typeahead({'source': allTags});
             },
         });
     };
@@ -1677,9 +1702,9 @@ var rimsview = (function() {
 
     $('#submit-selected').on('click', function () {
         var labelsAndTags = {};
-        labelsAndTags['label'] = $('#label').val();
-        labelsAndTags['tag'] = $('#tag').val();
-        //console.log($('#tag').val().split(", "));
+        labelsAndTags['label'] = $('#image-label').val();
+        labelsAndTags['tag'] = $('#image-tag').val();
+        //console.log($('#image-tag').val().split(", "));
         labelsAndTags['machine_name'] = $('#machine_name').val();
         labelsAndTags['is_machine'] = false;
         labelsAndTags['notes'] = $('#notes').val();

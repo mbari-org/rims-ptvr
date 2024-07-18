@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<root>
+    <StartTime>2024-04-12T00:00:00</StartTime>
+    <EndTime>2024-04-20T00:00:00</EndTime>
+    <dst>True</dst>
+    <CameraName>PTVR02HM</CameraName>
+    <MinSize>0.03</MinSize>
+    <MaxSize>1.0</MaxSize>
+    <MinAspect>0</MinAspect>
+    <MaxAspect>1</MaxAspect>
+    <OutFile>/home/rimsadmin/synchro_cluster.csv</OutFile>
+</root>

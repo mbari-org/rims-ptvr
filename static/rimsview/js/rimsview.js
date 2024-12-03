@@ -595,7 +595,7 @@ var rimsview = (function() {
         //if(makeArchive.prop('checked'))
         //    statusBar.html('Loading data from server and making downloadable archive...this may take some time...');
         //else
-            statusBar.html('Loading data from server...');
+            statusBar.html('Waiting for server replay...');
     };
     
     // Shows a warning message in the status bar
@@ -606,6 +606,7 @@ var rimsview = (function() {
         statusBar.removeClass('active');
         statusBar.css("color","#FF0");
         statusBar.addClass('progress-bar-primary');
+        statusBar.html('Loading data from server...');
     };
     
     // Render query string from settings
@@ -1124,6 +1125,23 @@ var rimsview = (function() {
             }
             //console.log(preset);
         }
+        
+        // Manually set any variables from the url if provided. 
+        // These will overide values from presets
+        if (params['minmaj'] != undefined)
+            minMaj.val(params['minmaj']);
+        if (params['maxmaj'] != undefined)
+            maxMaj.val(params['maxmaj']);
+        if (params['minasp'] != undefined)
+            minAspect.val(params['minmaj']);
+        if (params['maxasp'] != undefined)
+            maxAspect.val(params['maxasp']);
+        if (params['camera'] != undefined)
+            camera.val(cameraNames.indexOf(params['camera']))
+        if (params['utcStart'] != undefined)
+            utcStart.val(params['utcStart'])
+        if (params['utcEnd'] != undefined)
+            utcStart.val(params['utcEnd'])
     };
 
     my.returnToMainSite = function () {

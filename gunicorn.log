@@ -1,0 +1,343 @@
+[2024-09-24 15:14:07 -0700] [134035] [INFO] Starting gunicorn 20.1.0
+[2024-09-24 15:14:07 -0700] [134035] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (134035)
+[2024-09-24 15:14:07 -0700] [134035] [INFO] Using worker: gthread
+[2024-09-24 15:14:07 -0700] [134037] [INFO] Booting worker with pid: 134037
+[2024-09-24 15:14:07 -0700] [134046] [INFO] Booting worker with pid: 134046
+[2024-09-24 15:14:07 -0700] [134054] [INFO] Booting worker with pid: 134054
+[2024-09-24 15:14:07 -0700] [134055] [INFO] Booting worker with pid: 134055
+[2024-09-24 15:14:07 -0700] [134056] [INFO] Booting worker with pid: 134056
+[2024-09-24 15:14:07 -0700] [134057] [INFO] Booting worker with pid: 134057
+[2024-09-24 15:14:07 -0700] [134184] [INFO] Booting worker with pid: 134184
+[2024-09-24 15:14:07 -0700] [134186] [INFO] Booting worker with pid: 134186
+[2024-09-24 15:14:07 -0700] [134286] [INFO] Booting worker with pid: 134286
+[2024-09-24 15:14:08 -0700] [134503] [INFO] Booting worker with pid: 134503
+[2024-09-24 15:14:08 -0700] [134504] [INFO] Booting worker with pid: 134504
+[2024-09-24 15:14:08 -0700] [134734] [INFO] Booting worker with pid: 134734
+[2024-09-24 15:14:08 -0700] [134758] [INFO] Booting worker with pid: 134758
+[2024-09-24 15:14:08 -0700] [134929] [INFO] Booting worker with pid: 134929
+[2024-09-24 15:14:08 -0700] [134949] [INFO] Booting worker with pid: 134949
+[2024-09-24 15:14:08 -0700] [135076] [INFO] Booting worker with pid: 135076
+[2024-09-25 00:10:02 +0000] [134046] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:02 +0000] [134734] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:02 +0000] [134037] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:02 +0000] [134037] [INFO] Worker exiting (pid: 134037)
+[2024-09-25 00:10:02 +0000] [134046] [INFO] Worker exiting (pid: 134046)
+[2024-09-25 00:10:03 +0000] [134949] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134758] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134055] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134758] [INFO] Worker exiting (pid: 134758)
+[2024-09-25 00:10:03 +0000] [134949] [INFO] Worker exiting (pid: 134949)
+[2024-09-25 00:10:03 +0000] [134504] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134286] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-24 17:10:03 -0700] [328450] [INFO] Booting worker with pid: 328450
+[2024-09-24 17:10:03 -0700] [328450] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/arbiter.py", line 589, in spawn_worker
+    worker.init_process()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/workers/gthread.py", line 92, in init_process
+    super().init_process()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/util.py", line 359, in import_app
+    mod = importlib.import_module(module)
+  File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/rimsadmin/software/rims-ptvr/rims-ptvr/wsgi.py", line 12, in <module>
+    from django.core.wsgi import get_wsgi_application
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py", line 1, in <module>
+    from django.utils.version import get_version
+ModuleNotFoundError: No module named 'django.utils'
+[2024-09-24 17:10:03 -0700] [328450] [INFO] Worker exiting (pid: 328450)
+[2024-09-24 17:10:03 -0700] [328451] [INFO] Booting worker with pid: 328451
+[2024-09-24 17:10:03 -0700] [328451] [ERROR] Exception in worker process
+Traceback (most recent call last):
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/arbiter.py", line 589, in spawn_worker
+    worker.init_process()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/workers/gthread.py", line 92, in init_process
+    super().init_process()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/workers/base.py", line 134, in init_process
+    self.load_wsgi()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+    self.wsgi = self.app.wsgi()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/app/base.py", line 67, in wsgi
+    self.callable = self.load()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+    return self.load_wsgiapp()
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+    return util.import_app(self.app_uri)
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/gunicorn/util.py", line 359, in import_app
+    mod = importlib.import_module(module)
+  File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/home/rimsadmin/software/rims-ptvr/rims-ptvr/wsgi.py", line 12, in <module>
+    from django.core.wsgi import get_wsgi_application
+  File "/home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py", line 1, in <module>
+    from django.utils.version import get_version
+ModuleNotFoundError: No module named 'django.utils'
+[2024-09-24 17:10:03 -0700] [328451] [INFO] Worker exiting (pid: 328451)
+[2024-09-24 17:10:03 -0700] [134035] [WARNING] Worker with pid 134758 was terminated due to signal 15
+[2024-09-24 17:10:03 -0700] [134035] [WARNING] Worker with pid 134949 was terminated due to signal 15
+[2024-09-25 00:10:03 +0000] [134184] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134054] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134503] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134056] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/__init__.py modified
+[2024-09-25 00:10:03 +0000] [135076] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/utils/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134929] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/utils/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134186] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/utils/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134929] [INFO] Parent changed, shutting down: <Worker 134929>
+[2024-09-25 00:10:03 +0000] [134929] [INFO] Worker exiting (pid: 134929)
+[2024-09-25 00:10:03 +0000] [134734] [INFO] Parent changed, shutting down: <Worker 134734>
+[2024-09-25 00:10:03 +0000] [134734] [INFO] Worker exiting (pid: 134734)
+[2024-09-25 00:10:03 +0000] [134057] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/django/utils/__init__.py modified
+[2024-09-25 00:10:03 +0000] [134054] [INFO] Parent changed, shutting down: <Worker 134054>
+[2024-09-25 00:10:03 +0000] [134054] [INFO] Worker exiting (pid: 134054)
+[2024-09-25 00:10:03 +0000] [134504] [INFO] Parent changed, shutting down: <Worker 134504>
+[2024-09-25 00:10:03 +0000] [134504] [INFO] Worker exiting (pid: 134504)
+[2024-09-25 00:10:03 +0000] [134055] [INFO] Parent changed, shutting down: <Worker 134055>
+[2024-09-25 00:10:03 +0000] [134055] [INFO] Worker exiting (pid: 134055)
+[2024-09-25 00:10:04 +0000] [134286] [INFO] Parent changed, shutting down: <Worker 134286>
+[2024-09-25 00:10:04 +0000] [134286] [INFO] Worker exiting (pid: 134286)
+[2024-09-25 00:10:04 +0000] [134186] [INFO] Parent changed, shutting down: <Worker 134186>
+[2024-09-25 00:10:04 +0000] [134503] [INFO] Parent changed, shutting down: <Worker 134503>
+[2024-09-25 00:10:04 +0000] [134186] [INFO] Worker exiting (pid: 134186)
+[2024-09-25 00:10:04 +0000] [134503] [INFO] Worker exiting (pid: 134503)
+[2024-09-25 00:10:04 +0000] [135076] [INFO] Parent changed, shutting down: <Worker 135076>
+[2024-09-25 00:10:04 +0000] [134184] [INFO] Parent changed, shutting down: <Worker 134184>
+[2024-09-25 00:10:04 +0000] [134056] [INFO] Parent changed, shutting down: <Worker 134056>
+[2024-09-25 00:10:04 +0000] [135076] [INFO] Worker exiting (pid: 135076)
+[2024-09-25 00:10:04 +0000] [134184] [INFO] Worker exiting (pid: 134184)
+[2024-09-25 00:10:04 +0000] [134056] [INFO] Worker exiting (pid: 134056)
+[2024-09-25 00:10:04 +0000] [134057] [INFO] Parent changed, shutting down: <Worker 134057>
+[2024-09-25 00:10:04 +0000] [134057] [INFO] Worker exiting (pid: 134057)
+[2024-09-24 17:10:48 -0700] [329158] [INFO] Starting gunicorn 20.1.0
+[2024-09-24 17:10:48 -0700] [329158] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (329158)
+[2024-09-24 17:10:48 -0700] [329158] [INFO] Using worker: gthread
+[2024-09-24 17:10:48 -0700] [329160] [INFO] Booting worker with pid: 329160
+[2024-09-24 17:10:48 -0700] [329161] [INFO] Booting worker with pid: 329161
+[2024-09-24 17:10:48 -0700] [329162] [INFO] Booting worker with pid: 329162
+[2024-09-24 17:10:48 -0700] [329163] [INFO] Booting worker with pid: 329163
+[2024-09-24 17:10:49 -0700] [329290] [INFO] Booting worker with pid: 329290
+[2024-09-24 17:10:49 -0700] [329308] [INFO] Booting worker with pid: 329308
+[2024-09-24 17:10:49 -0700] [329372] [INFO] Booting worker with pid: 329372
+[2024-09-24 17:10:49 -0700] [329565] [INFO] Booting worker with pid: 329565
+[2024-09-24 17:10:49 -0700] [329629] [INFO] Booting worker with pid: 329629
+[2024-09-24 17:10:49 -0700] [329756] [INFO] Booting worker with pid: 329756
+[2024-09-24 17:10:49 -0700] [329946] [INFO] Booting worker with pid: 329946
+[2024-09-24 17:10:49 -0700] [329947] [INFO] Booting worker with pid: 329947
+[2024-09-24 17:10:49 -0700] [329948] [INFO] Booting worker with pid: 329948
+[2024-09-24 17:10:49 -0700] [330138] [INFO] Booting worker with pid: 330138
+[2024-09-24 17:10:49 -0700] [330265] [INFO] Booting worker with pid: 330265
+[2024-09-24 17:10:49 -0700] [330266] [INFO] Booting worker with pid: 330266
+[2024-09-25 00:16:15 +0000] [329162] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/urls.py modified
+[2024-09-25 00:16:16 +0000] [329162] [INFO] Worker exiting (pid: 329162)
+[2024-09-24 17:16:16 -0700] [338342] [INFO] Booting worker with pid: 338342
+[2024-09-25 00:17:06 +0000] [329161] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [329163] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [329160] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [338342] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [329565] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [329948] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [329308] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:06 +0000] [329290] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:07 +0000] [329629] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:07 +0000] [329372] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:07 +0000] [329161] [INFO] Worker exiting (pid: 329161)
+[2024-09-25 00:17:07 +0000] [329160] [INFO] Worker exiting (pid: 329160)
+[2024-09-25 00:17:07 +0000] [329163] [INFO] Worker exiting (pid: 329163)
+[2024-09-25 00:17:07 +0000] [329946] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:07 +0000] [329565] [INFO] Worker exiting (pid: 329565)
+[2024-09-25 00:17:07 +0000] [329290] [INFO] Worker exiting (pid: 329290)
+[2024-09-25 00:17:07 +0000] [329756] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:07 +0000] [330266] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-24 17:17:07 -0700] [339253] [INFO] Booting worker with pid: 339253
+[2024-09-24 17:17:07 -0700] [339254] [INFO] Booting worker with pid: 339254
+[2024-09-24 17:17:07 -0700] [339255] [INFO] Booting worker with pid: 339255
+[2024-09-25 00:17:07 +0000] [329308] [INFO] Worker exiting (pid: 329308)
+[2024-09-25 00:17:07 +0000] [330138] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-25 00:17:07 +0000] [329947] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-24 17:17:07 -0700] [339256] [INFO] Booting worker with pid: 339256
+[2024-09-25 00:17:07 +0000] [329948] [INFO] Worker exiting (pid: 329948)
+[2024-09-25 00:17:07 +0000] [329372] [INFO] Worker exiting (pid: 329372)
+[2024-09-25 00:17:07 +0000] [329629] [INFO] Worker exiting (pid: 329629)
+[2024-09-25 00:17:07 +0000] [330265] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rims-ptvr/settings.py modified
+[2024-09-24 17:17:07 -0700] [339257] [INFO] Booting worker with pid: 339257
+[2024-09-25 00:17:07 +0000] [338342] [INFO] Worker exiting (pid: 338342)
+[2024-09-24 17:17:07 -0700] [339258] [INFO] Booting worker with pid: 339258
+[2024-09-25 00:17:07 +0000] [329946] [INFO] Worker exiting (pid: 329946)
+[2024-09-24 17:17:07 -0700] [339259] [INFO] Booting worker with pid: 339259
+[2024-09-25 00:17:07 +0000] [329756] [INFO] Worker exiting (pid: 329756)
+[2024-09-24 17:17:07 -0700] [339260] [INFO] Booting worker with pid: 339260
+[2024-09-24 17:17:07 -0700] [339538] [INFO] Booting worker with pid: 339538
+[2024-09-25 00:17:07 +0000] [330266] [INFO] Worker exiting (pid: 330266)
+[2024-09-25 00:17:07 +0000] [330138] [INFO] Worker exiting (pid: 330138)
+[2024-09-24 17:17:07 -0700] [339578] [INFO] Booting worker with pid: 339578
+[2024-09-25 00:17:07 +0000] [329947] [INFO] Worker exiting (pid: 329947)
+[2024-09-25 00:17:07 +0000] [330265] [INFO] Worker exiting (pid: 330265)
+[2024-09-24 17:17:07 -0700] [339579] [INFO] Booting worker with pid: 339579
+[2024-09-24 17:17:07 -0700] [339867] [INFO] Booting worker with pid: 339867
+[2024-09-24 17:17:08 -0700] [340037] [INFO] Booting worker with pid: 340037
+[2024-09-24 17:17:08 -0700] [340219] [INFO] Booting worker with pid: 340219
+[2024-09-24 17:17:08 -0700] [340543] [INFO] Booting worker with pid: 340543
+[2024-09-24 17:17:08 -0700] [340544] [INFO] Booting worker with pid: 340544
+[2024-09-27 09:02:36 -0700] [18834] [INFO] Starting gunicorn 20.1.0
+[2024-09-27 09:02:36 -0700] [18834] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (18834)
+[2024-09-27 09:02:36 -0700] [18834] [INFO] Using worker: gthread
+[2024-09-27 09:02:36 -0700] [18853] [INFO] Booting worker with pid: 18853
+[2024-09-27 09:02:36 -0700] [18859] [INFO] Booting worker with pid: 18859
+[2024-09-27 09:02:36 -0700] [18860] [INFO] Booting worker with pid: 18860
+[2024-09-27 09:02:36 -0700] [18876] [INFO] Booting worker with pid: 18876
+[2024-09-27 09:02:36 -0700] [18877] [INFO] Booting worker with pid: 18877
+[2024-09-27 09:02:36 -0700] [18878] [INFO] Booting worker with pid: 18878
+[2024-09-27 09:02:36 -0700] [19124] [INFO] Booting worker with pid: 19124
+[2024-09-27 09:02:36 -0700] [19132] [INFO] Booting worker with pid: 19132
+[2024-09-27 09:02:36 -0700] [19196] [INFO] Booting worker with pid: 19196
+[2024-09-27 09:02:36 -0700] [19551] [INFO] Booting worker with pid: 19551
+[2024-09-27 09:02:36 -0700] [19576] [INFO] Booting worker with pid: 19576
+[2024-09-27 09:02:36 -0700] [19577] [INFO] Booting worker with pid: 19577
+[2024-09-27 09:02:36 -0700] [19641] [INFO] Booting worker with pid: 19641
+[2024-09-27 09:02:36 -0700] [19705] [INFO] Booting worker with pid: 19705
+[2024-09-27 09:02:37 -0700] [19958] [INFO] Booting worker with pid: 19958
+[2024-09-27 09:02:37 -0700] [19959] [INFO] Booting worker with pid: 19959
+[2024-09-30 12:35:47 -0700] [1077535] [INFO] Starting gunicorn 20.1.0
+[2024-09-30 12:35:47 -0700] [1077535] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (1077535)
+[2024-09-30 12:35:47 -0700] [1077535] [INFO] Using worker: gthread
+[2024-09-30 12:35:47 -0700] [1077539] [INFO] Booting worker with pid: 1077539
+[2024-09-30 12:35:47 -0700] [1077542] [INFO] Booting worker with pid: 1077542
+[2024-09-30 12:35:47 -0700] [1077543] [INFO] Booting worker with pid: 1077543
+[2024-09-30 12:35:47 -0700] [1077544] [INFO] Booting worker with pid: 1077544
+[2024-09-30 12:35:47 -0700] [1077545] [INFO] Booting worker with pid: 1077545
+[2024-09-30 12:35:47 -0700] [1077546] [INFO] Booting worker with pid: 1077546
+[2024-09-30 12:35:47 -0700] [1077547] [INFO] Booting worker with pid: 1077547
+[2024-09-30 12:35:47 -0700] [1077550] [INFO] Booting worker with pid: 1077550
+[2024-09-30 12:35:47 -0700] [1077551] [INFO] Booting worker with pid: 1077551
+[2024-09-30 12:35:47 -0700] [1077552] [INFO] Booting worker with pid: 1077552
+[2024-09-30 12:35:47 -0700] [1077945] [INFO] Booting worker with pid: 1077945
+[2024-09-30 12:35:47 -0700] [1077995] [INFO] Booting worker with pid: 1077995
+[2024-09-30 12:35:47 -0700] [1077996] [INFO] Booting worker with pid: 1077996
+[2024-09-30 12:35:47 -0700] [1077999] [INFO] Booting worker with pid: 1077999
+[2024-09-30 12:35:48 -0700] [1078504] [INFO] Booting worker with pid: 1078504
+[2024-09-30 12:35:48 -0700] [1078505] [INFO] Booting worker with pid: 1078505
+[2024-10-02 22:23:15 +0000] [1077542] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:15 +0000] [1077542] [INFO] Worker exiting (pid: 1077542)
+[2024-10-02 22:23:15 +0000] [1078504] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077551] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077996] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1078505] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077550] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077543] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077945] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077544] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 15:23:16 -0700] [405394] [INFO] Booting worker with pid: 405394
+[2024-10-02 22:23:16 +0000] [1077546] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077552] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077545] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077999] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077995] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077539] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077547] [INFO] Worker reloading: /home/rimsadmin/software/rims/rimsenv/lib/python3.8/site-packages/psycopg2/errors.py modified
+[2024-10-02 22:23:16 +0000] [1077544] [INFO] Worker exiting (pid: 1077544)
+[2024-10-02 22:23:16 +0000] [1077539] [INFO] Worker exiting (pid: 1077539)
+[2024-10-02 22:23:16 +0000] [1077545] [INFO] Worker exiting (pid: 1077545)
+[2024-10-02 22:23:16 +0000] [1077543] [INFO] Worker exiting (pid: 1077543)
+[2024-10-02 22:23:16 +0000] [1077999] [INFO] Worker exiting (pid: 1077999)
+[2024-10-02 22:23:16 +0000] [1077996] [INFO] Worker exiting (pid: 1077996)
+[2024-10-02 22:23:16 +0000] [1077546] [INFO] Worker exiting (pid: 1077546)
+[2024-10-02 22:23:16 +0000] [1078504] [INFO] Worker exiting (pid: 1078504)
+[2024-10-02 22:23:16 +0000] [1077995] [INFO] Worker exiting (pid: 1077995)
+[2024-10-02 22:23:16 +0000] [1077551] [INFO] Worker exiting (pid: 1077551)
+[2024-10-02 22:23:16 +0000] [1078505] [INFO] Worker exiting (pid: 1078505)
+[2024-10-02 22:23:16 +0000] [1077945] [INFO] Worker exiting (pid: 1077945)
+[2024-10-02 22:23:16 +0000] [1077550] [INFO] Worker exiting (pid: 1077550)
+[2024-10-02 22:23:16 +0000] [1077552] [INFO] Worker exiting (pid: 1077552)
+[2024-10-02 22:23:16 +0000] [1077547] [INFO] Worker exiting (pid: 1077547)
+[2024-10-02 15:23:17 -0700] [406877] [INFO] Booting worker with pid: 406877
+[2024-10-02 15:23:17 -0700] [406887] [INFO] Booting worker with pid: 406887
+[2024-10-02 15:23:17 -0700] [407012] [INFO] Booting worker with pid: 407012
+[2024-10-02 15:23:17 -0700] [407077] [INFO] Booting worker with pid: 407077
+[2024-10-02 15:23:17 -0700] [407078] [INFO] Booting worker with pid: 407078
+[2024-10-02 15:23:17 -0700] [407079] [INFO] Booting worker with pid: 407079
+[2024-10-02 15:23:17 -0700] [407083] [INFO] Booting worker with pid: 407083
+[2024-10-02 15:23:17 -0700] [407213] [INFO] Booting worker with pid: 407213
+[2024-10-02 15:23:17 -0700] [407282] [INFO] Booting worker with pid: 407282
+[2024-10-02 15:23:17 -0700] [407283] [INFO] Booting worker with pid: 407283
+[2024-10-02 15:23:17 -0700] [407442] [INFO] Booting worker with pid: 407442
+[2024-10-02 15:23:17 -0700] [407866] [INFO] Booting worker with pid: 407866
+[2024-10-02 15:23:17 -0700] [408119] [INFO] Booting worker with pid: 408119
+[2024-10-02 15:23:17 -0700] [408183] [INFO] Booting worker with pid: 408183
+[2024-10-02 15:23:17 -0700] [408247] [INFO] Booting worker with pid: 408247
+[2024-10-24 17:15:07 -0700] [38622] [INFO] Starting gunicorn 23.0.0
+[2024-10-24 17:15:07 -0700] [38622] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (38622)
+[2024-10-24 17:15:07 -0700] [38622] [INFO] Using worker: gthread
+[2024-10-24 17:15:07 -0700] [38623] [INFO] Booting worker with pid: 38623
+[2024-10-24 17:15:08 -0700] [38624] [INFO] Booting worker with pid: 38624
+[2024-10-24 17:15:08 -0700] [38625] [INFO] Booting worker with pid: 38625
+[2024-10-24 17:15:08 -0700] [38689] [INFO] Booting worker with pid: 38689
+[2024-10-24 17:15:08 -0700] [38792] [INFO] Booting worker with pid: 38792
+[2024-10-24 17:15:08 -0700] [38817] [INFO] Booting worker with pid: 38817
+[2024-10-24 17:15:08 -0700] [38944] [INFO] Booting worker with pid: 38944
+[2024-10-24 17:15:08 -0700] [38962] [INFO] Booting worker with pid: 38962
+[2024-10-24 17:15:08 -0700] [39026] [INFO] Booting worker with pid: 39026
+[2024-10-24 17:15:08 -0700] [39090] [INFO] Booting worker with pid: 39090
+[2024-10-24 17:15:08 -0700] [39150] [INFO] Booting worker with pid: 39150
+[2024-10-24 17:15:08 -0700] [39220] [INFO] Booting worker with pid: 39220
+[2024-10-24 17:15:08 -0700] [39348] [INFO] Booting worker with pid: 39348
+[2024-10-24 17:15:08 -0700] [39489] [INFO] Booting worker with pid: 39489
+[2024-10-24 17:15:08 -0700] [39773] [INFO] Booting worker with pid: 39773
+[2024-10-24 17:15:08 -0700] [39783] [INFO] Booting worker with pid: 39783
+[2024-10-28 16:16:56 -0700] [38622] [INFO] Handling signal: term
+[2024-10-28 23:16:56 +0000] [39026] [INFO] Worker exiting (pid: 39026)
+[2024-10-28 23:16:56 +0000] [38817] [INFO] Worker exiting (pid: 38817)
+[2024-10-28 23:16:56 +0000] [38792] [INFO] Worker exiting (pid: 38792)
+[2024-10-28 23:16:56 +0000] [38689] [INFO] Worker exiting (pid: 38689)
+[2024-10-28 23:16:56 +0000] [38962] [INFO] Worker exiting (pid: 38962)
+[2024-10-28 23:16:56 +0000] [39150] [INFO] Worker exiting (pid: 39150)
+[2024-10-28 23:16:56 +0000] [39220] [INFO] Worker exiting (pid: 39220)
+[2024-10-28 23:16:56 +0000] [39090] [INFO] Worker exiting (pid: 39090)
+[2024-10-28 23:16:56 +0000] [38625] [INFO] Worker exiting (pid: 38625)
+[2024-10-28 23:16:56 +0000] [38624] [INFO] Worker exiting (pid: 38624)
+[2024-10-28 23:16:57 +0000] [38623] [INFO] Worker exiting (pid: 38623)
+[2024-10-28 23:16:57 +0000] [39783] [INFO] Worker exiting (pid: 39783)
+[2024-10-28 23:16:57 +0000] [39348] [INFO] Worker exiting (pid: 39348)
+[2024-10-28 23:16:57 +0000] [38944] [INFO] Worker exiting (pid: 38944)
+[2024-10-28 23:16:57 +0000] [39773] [INFO] Worker exiting (pid: 39773)
+[2024-10-28 23:16:57 +0000] [39489] [INFO] Worker exiting (pid: 39489)
+[2024-10-28 16:16:57 -0700] [38622] [INFO] Shutting down: Master
+[2024-10-28 16:17:32 -0700] [3788651] [INFO] Starting gunicorn 23.0.0
+[2024-10-28 16:17:32 -0700] [3788651] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (3788651)
+[2024-10-28 16:17:32 -0700] [3788651] [INFO] Using worker: gthread
+[2024-10-28 16:17:32 -0700] [3788666] [INFO] Booting worker with pid: 3788666
+[2024-10-28 16:17:32 -0700] [3788667] [INFO] Booting worker with pid: 3788667
+[2024-10-28 16:17:32 -0700] [3788668] [INFO] Booting worker with pid: 3788668
+[2024-10-28 16:17:32 -0700] [3788669] [INFO] Booting worker with pid: 3788669
+[2024-10-28 16:17:32 -0700] [3788796] [INFO] Booting worker with pid: 3788796
+[2024-10-28 16:17:32 -0700] [3788860] [INFO] Booting worker with pid: 3788860
+[2024-10-28 16:17:32 -0700] [3788955] [INFO] Booting worker with pid: 3788955
+[2024-10-28 16:17:33 -0700] [3788988] [INFO] Booting worker with pid: 3788988
+[2024-10-28 16:17:33 -0700] [3789115] [INFO] Booting worker with pid: 3789115
+[2024-10-28 16:17:33 -0700] [3789182] [INFO] Booting worker with pid: 3789182
+[2024-10-28 16:17:33 -0700] [3789439] [INFO] Booting worker with pid: 3789439
+[2024-10-28 16:17:33 -0700] [3789440] [INFO] Booting worker with pid: 3789440
+[2024-10-28 16:17:33 -0700] [3789441] [INFO] Booting worker with pid: 3789441
+[2024-10-28 16:17:33 -0700] [3789559] [INFO] Booting worker with pid: 3789559
+[2024-10-28 16:17:33 -0700] [3789716] [INFO] Booting worker with pid: 3789716
+[2024-10-28 16:17:33 -0700] [3789760] [INFO] Booting worker with pid: 3789760

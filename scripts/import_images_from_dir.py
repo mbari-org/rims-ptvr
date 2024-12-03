@@ -9,8 +9,7 @@ from rois.file_name_formats import FileNameFmt, ChitonFileNameFmt
 
 def do_import(import_data):
     
-    from django.db import connection    
-    connection.connect()
+    django.db.close_old_connections()
 
     data_dir = import_data['data_dir']
     image_path = import_data['image_path']

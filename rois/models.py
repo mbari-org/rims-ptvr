@@ -306,6 +306,13 @@ class Image(models.Model):
     # Flag to indicate the image may be clipped
     is_clipped = False
 
+    # Variable for import and processing
+    input_path = None
+    alt_file_name = None
+    img_c_8bit = None
+    org_img = None
+    image_storage_path = ""
+    image_meta = {}
 
     # Meta information
     class Meta:
@@ -434,6 +441,8 @@ class Image(models.Model):
             proc_settings.create()
 
         self.proc_settings = proc_settings
+        self.input_path = path
+        self.alt_file_name = alt_file_name
         
         if alt_file_name == None:
             filename = self.image_id
@@ -445,15 +454,13 @@ class Image(models.Model):
             return False
 
         # explode the image id into the image meta info
-        image_meta = self.explode_id()
+        self.image_meta = self.explode_id()
 
         # Create dir for the image if needed
-        image_storage_path = self.create_dir_for_image(settings.IMAGE_STORE_FULL_PATH)
+        self.image_storage_path = self.create_dir_for_image(settings.IMAGE_STORE_FULL_PATH)
         
         # Create dir for backup if needed
         #backup_storage_path = self.create_dir_for_image(settings.BACKUP_IMAGE_PATH)
-        
-        proc_start_time = time.time()
         
         # Process the image and save the output
         img = np.array([])
@@ -470,22 +477,27 @@ class Image(models.Model):
             
         if img_c_8bit is None:
             return False
+        else:
+            self.img_c_8bit = img_c_8bit
+            self.org_img = img
+            return True
+                    
+    def process_image(self):
     
+        proc_start_time = time.time()
         output = cvtools.extract_features(
-            img_c_8bit,
-            img,
-            proc_settings.json_settings, 
+            self.img_c_8bit,
+            self.org_img,
+            self.proc_settings.json_settings, 
             save_to_disk=True,
-            abs_path=image_storage_path,
+            abs_path=self.image_storage_path,
             file_prefix=os.path.splitext(self.image_id)[0]
         )
-        
         proc_end_time = time.time()
-
         #print("proc time: " + str(time.time()-proc_start_time))
 
         if not 'axis_major_length' in output['features']:
-            logger.warning('Skipping image with no detected objects.')
+            logger.debug('Skipping image with no detected objects.')
             return False   
 
         # Set the image features
@@ -502,13 +514,13 @@ class Image(models.Model):
 
         tz = pytz.timezone('UTC')
         self.timestamp = tz.localize(
-                datetime.datetime.fromtimestamp(image_meta['unixtime'])
+                datetime.datetime.fromtimestamp(self.image_meta['unixtime'])
         )
 
 
         # Set the image width and height
-        self.image_width = image_meta['image_width']
-        self.image_height = image_meta['image_height']
+        self.image_width = self.image_meta['image_width']
+        self.image_height = self.image_meta['image_height']
 
         # print out the morpho stats with timestamp
         """
@@ -535,10 +547,10 @@ class Image(models.Model):
             self.is_clipped = True
         
         # Set the camera
-        if (Camera.objects.filter(name=image_meta['camera']).exists()):
-            self.camera = Camera.objects.get(name=image_meta['camera'])
+        if (Camera.objects.filter(name=self.image_meta['camera']).exists()):
+            self.camera = Camera.objects.get(name=self.image_meta['camera'])
         else:
-            c = Camera(name=image_meta['camera'])
+            c = Camera(name=self.image_meta['camera'])
             c.save()
             self.camera = c
 

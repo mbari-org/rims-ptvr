@@ -958,10 +958,10 @@ var rimsview = (function() {
                 //console.log(this.imageData);
               });
               marker.addListener('mouseover', function() {
-                infowindow.open(map, this);
+                //infowindow.open(map, this);
             });
             marker.addListener('mouseout', function() {
-                infowindow.close(map, this);
+                //infowindow.close(map, this);
               }, false);
             markers.push(marker);
 
@@ -1040,14 +1040,14 @@ var rimsview = (function() {
                 }
             }
 
-            google.maps.event.trigger(this.marker, "mouseover");
+            //google.maps.event.trigger(this.marker, "mouseover");
             
             statusText.html(text);
             
         });
 
         $('.image-item').on('mouseout', function(){
-            google.maps.event.trigger(this.marker, "mouseout");
+            //google.maps.event.trigger(this.marker, "mouseout");
         });
 
         // Make images draggable (test)

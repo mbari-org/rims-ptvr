@@ -341,3 +341,59 @@ ModuleNotFoundError: No module named 'django.utils'
 [2024-10-28 16:17:33 -0700] [3789559] [INFO] Booting worker with pid: 3789559
 [2024-10-28 16:17:33 -0700] [3789716] [INFO] Booting worker with pid: 3789716
 [2024-10-28 16:17:33 -0700] [3789760] [INFO] Booting worker with pid: 3789760
+[2024-12-18 14:19:35 -0800] [912564] [INFO] Starting gunicorn 23.0.0
+[2024-12-18 14:19:35 -0800] [912564] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (912564)
+[2024-12-18 14:19:35 -0800] [912564] [INFO] Using worker: gthread
+[2024-12-18 14:19:35 -0800] [912565] [INFO] Booting worker with pid: 912565
+[2024-12-18 14:19:35 -0800] [912566] [INFO] Booting worker with pid: 912566
+[2024-12-18 14:19:35 -0800] [912567] [INFO] Booting worker with pid: 912567
+[2024-12-18 14:19:35 -0800] [912568] [INFO] Booting worker with pid: 912568
+[2024-12-18 14:19:35 -0800] [912569] [INFO] Booting worker with pid: 912569
+[2024-12-18 14:19:35 -0800] [912570] [INFO] Booting worker with pid: 912570
+[2024-12-18 14:19:35 -0800] [912571] [INFO] Booting worker with pid: 912571
+[2024-12-18 14:19:35 -0800] [912582] [INFO] Booting worker with pid: 912582
+[2024-12-18 14:19:35 -0800] [912651] [INFO] Booting worker with pid: 912651
+[2024-12-18 14:19:35 -0800] [912841] [INFO] Booting worker with pid: 912841
+[2024-12-18 14:19:35 -0800] [912905] [INFO] Booting worker with pid: 912905
+[2024-12-18 14:19:35 -0800] [912950] [INFO] Booting worker with pid: 912950
+[2024-12-18 14:19:35 -0800] [913222] [INFO] Booting worker with pid: 913222
+[2024-12-18 14:19:35 -0800] [913286] [INFO] Booting worker with pid: 913286
+[2024-12-18 14:19:35 -0800] [913535] [INFO] Booting worker with pid: 913535
+[2024-12-18 14:19:35 -0800] [913540] [INFO] Booting worker with pid: 913540
+[2025-01-02 09:58:43 -0800] [912564] [INFO] Handling signal: term
+[2025-01-02 17:58:43 +0000] [912565] [INFO] Worker exiting (pid: 912565)
+[2025-01-02 17:58:43 +0000] [912651] [INFO] Worker exiting (pid: 912651)
+[2025-01-02 17:58:43 +0000] [913222] [INFO] Worker exiting (pid: 913222)
+[2025-01-02 17:58:43 +0000] [913540] [INFO] Worker exiting (pid: 913540)
+[2025-01-02 17:58:43 +0000] [912568] [INFO] Worker exiting (pid: 912568)
+[2025-01-02 17:58:43 +0000] [913286] [INFO] Worker exiting (pid: 913286)
+[2025-01-02 17:58:43 +0000] [912571] [INFO] Worker exiting (pid: 912571)
+[2025-01-02 17:58:43 +0000] [912570] [INFO] Worker exiting (pid: 912570)
+[2025-01-02 17:58:43 +0000] [912582] [INFO] Worker exiting (pid: 912582)
+[2025-01-02 17:58:43 +0000] [912841] [INFO] Worker exiting (pid: 912841)
+[2025-01-02 17:58:43 +0000] [912567] [INFO] Worker exiting (pid: 912567)
+[2025-01-02 17:58:43 +0000] [912950] [INFO] Worker exiting (pid: 912950)
+[2025-01-02 17:58:43 +0000] [912905] [INFO] Worker exiting (pid: 912905)
+[2025-01-02 17:58:43 +0000] [912566] [INFO] Worker exiting (pid: 912566)
+[2025-01-02 17:58:43 +0000] [912569] [INFO] Worker exiting (pid: 912569)
+[2025-01-02 17:58:44 +0000] [913535] [INFO] Worker exiting (pid: 913535)
+[2025-01-02 09:58:44 -0800] [912564] [INFO] Shutting down: Master
+[2025-01-08 08:45:46 -0800] [2292470] [INFO] Starting gunicorn 23.0.0
+[2025-01-08 08:45:46 -0800] [2292470] [INFO] Listening at: unix:/run/gunicorn-ptvr.sock (2292470)
+[2025-01-08 08:45:46 -0800] [2292470] [INFO] Using worker: gthread
+[2025-01-08 08:45:46 -0800] [2292471] [INFO] Booting worker with pid: 2292471
+[2025-01-08 08:45:46 -0800] [2292472] [INFO] Booting worker with pid: 2292472
+[2025-01-08 08:45:46 -0800] [2292473] [INFO] Booting worker with pid: 2292473
+[2025-01-08 08:45:46 -0800] [2292537] [INFO] Booting worker with pid: 2292537
+[2025-01-08 08:45:47 -0800] [2292601] [INFO] Booting worker with pid: 2292601
+[2025-01-08 08:45:47 -0800] [2292728] [INFO] Booting worker with pid: 2292728
+[2025-01-08 08:45:47 -0800] [2292805] [INFO] Booting worker with pid: 2292805
+[2025-01-08 08:45:47 -0800] [2292808] [INFO] Booting worker with pid: 2292808
+[2025-01-08 08:45:47 -0800] [2292991] [INFO] Booting worker with pid: 2292991
+[2025-01-08 08:45:47 -0800] [2293005] [INFO] Booting worker with pid: 2293005
+[2025-01-08 08:45:47 -0800] [2293178] [INFO] Booting worker with pid: 2293178
+[2025-01-08 08:45:47 -0800] [2293264] [INFO] Booting worker with pid: 2293264
+[2025-01-08 08:45:47 -0800] [2293332] [INFO] Booting worker with pid: 2293332
+[2025-01-08 08:45:47 -0800] [2293333] [INFO] Booting worker with pid: 2293333
+[2025-01-08 08:45:47 -0800] [2293493] [INFO] Booting worker with pid: 2293493
+[2025-01-08 08:45:47 -0800] [2293651] [INFO] Booting worker with pid: 2293651

@@ -1133,7 +1133,7 @@ var rimsview = (function() {
         if (params['maxmaj'] != undefined)
             maxMaj.val(params['maxmaj']);
         if (params['minasp'] != undefined)
-            minAspect.val(params['minmaj']);
+            minAspect.val(params['minasp']);
         if (params['maxasp'] != undefined)
             maxAspect.val(params['maxasp']);
         if (params['camera'] != undefined)

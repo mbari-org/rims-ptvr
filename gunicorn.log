@@ -397,3 +397,51 @@ ModuleNotFoundError: No module named 'django.utils'
 [2025-01-08 08:45:47 -0800] [2293333] [INFO] Booting worker with pid: 2293333
 [2025-01-08 08:45:47 -0800] [2293493] [INFO] Booting worker with pid: 2293493
 [2025-01-08 08:45:47 -0800] [2293651] [INFO] Booting worker with pid: 2293651
+[2025-02-04 17:55:13 +0000] [2293493] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293005] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293651] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292601] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292728] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293333] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292471] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292991] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292473] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292472] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293332] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293264] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292537] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293178] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2292805] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 17:55:14 +0000] [2293651] [INFO] Worker exiting (pid: 2293651)
+[2025-02-04 17:55:14 +0000] [2292991] [INFO] Worker exiting (pid: 2292991)
+[2025-02-04 17:55:14 +0000] [2293005] [INFO] Worker exiting (pid: 2293005)
+[2025-02-04 17:55:14 +0000] [2292805] [INFO] Worker exiting (pid: 2292805)
+[2025-02-04 17:55:14 +0000] [2292728] [INFO] Worker exiting (pid: 2292728)
+[2025-02-04 17:55:14 +0000] [2293493] [INFO] Worker exiting (pid: 2293493)
+[2025-02-04 17:55:14 +0000] [2293178] [INFO] Worker exiting (pid: 2293178)
+[2025-02-04 17:55:14 +0000] [2292473] [INFO] Worker exiting (pid: 2292473)
+[2025-02-04 17:55:14 +0000] [2293264] [INFO] Worker exiting (pid: 2293264)
+[2025-02-04 17:55:14 +0000] [2292537] [INFO] Worker exiting (pid: 2292537)
+[2025-02-04 17:55:14 +0000] [2293332] [INFO] Worker exiting (pid: 2293332)
+[2025-02-04 17:55:14 +0000] [2293333] [INFO] Worker exiting (pid: 2293333)
+[2025-02-04 17:55:14 +0000] [2292601] [INFO] Worker exiting (pid: 2292601)
+[2025-02-04 17:55:14 +0000] [2292472] [INFO] Worker exiting (pid: 2292472)
+[2025-02-04 17:55:14 +0000] [2292808] [INFO] Worker reloading: /home/rimsadmin/software/rims-ptvr/rois/serializers.py modified
+[2025-02-04 09:55:14 -0800] [1502884] [INFO] Booting worker with pid: 1502884
+[2025-02-04 09:55:14 -0800] [1502885] [INFO] Booting worker with pid: 1502885
+[2025-02-04 09:55:14 -0800] [1502886] [INFO] Booting worker with pid: 1502886
+[2025-02-04 09:55:14 -0800] [1502887] [INFO] Booting worker with pid: 1502887
+[2025-02-04 09:55:15 -0800] [1502888] [INFO] Booting worker with pid: 1502888
+[2025-02-04 09:55:15 -0800] [1502889] [INFO] Booting worker with pid: 1502889
+[2025-02-04 17:55:15 +0000] [2292471] [INFO] Worker exiting (pid: 2292471)
+[2025-02-04 09:55:15 -0800] [1502890] [INFO] Booting worker with pid: 1502890
+[2025-02-04 09:55:15 -0800] [1502891] [INFO] Booting worker with pid: 1502891
+[2025-02-04 09:55:15 -0800] [1503418] [INFO] Booting worker with pid: 1503418
+[2025-02-04 09:55:15 -0800] [1503479] [INFO] Booting worker with pid: 1503479
+[2025-02-04 09:55:15 -0800] [1503917] [INFO] Booting worker with pid: 1503917
+[2025-02-04 17:55:15 +0000] [2292808] [INFO] Worker exiting (pid: 2292808)
+[2025-02-04 09:55:15 -0800] [1504245] [INFO] Booting worker with pid: 1504245
+[2025-02-04 09:55:15 -0800] [1504247] [INFO] Booting worker with pid: 1504247
+[2025-02-04 09:55:15 -0800] [1504249] [INFO] Booting worker with pid: 1504249
+[2025-02-04 09:55:16 -0800] [1504709] [INFO] Booting worker with pid: 1504709
+[2025-02-04 09:55:16 -0800] [1504711] [INFO] Booting worker with pid: 1504711

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rois.models import Image, Camera
 import pytz
+import pandas as pd
 
 #class CameraSerializer(serializers.HyperlinkedModelSerializer):
 #
@@ -9,6 +10,11 @@ import pytz
 #        model = Camera
 #        fields = ('name','description')
 
+class CustomFloatField(serializers.FloatField):
+    def to_representation(self, value):
+        if pd.isna(value):
+            return None
+        return super().to_representation(value)
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -20,6 +26,10 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     #user_labels = serializers.StringRelatedField(many=True)
     user_labels = serializers.SerializerMethodField()
     tags = serializers.StringRelatedField(many=True)
+    temperature = CustomFloatField()
+    chlorophyll = CustomFloatField()
+    latitude = CustomFloatField()
+    longitude = CustomFloatField()
 
     class Meta:
 
